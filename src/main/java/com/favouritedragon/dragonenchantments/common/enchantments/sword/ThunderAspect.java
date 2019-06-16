@@ -8,6 +8,7 @@ import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -38,10 +39,12 @@ public class ThunderAspect extends Enchantment {
 			if (stack.isItemEnchanted()) {
 				if (attacker instanceof EntityPlayer) {
 					//This requires some weird stuff for a sweep attack (wtf, mojang)
+					float attackMult = (float)((EntityPlayer) attacker).getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
 					float modifier = EnchantmentHelper.getModifierForCreature(stack, EnumCreatureAttribute.UNDEFINED);
 					float mult = ((EntityPlayer) attacker).getCooledAttackStrength(0.5F);
 					modifier *= mult;
-					if (modifier > 0.0F) {
+					attackMult = attackMult * (0.2F + mult * mult * 0.8F);
+					if (modifier > 0.0F || attackMult > 0.0F) {
 						int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.thunderAspect, stack);
 						if (level > 0 && hurt != null) {
 							hurt.attackEntityFrom(DamageSource.LIGHTNING_BOLT, event.getAmount() / 10 * level * 2);
