@@ -1,13 +1,11 @@
-package com.favouritedragon.dragonenchantments.common.enchantments.sword;
+package com.favouritedragon.dragonenchantments.common.enchantments.weapon;
 
 import com.favouritedragon.dragonenchantments.DragonEnchants;
 import com.favouritedragon.dragonenchantments.common.enchantments.ModEnchantments;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
@@ -18,18 +16,10 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 @Mod.EventBusSubscriber(modid = DragonEnchants.MODID)
 public class DragonSlayer extends Enchantment {
 	public DragonSlayer() {
-		super(Rarity.RARE, ModEnchantments.WEAPONS, new EntityEquipmentSlot[] {EntityEquipmentSlot.MAINHAND, EntityEquipmentSlot.OFFHAND});
-		setRegistryName("dragon_slayer");
-		setName("Dragon Slayer");
+		super(Rarity.RARE, ModEnchantments.WEAPONS, new EntityEquipmentSlot[]{EntityEquipmentSlot.MAINHAND, EntityEquipmentSlot.OFFHAND});
+		setRegistryName(DragonEnchants.MODID, "dragon_slayer");
+		setName("dragon_slayer");
 	}
-
-
-	@Override
-	public int getMaxLevel() {
-		return 5;
-	}
-
-
 
 	@SubscribeEvent
 	public static void onDragonHurt(LivingHurtEvent event) {
@@ -38,8 +28,7 @@ public class DragonSlayer extends Enchantment {
 			ItemStack stack = null;
 			if (attacker instanceof EntityLivingBase && ((EntityLivingBase) attacker).getHeldItemMainhand() != ItemStack.EMPTY) {
 				stack = ((EntityLivingBase) attacker).getHeldItemMainhand();
-			}
-			else if (attacker instanceof EntityLivingBase && ((EntityLivingBase) attacker).getHeldItemOffhand() != ItemStack.EMPTY) {
+			} else if (attacker instanceof EntityLivingBase && ((EntityLivingBase) attacker).getHeldItemOffhand() != ItemStack.EMPTY) {
 				stack = ((EntityLivingBase) attacker).getHeldItemOffhand();
 			}
 			assert stack != null;
@@ -48,6 +37,16 @@ public class DragonSlayer extends Enchantment {
 				event.setAmount(event.getAmount() * (1 + 0.1F * level));
 			}
 		}
+	}
+
+	@Override
+	public boolean isTreasureEnchantment() {
+		return true;
+	}
+
+	@Override
+	public int getMaxLevel() {
+		return 5;
 	}
 
 }

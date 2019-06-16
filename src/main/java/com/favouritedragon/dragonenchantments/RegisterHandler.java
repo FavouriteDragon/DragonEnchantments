@@ -1,6 +1,6 @@
 package com.favouritedragon.dragonenchantments;
 
-import com.favouritedragon.dragonenchantments.common.enchantments.sword.DragonSlayer;
+import com.favouritedragon.dragonenchantments.common.enchantments.weapon.DragonSlayer;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.crafting.IRecipe;
