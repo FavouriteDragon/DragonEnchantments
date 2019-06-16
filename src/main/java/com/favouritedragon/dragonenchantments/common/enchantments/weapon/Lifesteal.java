@@ -23,7 +23,15 @@ public class Lifesteal extends Enchantment {
 	public static void onLifeSteal(LivingHurtEvent event) {
 		Entity attacker = event.getSource().getTrueSource();
 		if (attacker instanceof EntityLivingBase && !attacker.world.isRemote) {
-			int level = EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.lifeSteal, ((EntityLivingBase) attacker));
+			ItemStack stack = null;
+			if (((EntityLivingBase) attacker).getHeldItemMainhand().isItemEnchanted()) {
+				stack = ((EntityLivingBase) attacker).getHeldItemMainhand();
+			}
+			else if (((EntityLivingBase) attacker).getHeldItemOffhand().isItemEnchanted()) {
+				stack = ((EntityLivingBase) attacker).getHeldItemOffhand();
+			}
+			if(stack == null) return;
+			int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.lifeSteal, stack);
 			if (level > 0) {
 				((EntityLivingBase) attacker).heal(event.getAmount() / 10 * level * level);
 			}
