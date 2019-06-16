@@ -7,10 +7,11 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+@Mod.EventBusSubscriber(modid = DragonEnchants.MODID)
 public class Lifesteal extends Enchantment {
 	public Lifesteal() {
 		super(Rarity.RARE, ModEnchantments.WEAPONS, new EntityEquipmentSlot[]{EntityEquipmentSlot.MAINHAND, EntityEquipmentSlot.OFFHAND});
@@ -21,25 +22,18 @@ public class Lifesteal extends Enchantment {
 	@SubscribeEvent
 	public static void onLifeSteal(LivingHurtEvent event) {
 		Entity attacker = event.getSource().getTrueSource();
-		if (attacker != null && !attacker.world.isRemote) {
-			ItemStack stack = null;
-			if (attacker instanceof EntityLivingBase && ((EntityLivingBase) attacker).getHeldItemMainhand() != ItemStack.EMPTY) {
-				stack = ((EntityLivingBase) attacker).getHeldItemMainhand();
-			} else if (attacker instanceof EntityLivingBase && ((EntityLivingBase) attacker).getHeldItemOffhand() != ItemStack.EMPTY) {
-				stack = ((EntityLivingBase) attacker).getHeldItemOffhand();
-			}
-			assert stack != null;
-			int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.lifeSteal, stack);
+		if (attacker instanceof EntityLivingBase && !attacker.world.isRemote){
+			int level = EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.lifeSteal, ((EntityLivingBase) attacker));
 			if (level > 0) {
 				((EntityLivingBase) attacker).heal(event.getAmount() / 10 * level * level);
 			}
 		}
 	}
 
-	@Override
+	/*@Override
 	public boolean isTreasureEnchantment() {
 		return true;
-	}
+	}**/
 
 	@Override
 	public int getMaxLevel() {
