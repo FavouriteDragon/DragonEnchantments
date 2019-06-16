@@ -59,6 +59,7 @@ public class RegisterHandler {
 	public static void registerEnchantments(RegistryEvent.Register<Enchantment> event) {
 		event.getRegistry().register(ModEnchantments.dragonSlayer);
 		event.getRegistry().register(ModEnchantments.lifeSteal);
+		event.getRegistry().register(ModEnchantments.thunderAspect);
 	}
 
 	static void registerAll() {
