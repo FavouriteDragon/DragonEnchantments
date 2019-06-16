@@ -7,6 +7,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
@@ -34,7 +35,7 @@ public class ThunderAspect extends Enchantment {
 		if (attacker instanceof EntityLivingBase) {
 			ItemStack stack = ((EntityLivingBase) attacker).getHeldItemMainhand();
 			if (stack.isItemEnchanted()) {
-				if (stack.getItem().onEntitySwing((EntityLivingBase) attacker, stack)) {
+				if (attacker instanceof EntityPlayer && !((EntityPlayer) attacker).getCooldownTracker().hasCooldown(stack.getItem())) {
 					int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.thunderAspect, stack);
 					if (level > 0 && hurt != null) {
 						hurt.attackEntityFrom(DamageSource.LIGHTNING_BOLT, event.getAmount() / 10 * level * 2);
