@@ -41,7 +41,7 @@ public class ThunderAspect extends Enchantment {
 						hurt.attackEntityFrom(DamageSource.LIGHTNING_BOLT, event.getAmount() / 10 * level * 2);
 						Vec3d lookVec = attacker.getLookVec();
 						hurt.motionX += lookVec.x * (1 + 0.2 * level);
-						hurt.motionY += lookVec.y * (1 + 0.05 * level);
+						hurt.motionY += lookVec.y * (1 + 0.2 * level);
 						hurt.motionZ += lookVec.z * (1 + 0.2 * level);
 						if (attacker.world.isRemote) {
 							attacker.world.playSound(hurt.posX, hurt.posY, hurt.posZ, SoundEvents.ENTITY_LIGHTNING_IMPACT, SoundCategory.PLAYERS,
@@ -52,11 +52,11 @@ public class ThunderAspect extends Enchantment {
 				else {
 					int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.thunderAspect, stack);
 					if (level > 0 && hurt != null) {
-						hurt.attackEntityFrom(DamageSource.LIGHTNING_BOLT,event.getAmount() / 10 * level * 2);
+						hurt.attackEntityFrom(DamageSource.LIGHTNING_BOLT,event.getAmount() / 10 * level);
 						Vec3d lookVec = attacker.getLookVec();
-						hurt.motionX += lookVec.x * (1 + 0.2 * level);
-						hurt.motionY += lookVec.y * (1 + 0.05 * level);
-						hurt.motionZ += lookVec.z * (1 + 0.2 * level);
+						hurt.motionX += lookVec.x * (1 + 0.15 * level);
+						hurt.motionY += lookVec.y * (1 + 0.15 * level);
+						hurt.motionZ += lookVec.z * (1 + 0.15 * level);
 					}
 				}
 
