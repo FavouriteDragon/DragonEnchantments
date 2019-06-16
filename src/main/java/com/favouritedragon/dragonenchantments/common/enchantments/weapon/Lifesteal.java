@@ -31,6 +31,7 @@ public class Lifesteal extends Enchantment {
 			else if (((EntityLivingBase) attacker).getHeldItemOffhand().isItemEnchanted()) {
 				stack = ((EntityLivingBase) attacker).getHeldItemOffhand();
 			}
+			if(stack == null) return;
 			int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.lifeSteal, stack);
 			if (level > 0) {
 				((EntityLivingBase) attacker).heal(event.getAmount() / 10 * level * level);
