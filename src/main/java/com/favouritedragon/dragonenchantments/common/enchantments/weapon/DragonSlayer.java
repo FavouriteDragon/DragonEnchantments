@@ -17,8 +17,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class DragonSlayer extends Enchantment {
 	public DragonSlayer() {
 		super(Rarity.RARE, ModEnchantments.WEAPONS, new EntityEquipmentSlot[]{EntityEquipmentSlot.MAINHAND, EntityEquipmentSlot.OFFHAND});
-		setRegistryName(DragonEnchants.MODID, "dragon_slayer");
-		setName("dragon_slayer");
+		setRegistryName("dragon_slayer");
+		setName(DragonEnchants.MODID + ":" + "dragon_slayer");
 	}
 
 	@SubscribeEvent
@@ -40,13 +40,22 @@ public class DragonSlayer extends Enchantment {
 	}
 
 	@Override
-	public boolean isTreasureEnchantment() {
-		return true;
-	}
-
-	@Override
 	public int getMaxLevel() {
 		return 5;
 	}
 
+	@Override
+	public int getMinEnchantability(int enchantmentLevel) {
+		return 10 + 20 * (enchantmentLevel - 1);
+	}
+
+	@Override
+	public int getMaxEnchantability(int enchantmentLevel) {
+		return super.getMaxEnchantability(enchantmentLevel) + 50;
+	}
+
+	@Override
+	public boolean isTreasureEnchantment() {
+		return true;
+	}
 }

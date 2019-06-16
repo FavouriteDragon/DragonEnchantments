@@ -1,6 +1,7 @@
 package com.favouritedragon.dragonenchantments;
 
 import com.favouritedragon.dragonenchantments.common.enchantments.weapon.DragonSlayer;
+import com.favouritedragon.dragonenchantments.common.enchantments.weapon.Lifesteal;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.crafting.IRecipe;
@@ -56,6 +57,7 @@ public class RegisterHandler {
 	@SubscribeEvent
 	public static void registerEnchantments(RegistryEvent.Register<Enchantment> event) {
 		event.getRegistry().register(new DragonSlayer());
+		event.getRegistry().register(new Lifesteal());
 	}
 
 	static void registerAll() {

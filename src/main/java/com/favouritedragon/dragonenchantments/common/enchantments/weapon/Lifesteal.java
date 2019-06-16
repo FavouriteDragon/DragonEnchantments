@@ -4,10 +4,8 @@ import com.favouritedragon.dragonenchantments.DragonEnchants;
 import com.favouritedragon.dragonenchantments.common.enchantments.ModEnchantments;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -16,22 +14,12 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class Lifesteal extends Enchantment {
 	public Lifesteal() {
 		super(Rarity.RARE, ModEnchantments.WEAPONS, new EntityEquipmentSlot[]{EntityEquipmentSlot.MAINHAND, EntityEquipmentSlot.OFFHAND});
-		setRegistryName(DragonEnchants.MODID, "life_steal");
-		setName("life_steal");
-	}
-
-	@Override
-	public boolean isTreasureEnchantment() {
-		return true;
-	}
-
-	@Override
-	public int getMaxLevel() {
-		return 3;
+		setRegistryName("life_steal");
+		setName(DragonEnchants.MODID + ":" + "life_steal");
 	}
 
 	@SubscribeEvent
-	public static void onLifeStea(LivingHurtEvent event) {
+	public static void onLifeSteal(LivingHurtEvent event) {
 		Entity attacker = event.getSource().getTrueSource();
 		if (attacker != null && !attacker.world.isRemote) {
 			ItemStack stack = null;
@@ -46,5 +34,25 @@ public class Lifesteal extends Enchantment {
 				((EntityLivingBase) attacker).heal(event.getAmount() / 10 * level * level);
 			}
 		}
+	}
+
+	@Override
+	public boolean isTreasureEnchantment() {
+		return true;
+	}
+
+	@Override
+	public int getMaxLevel() {
+		return 3;
+	}
+
+	@Override
+	public int getMinEnchantability(int enchantmentLevel) {
+		return 10 + 20 * (enchantmentLevel - 1);
+	}
+
+	@Override
+	public int getMaxEnchantability(int enchantmentLevel) {
+		return super.getMaxEnchantability(enchantmentLevel) + 50;
 	}
 }
