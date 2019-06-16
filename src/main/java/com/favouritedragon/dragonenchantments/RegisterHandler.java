@@ -1,5 +1,7 @@
 package com.favouritedragon.dragonenchantments;
 
+import com.favouritedragon.dragonenchantments.common.enchantments.sword.DragonSlayer;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
@@ -32,10 +34,6 @@ public class RegisterHandler {
 		EntityRegistry.registerEgg(registryName, eggColour, spotColour);
 	}
 
-	@SubscribeEvent
-	public static void registerRecipes(RegistryEvent.Register<IRecipe> event) {
-
-	}
 
 	public static void registerItems() {
 
@@ -50,7 +48,17 @@ public class RegisterHandler {
 
 	}
 
-	public static void registerAll() {
+	@SubscribeEvent
+	public static void registerRecipes(RegistryEvent.Register<IRecipe> event) {
+
+	}
+
+	@SubscribeEvent
+	public static void registerEnchantments(RegistryEvent.Register<Enchantment> event) {
+		event.getRegistry().register(new DragonSlayer());
+	}
+
+	static void registerAll() {
 		registerLoot();
 		registerEntities();
 		registerItems();
