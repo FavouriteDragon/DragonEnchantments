@@ -67,7 +67,7 @@ public class Lifesteal extends Enchantment {
 
 	@Override
 	public int getMinEnchantability(int enchantmentLevel) {
-		return 10 + 20 * (enchantmentLevel);
+		return 10 + 40 * (enchantmentLevel);
 	}
 
 	@Override

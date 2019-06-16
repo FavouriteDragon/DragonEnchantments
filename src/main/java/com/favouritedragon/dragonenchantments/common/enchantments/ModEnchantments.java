@@ -1,6 +1,7 @@
 package com.favouritedragon.dragonenchantments.common.enchantments;
 
 import com.favouritedragon.dragonenchantments.DragonEnchants;
+import com.favouritedragon.dragonenchantments.common.enchantments.sword.ThunderAspect;
 import com.favouritedragon.dragonenchantments.common.enchantments.weapon.DragonSlayer;
 import com.favouritedragon.dragonenchantments.common.enchantments.weapon.Lifesteal;
 import net.minecraft.enchantment.Enchantment;
@@ -19,4 +20,5 @@ public class ModEnchantments {
 
 	public static final Enchantment dragonSlayer = new DragonSlayer();
 	public static final Enchantment lifeSteal = new Lifesteal();
+	public static final Enchantment thunderAspect = new ThunderAspect();
 }
