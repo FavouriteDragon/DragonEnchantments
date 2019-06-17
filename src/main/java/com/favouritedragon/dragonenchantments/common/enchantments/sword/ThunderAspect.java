@@ -10,6 +10,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
@@ -17,6 +18,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.Sys;
@@ -41,9 +43,19 @@ public class ThunderAspect extends Enchantment {
 					float attackMult = (float) ((EntityPlayer) attacker).getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
 					float modifier = EnchantmentHelper.getModifierForCreature(stack, EnumCreatureAttribute.UNDEFINED);
 					float mult = ((EntityPlayer) attacker).getCooledAttackStrength(0.5F);
+					boolean doCrit = mult > 0.9F;
 					modifier *= mult;
 					attackMult = attackMult * (0.2F + mult * mult * 0.8F);
 					attackMult += modifier;
+					boolean crit = doCrit && attacker.fallDistance > 0.0F && !attacker.onGround && !((EntityPlayer) attacker).isOnLadder() &&
+							!attacker.isInWater() && !(((EntityPlayer) attacker).isPotionActive(MobEffects.BLINDNESS) && !attacker.isRiding() &&
+							!attacker.isSprinting() && hurt instanceof EntityLivingBase);
+
+					net.minecraftforge.event.entity.player.CriticalHitEvent hitResult =
+							net.minecraftforge.common.ForgeHooks.getCriticalHit((EntityPlayer) attacker, hurt, crit, crit ? 1.5F : 1.0F);
+					if (hitResult != null) {
+						attackMult *= hitResult.getDamageModifier();
+					}
 					//Checks to see if the damage is equivalent to a sweeping attack
 					if (event.getAmount() == (1.0F + EnchantmentHelper.getSweepingDamageRatio((EntityLivingBase) attacker) * attackMult)) {
 						int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.thunderAspect, stack);
