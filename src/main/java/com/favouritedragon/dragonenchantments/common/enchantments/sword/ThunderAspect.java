@@ -22,10 +22,16 @@ import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.CriticalHitEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import java.util.HashSet;
+
 //@Mod.EventBusSubscriber(modid = DragonEnchants.MODID)
 public class ThunderAspect extends Enchantment {
 
 	private float sweepMult = 0;
+
+	//Used in tandem with the sound event to determine whether to fire extra damage and such. Damn. This is hacky.
+	private HashSet<Entity> entities;
+
 	public ThunderAspect() {
 		super(Rarity.RARE, EnumEnchantmentType.WEAPON, new EntityEquipmentSlot[]{EntityEquipmentSlot.MAINHAND});
 		setRegistryName("thunder_aspect");
@@ -77,7 +83,7 @@ public class ThunderAspect extends Enchantment {
 		EntityLivingBase hurt = event.getEntityLiving();
 		if (attacker instanceof EntityLivingBase) {
 			ItemStack stack = ((EntityLivingBase) attacker).getHeldItemMainhand();
-			if (stack.isItemEnchanted()) {
+			if (stack.isItemEnchanted() && !(attacker instanceof EntityPlayer)) {
 			/*	if (attacker instanceof EntityPlayer) {
 					//This requires some weird stuff for a sweep attack (wtf, mojang)
 					setInitialSweepMult((EntityPlayer) attacker);
