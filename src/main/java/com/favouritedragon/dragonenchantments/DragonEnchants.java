@@ -1,6 +1,8 @@
 package com.favouritedragon.dragonenchantments;
 
+import com.favouritedragon.dragonenchantments.common.enchantments.sword.SoulDevour;
 import com.favouritedragon.dragonenchantments.proxy.IProxy;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -30,6 +32,7 @@ public class DragonEnchants {
 		proxy.preInit(event);
 		proxy.registerRender();
 		RegisterHandler.registerAll();
+		MinecraftForge.EVENT_BUS.register(new SoulDevour());
 	}
 
 	@EventHandler
