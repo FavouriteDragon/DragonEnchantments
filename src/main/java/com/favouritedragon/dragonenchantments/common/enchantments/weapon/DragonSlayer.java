@@ -15,10 +15,12 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import java.util.Objects;
+
 @Mod.EventBusSubscriber(modid = DragonEnchants.MODID)
 public class DragonSlayer extends Enchantment {
 	public DragonSlayer() {
-		super(Rarity.RARE, ModEnchantments.WEAPONS, new EntityEquipmentSlot[]{EntityEquipmentSlot.MAINHAND, EntityEquipmentSlot.OFFHAND});
+		super(Rarity.RARE, Objects.requireNonNull(ModEnchantments.WEAPONS), new EntityEquipmentSlot[]{EntityEquipmentSlot.MAINHAND, EntityEquipmentSlot.OFFHAND});
 		setRegistryName("dragon_slayer");
 		setName(DragonEnchants.MODID + ":" + "dragon_slayer");
 	}
