@@ -27,7 +27,7 @@ public class CloudWalker extends Enchantment {
 	}
 
 	@SubscribeEvent
-	public static void onFallEvent(LivingEvent.LivingUpdateEvent event) {
+	public static void jumpAndFallEvent(LivingEvent.LivingUpdateEvent event) {
 		EntityLivingBase entity = event.getEntityLiving();
 		if (entity != null) {
 			int level = EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.cloudWalker, entity);
@@ -38,6 +38,8 @@ public class CloudWalker extends Enchantment {
 			}
 		}
 	}
+
+
 
 	@SubscribeEvent
 	public void clearDoubleJump(LivingFallEvent event) {
