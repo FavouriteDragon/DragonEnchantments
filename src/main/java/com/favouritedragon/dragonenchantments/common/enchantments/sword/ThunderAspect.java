@@ -19,6 +19,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import org.lwjgl.Sys;
 
 @Mod.EventBusSubscriber(modid = DragonEnchants.MODID)
 public class ThunderAspect extends Enchantment {
@@ -44,8 +45,7 @@ public class ThunderAspect extends Enchantment {
 					attackMult = attackMult * (0.2F + mult * mult * 0.8F);
 					attackMult += modifier;
 					//Checks to see if the damage is equivalent to a sweeping attack
-					if (event.getAmount() == (1.0F + EnchantmentHelper.getSweepingDamageRatio((EntityLivingBase) attacker) + attackMult) && event.getSource().equals(
-							DamageSource.causePlayerDamage((EntityPlayer) attacker))) {
+					if (event.getAmount() == (1.0F + EnchantmentHelper.getSweepingDamageRatio((EntityLivingBase) attacker) * attackMult)) {
 						int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.thunderAspect, stack);
 						if (level > 0 && hurt != null) {
 							hurt.attackEntityFrom(DamageSource.LIGHTNING_BOLT, event.getAmount() / 10 * level * 2);
