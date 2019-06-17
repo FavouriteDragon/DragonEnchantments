@@ -1,7 +1,13 @@
 package com.favouritedragon.dragonenchantments.common.util;
 
 import com.favouritedragon.dragonenchantments.DragonEnchants;
+
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityCreeper;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -28,4 +34,15 @@ public class DragonUtils {
 		}
 	}
 
+	public static int getHeldLevelForEnchantment(EntityLivingBase entity, Enchantment enchantment) {
+		ItemStack stack = null;
+		ItemStack mainStack = entity.getHeldItemMainhand();
+		ItemStack offStack = entity.getHeldItemOffhand();
+		if (mainStack.isItemEnchanted()) {
+			stack = mainStack;
+		} else if (offStack.isItemEnchanted()) {
+			stack = offStack;
+		}
+		return stack != null ? EnchantmentHelper.getEnchantmentLevel(enchantment, stack) : 0;
+	}
 }

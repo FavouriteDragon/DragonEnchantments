@@ -60,6 +60,7 @@ public class RegisterHandler {
 		event.getRegistry().register(ModEnchantments.dragonSlayer);
 		event.getRegistry().register(ModEnchantments.lifeSteal);
 		event.getRegistry().register(ModEnchantments.thunderAspect);
+		event.getRegistry().register(ModEnchantments.enderference);
 	}
 
 	static void registerAll() {
