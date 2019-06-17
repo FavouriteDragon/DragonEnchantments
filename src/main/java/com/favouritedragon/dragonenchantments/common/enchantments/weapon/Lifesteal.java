@@ -4,22 +4,19 @@ import com.favouritedragon.dragonenchantments.DragonEnchants;
 import com.favouritedragon.dragonenchantments.common.enchantments.ModEnchantments;
 import com.favouritedragon.dragonenchantments.common.util.DragonUtils;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import java.util.Objects;
 
 @Mod.EventBusSubscriber(modid = DragonEnchants.MODID)
 public class Lifesteal extends Enchantment {
 	public Lifesteal() {
-		super(Rarity.RARE, ModEnchantments.WEAPONS, new EntityEquipmentSlot[]{EntityEquipmentSlot.MAINHAND, EntityEquipmentSlot.OFFHAND});
+		super(Rarity.RARE, Objects.requireNonNull(ModEnchantments.WEAPONS), new EntityEquipmentSlot[]{EntityEquipmentSlot.MAINHAND, EntityEquipmentSlot.OFFHAND});
 		setRegistryName("life_steal");
 		setName(DragonEnchants.MODID + ":" + "life_steal");
 	}
@@ -31,7 +28,8 @@ public class Lifesteal extends Enchantment {
 		if (attacker instanceof EntityLivingBase && !attacker.world.isRemote) {
 			int level = DragonUtils.getHeldLevelForEnchantment((EntityLivingBase) attacker, ModEnchantments.lifeSteal, event);
 			if (level > 0) {
-				((EntityLivingBase) attacker).heal(event.getAmount() / 10 * level * level);
+				float amount = event.getAmount() > event.getEntityLiving().getHealth() ? event.getAmount() : event.getEntityLiving().getHealth();
+				((EntityLivingBase) attacker).heal(amount / 10 * level * level);
 			}
 		}
 	}
