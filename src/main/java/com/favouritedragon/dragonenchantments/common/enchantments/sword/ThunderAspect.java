@@ -37,14 +37,14 @@ public class ThunderAspect extends Enchantment {
 		Entity hurt = event.getTarget();
 		if (player != null) {
 			ItemStack stack = player.getHeldItemMainhand();
-			if (!player.getCooldownTracker().hasCooldown(stack.getItem())) {
+			if (player.getCooledAttackStrength(0) >= 1.0) {
 				int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.thunderAspect, stack);
 				if (hurt instanceof EntityLivingBase) {
 					if (level > 0) {
 						hurt.attackEntityFrom(DamageSource.LIGHTNING_BOLT, level * 2);
 						Vec3d lookVec = player.getLookVec();
 						hurt.motionX += lookVec.x * (1 + 0.2 * level);
-						hurt.motionY += lookVec.y * (1 + 2 * level);
+						hurt.motionY += lookVec.y > 0 ? lookVec.y * (1 + 0.2 * level) : 1 + 0.4 * level;
 						hurt.motionZ += lookVec.z * (1 + 0.2 * level);
 					}
 					if (player.world.isRemote) {
@@ -59,7 +59,7 @@ public class ThunderAspect extends Enchantment {
 						hurt.attackEntityFrom(DamageSource.LIGHTNING_BOLT, level);
 						Vec3d lookVec = player.getLookVec();
 						hurt.motionX += lookVec.x * (1 + 0.1 * level);
-						hurt.motionY += lookVec.y * (1 + level);
+						hurt.motionY += lookVec.y > 0 ? lookVec.y * (1 + 0.1 * level) : 1 + 0.2 * level;
 						hurt.motionZ += lookVec.z * (1 + 0.1 * level);
 					}
 				}
