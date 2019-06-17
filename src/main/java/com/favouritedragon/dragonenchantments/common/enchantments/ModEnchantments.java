@@ -1,6 +1,7 @@
 package com.favouritedragon.dragonenchantments.common.enchantments;
 
 import com.favouritedragon.dragonenchantments.DragonEnchants;
+import com.favouritedragon.dragonenchantments.common.enchantments.boots.CloudWalker;
 import com.favouritedragon.dragonenchantments.common.enchantments.sword.SoulDevour;
 import com.favouritedragon.dragonenchantments.common.enchantments.sword.ThunderAspect;
 import com.favouritedragon.dragonenchantments.common.enchantments.weapon.DragonSlayer;
@@ -20,9 +21,11 @@ public class ModEnchantments {
 			(item instanceof ItemSword || item instanceof ItemBow || item instanceof ItemAxe));
 
 
+	public static final Enchantment cloudWalker = new CloudWalker();
 	public static final Enchantment dragonSlayer = new DragonSlayer();
+	public static final Enchantment enderference = new Enderference();
 	public static final Enchantment lifeSteal = new Lifesteal();
 	public static final Enchantment thunderAspect = new ThunderAspect();
-	public static final Enchantment enderference = new Enderference();
 	public static final Enchantment soulDevour = new SoulDevour();
+
 }
