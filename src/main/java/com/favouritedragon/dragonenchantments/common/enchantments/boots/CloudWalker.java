@@ -1,5 +1,6 @@
 package com.favouritedragon.dragonenchantments.common.enchantments.boots;
 
+import com.favouritedragon.dragonenchantments.DragonEnchants;
 import com.favouritedragon.dragonenchantments.common.enchantments.ModEnchantments;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -13,6 +14,8 @@ public class CloudWalker extends Enchantment {
 
 	public CloudWalker() {
 		super(Rarity.VERY_RARE, EnumEnchantmentType.ARMOR_FEET, new EntityEquipmentSlot[]{EntityEquipmentSlot.FEET});
+		setName(DragonEnchants.MODID + ":" + "cloud_walker");
+		setRegistryName("cloud_walker");
 	}
 
 	@SubscribeEvent
