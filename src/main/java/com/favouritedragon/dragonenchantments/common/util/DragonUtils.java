@@ -1,15 +1,16 @@
 package com.favouritedragon.dragonenchantments.common.util;
 
 import com.favouritedragon.dragonenchantments.DragonEnchants;
-
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityCreeper;
+import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.util.DamageSource;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -38,10 +39,58 @@ public class DragonUtils {
 		ItemStack stack = null;
 		ItemStack mainStack = entity.getHeldItemMainhand();
 		ItemStack offStack = entity.getHeldItemOffhand();
-		if (mainStack.isItemEnchanted()) {
+		if (mainStack.isItemEnchanted() && EnchantmentHelper.getEnchantmentLevel(enchantment, mainStack) > 0) {
 			stack = mainStack;
-		} else if (offStack.isItemEnchanted()) {
+		} else if (offStack.isItemEnchanted() && EnchantmentHelper.getEnchantmentLevel(enchantment, offStack) > 0) {
 			stack = offStack;
+		}
+		return stack != null ? EnchantmentHelper.getEnchantmentLevel(enchantment, stack) : 0;
+	}
+
+	public static int getHeldLevelForEnchantment(EntityLivingBase entity, Enchantment enchantment, LivingHurtEvent event) {
+		ItemStack stack = null;
+		ItemStack mainStack = entity.getHeldItemMainhand();
+		ItemStack offStack = entity.getHeldItemOffhand();
+		boolean mainLevel = EnchantmentHelper.getEnchantmentLevel(enchantment, mainStack) > 0;
+		boolean offLevel = EnchantmentHelper.getEnchantmentLevel(enchantment, offStack) > 0;
+		if (event.getSource().getImmediateSource() instanceof EntityArrow) {
+			if (mainStack.isItemEnchanted() && mainStack.getItem() == Items.BOW && mainLevel) {
+				stack = mainStack;
+			}
+			else if (offStack.isItemEnchanted() && offStack.getItem() == Items.BOW && offLevel) {
+				stack = offStack;
+			}
+		}
+		else {
+			if (mainStack.isItemEnchanted() && mainLevel) {
+				stack = mainStack;
+			} else if (offStack.isItemEnchanted() && offLevel) {
+				stack = offStack;
+			}
+		}
+		return stack != null ? EnchantmentHelper.getEnchantmentLevel(enchantment, stack) : 0;
+	}
+
+	public static int getHeldLevelForEnchantment(EntityLivingBase entity, Enchantment enchantment, LivingAttackEvent event) {
+		ItemStack stack = null;
+		ItemStack mainStack = entity.getHeldItemMainhand();
+		ItemStack offStack = entity.getHeldItemOffhand();
+		boolean mainLevel = EnchantmentHelper.getEnchantmentLevel(enchantment, mainStack) > 0;
+		boolean offLevel = EnchantmentHelper.getEnchantmentLevel(enchantment, offStack) > 0;
+		if (event.getSource().getImmediateSource() instanceof EntityArrow) {
+			if (mainStack.isItemEnchanted() && mainStack.getItem() == Items.BOW && mainLevel) {
+				stack = mainStack;
+			}
+			else if (offStack.isItemEnchanted() && offStack.getItem() == Items.BOW && offLevel) {
+				stack = offStack;
+			}
+		}
+		else {
+			if (mainStack.isItemEnchanted() && mainLevel) {
+				stack = mainStack;
+			} else if (offStack.isItemEnchanted() && offLevel) {
+				stack = offStack;
+			}
 		}
 		return stack != null ? EnchantmentHelper.getEnchantmentLevel(enchantment, stack) : 0;
 	}

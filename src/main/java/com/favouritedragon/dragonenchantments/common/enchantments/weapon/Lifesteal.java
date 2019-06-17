@@ -2,6 +2,7 @@ package com.favouritedragon.dragonenchantments.common.enchantments.weapon;
 
 import com.favouritedragon.dragonenchantments.DragonEnchants;
 import com.favouritedragon.dragonenchantments.common.enchantments.ModEnchantments;
+import com.favouritedragon.dragonenchantments.common.util.DragonUtils;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -23,32 +24,12 @@ public class Lifesteal extends Enchantment {
 		setName(DragonEnchants.MODID + ":" + "life_steal");
 	}
 
+	//Has to be an attack event so if you kill an enemy you still steal life.
 	@SubscribeEvent
-	public static void onLifeSteal(LivingHurtEvent event) {
+	public static void onLifeSteal(LivingAttackEvent event) {
 		Entity attacker = event.getSource().getTrueSource();
 		if (attacker instanceof EntityLivingBase && !attacker.world.isRemote) {
-			ItemStack stack = null;
-			int level;
-			ItemStack mainStack = ((EntityLivingBase) attacker).getHeldItemMainhand();
-			ItemStack offStack = ((EntityLivingBase) attacker).getHeldItemOffhand();
-			if (event.getSource().getImmediateSource() instanceof EntityArrow) {
-				if (mainStack.isItemEnchanted() && mainStack.getItem() == Items.BOW) {
-					stack = mainStack;
-				}
-				else if (offStack.isItemEnchanted() && offStack.getItem() == Items.BOW) {
-					stack = offStack;
-				}
-			}
-			else {
-				if (mainStack.isItemEnchanted()) {
-					stack = mainStack;
-				}
-				else if (offStack.isItemEnchanted()) {
-					stack = offStack;
-				}
-			}
-			if(stack == null) return;
-			level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.lifeSteal, stack);
+			int level = DragonUtils.getHeldLevelForEnchantment((EntityLivingBase) attacker, ModEnchantments.lifeSteal, event);
 			if (level > 0) {
 				((EntityLivingBase) attacker).heal(event.getAmount() / 10 * level * level);
 			}
