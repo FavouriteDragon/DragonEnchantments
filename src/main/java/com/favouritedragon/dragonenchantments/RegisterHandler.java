@@ -3,6 +3,8 @@ package com.favouritedragon.dragonenchantments;
 import com.favouritedragon.dragonenchantments.common.enchantments.ModEnchantments;
 import com.favouritedragon.dragonenchantments.common.enchantments.weapon.DragonSlayer;
 import com.favouritedragon.dragonenchantments.common.enchantments.weapon.Lifesteal;
+import com.favouritedragon.dragonenchantments.common.network.PacketSDoubleJump;
+
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.crafting.IRecipe;
@@ -11,6 +13,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.relauncher.Side;
 
 @Mod.EventBusSubscriber(modid = DragonEnchants.MODID)
 public class RegisterHandler {
@@ -55,6 +58,10 @@ public class RegisterHandler {
 
 	}
 
+	public static void registerPackets(){
+		DragonEnchants.NETWORK.registerMessage(PacketSDoubleJump.Handler.class, PacketSDoubleJump.class, 1, Side.SERVER);
+	}
+
 	@SubscribeEvent
 	public static void registerEnchantments(RegistryEvent.Register<Enchantment> event) {
 		event.getRegistry().register(ModEnchantments.cloudWalker);
@@ -62,18 +69,13 @@ public class RegisterHandler {
 		event.getRegistry().register(ModEnchantments.enderference);
 		event.getRegistry().register(ModEnchantments.lifeSteal);
 		event.getRegistry().register(ModEnchantments.thunderAspect);
-<<<<<<< HEAD
-		event.getRegistry().register(ModEnchantments.enderference);
-		event.getRegistry().register(ModEnchantments.soulDevour);
-=======
-
->>>>>>> d0ddc5dcb04d3171e329c600432beb915064cdde
 	}
 
 	static void registerAll() {
 		registerLoot();
 		registerEntities();
 		registerItems();
+		registerPackets();
 	}
 
 }

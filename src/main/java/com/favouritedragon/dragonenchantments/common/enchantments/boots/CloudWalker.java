@@ -2,6 +2,8 @@ package com.favouritedragon.dragonenchantments.common.enchantments.boots;
 
 import com.favouritedragon.dragonenchantments.DragonEnchants;
 import com.favouritedragon.dragonenchantments.common.enchantments.ModEnchantments;
+import com.favouritedragon.dragonenchantments.common.network.PacketSDoubleJump;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -55,11 +57,16 @@ public class CloudWalker extends Enchantment {
 			if (mc.gameSettings.keyBindJump.isKeyDown()) {
 				if (getTimesJumped(player.getUniqueID().toString()) < 2) {
 					if (!player.onGround) {
-
+						player.getEntityWorld().sendPacketToServer(DragonEnchants.NETWORK.getPacketFrom(new PacketSDoubleJump()));
 					}
 				}
 			}
 		}
+
+	}
+
+	// Called on the server
+	public static void doDoubleJump(EntityPlayer entity){
 
 	}
 
