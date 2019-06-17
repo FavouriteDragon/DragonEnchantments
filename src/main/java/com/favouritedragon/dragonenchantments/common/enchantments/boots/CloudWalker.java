@@ -32,7 +32,7 @@ public class CloudWalker extends Enchantment {
 		if (entity != null) {
 			int level = EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.cloudWalker, entity);
 			if (level > 0) {
-				if (entity.motionY <= 0) {
+				if (entity.motionY < 0) {
 					entity.motionY += 0.06 * level;
 				}
 			}
@@ -40,13 +40,14 @@ public class CloudWalker extends Enchantment {
 	}
 
 	@SubscribeEvent
-	public static void jumpEvent(LivingEvent.LivingJumpEvent event) {
-
-	}
-
-	@SubscribeEvent
 	public void clearDoubleJump(LivingFallEvent event) {
-
+		EntityLivingBase entity = event.getEntityLiving();
+		if (entity != null) {
+			int level = EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.cloudWalker, entity);
+			if (level > 0) {
+				setTimesJumped(entity.getUniqueID().toString(), 0);
+			}
+		}
 	}
 	@Override
 	public int getMaxLevel() {
@@ -58,11 +59,15 @@ public class CloudWalker extends Enchantment {
 		return 100 * enchantmentLevel;
 	}
 
-	private static void addTimesJumped(String UUID, int jumped) {
+	public static void setTimesJumped(String UUID, int jumped) {
+		timesJumped.replace(UUID, jumped);
+	}
+
+	public static void addTimesJumped(String UUID, int jumped) {
 		timesJumped.put(UUID, jumped);
 	}
 
-	private static HashMap<String, Integer> getTimesJumped() {
+	public static HashMap<String, Integer> getTimesJumped() {
 		return timesJumped;
 	}
 }
