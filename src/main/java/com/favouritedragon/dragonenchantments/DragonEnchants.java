@@ -32,7 +32,6 @@ public class DragonEnchants {
 		proxy.preInit(event);
 		proxy.registerRender();
 		RegisterHandler.registerAll();
-		MinecraftForge.EVENT_BUS.register(new SoulDevour());
 	}
 
 	@EventHandler

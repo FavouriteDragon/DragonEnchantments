@@ -1,6 +1,8 @@
 package com.favouritedragon.dragonenchantments.common.util;
 
 import com.favouritedragon.dragonenchantments.DragonEnchants;
+
+import akka.japi.Pair;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
@@ -45,6 +47,18 @@ public class DragonUtils {
 			stack = offStack;
 		}
 		return stack != null ? EnchantmentHelper.getEnchantmentLevel(enchantment, stack) : 0;
+	}
+
+	public static Pair<Integer,ItemStack> getHeldLevelForEnchantmentAndHeldItem(EntityLivingBase entity, Enchantment enchantment) {
+		ItemStack stack = null;
+		ItemStack mainStack = entity.getHeldItemMainhand();
+		ItemStack offStack = entity.getHeldItemOffhand();
+		if (mainStack.isItemEnchanted() && EnchantmentHelper.getEnchantmentLevel(enchantment, mainStack) > 0) {
+			stack = mainStack;
+		} else if (offStack.isItemEnchanted() && EnchantmentHelper.getEnchantmentLevel(enchantment, offStack) > 0) {
+			stack = offStack;
+		}
+		return new Pair<Integer,ItemStack>(stack != null ? EnchantmentHelper.getEnchantmentLevel(enchantment, stack) : 0, stack);
 	}
 
 	public static int getHeldLevelForEnchantment(EntityLivingBase entity, Enchantment enchantment, LivingHurtEvent event) {
