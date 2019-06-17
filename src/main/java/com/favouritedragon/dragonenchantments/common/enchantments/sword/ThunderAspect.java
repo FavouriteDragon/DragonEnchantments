@@ -38,6 +38,8 @@ public class ThunderAspect extends Enchantment {
 		}
 	}
 
+	//TODO: Try moving calculations to LivingHurtEvent, and/or AttackEntityEvent and see if that fixes things
+
 	@SubscribeEvent
 	public void onSwingEvent(LivingAttackEvent event) {
 		Entity attacker = event.getSource().getTrueSource();
