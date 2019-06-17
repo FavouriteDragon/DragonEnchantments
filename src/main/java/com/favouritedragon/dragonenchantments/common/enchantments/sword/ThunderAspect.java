@@ -15,10 +15,8 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -39,12 +37,15 @@ public class ThunderAspect extends Enchantment {
 			if (stack.isItemEnchanted()) {
 				if (attacker instanceof EntityPlayer) {
 					//This requires some weird stuff for a sweep attack (wtf, mojang)
-					float attackMult = (float)((EntityPlayer) attacker).getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
+					float attackMult = (float) ((EntityPlayer) attacker).getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
 					float modifier = EnchantmentHelper.getModifierForCreature(stack, EnumCreatureAttribute.UNDEFINED);
 					float mult = ((EntityPlayer) attacker).getCooledAttackStrength(0.5F);
 					modifier *= mult;
 					attackMult = attackMult * (0.2F + mult * mult * 0.8F);
-					if (modifier > 0.0F || attackMult > 0.0F) {
+					attackMult += modifier;
+					//Checks to see if the damage is equivalent to a sweeping attack
+					if (event.getAmount() == (1.0F + EnchantmentHelper.getSweepingDamageRatio((EntityLivingBase) attacker) + attackMult) && event.getSource().equals(
+							DamageSource.causePlayerDamage((EntityPlayer) attacker))) {
 						int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.thunderAspect, stack);
 						if (level > 0 && hurt != null) {
 							hurt.attackEntityFrom(DamageSource.LIGHTNING_BOLT, event.getAmount() / 10 * level * 2);
@@ -57,22 +58,20 @@ public class ThunderAspect extends Enchantment {
 										1.0F + attacker.world.rand.nextFloat(), 1.0F + attacker.world.rand.nextFloat(), true);
 							}
 						}
-					}
-					else {
+					} else {
 						int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.thunderAspect, stack);
 						if (level > 0 && hurt != null) {
-							hurt.attackEntityFrom(DamageSource.LIGHTNING_BOLT,event.getAmount() / 10 * level);
+							hurt.attackEntityFrom(DamageSource.LIGHTNING_BOLT, event.getAmount() / 10 * level);
 							Vec3d lookVec = attacker.getLookVec();
 							hurt.motionX += lookVec.x * (1 + 0.15 * level);
 							hurt.motionY += lookVec.y * (1 + 0.15 * level);
 							hurt.motionZ += lookVec.z * (1 + 0.15 * level);
 						}
 					}
-				}
-				else {
+				} else {
 					int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.thunderAspect, stack);
 					if (level > 0 && hurt != null) {
-						hurt.attackEntityFrom(DamageSource.LIGHTNING_BOLT,event.getAmount() / 10 * level);
+						hurt.attackEntityFrom(DamageSource.LIGHTNING_BOLT, event.getAmount() / 10 * level);
 						Vec3d lookVec = attacker.getLookVec();
 						hurt.motionX += lookVec.x * (1 + 0.15 * level);
 						hurt.motionY += lookVec.y * (1 + 0.15 * level);
@@ -82,6 +81,7 @@ public class ThunderAspect extends Enchantment {
 
 			}
 		}
+
 	}
 
 
@@ -104,4 +104,5 @@ public class ThunderAspect extends Enchantment {
 	public boolean isTreasureEnchantment() {
 		return true;
 	}
+
 }
