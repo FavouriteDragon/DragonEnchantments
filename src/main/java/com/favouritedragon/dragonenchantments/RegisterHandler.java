@@ -57,10 +57,12 @@ public class RegisterHandler {
 
 	@SubscribeEvent
 	public static void registerEnchantments(RegistryEvent.Register<Enchantment> event) {
+		event.getRegistry().register(ModEnchantments.cloudWalker);
 		event.getRegistry().register(ModEnchantments.dragonSlayer);
+		event.getRegistry().register(ModEnchantments.enderference);
 		event.getRegistry().register(ModEnchantments.lifeSteal);
 		event.getRegistry().register(ModEnchantments.thunderAspect);
-		event.getRegistry().register(ModEnchantments.enderference);
+
 	}
 
 	static void registerAll() {
