@@ -2,15 +2,22 @@ package com.favouritedragon.dragonenchantments.common.enchantments.boots;
 
 import com.favouritedragon.dragonenchantments.DragonEnchants;
 import com.favouritedragon.dragonenchantments.common.enchantments.ModEnchantments;
+import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnumEnchantmentType;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -32,13 +39,29 @@ public class CloudWalker extends Enchantment {
 		if (entity != null) {
 			int level = EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.cloudWalker, entity);
 			if (level > 0) {
-				if (entity.motionY < 0) {
-					entity.motionY += 0.06 * level;
+				if (entity.motionY < 0 && !entity.onGround) {
+					entity.motionY += 0.03 + level / 100F;
 				}
 			}
 		}
 	}
 
+	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
+	public static void onKeyPressEvent(InputEvent.KeyInputEvent event) {
+		Minecraft mc = Minecraft.getMinecraft();
+		EntityPlayer player = mc.player;
+		if (player != null) {
+			if (mc.gameSettings.keyBindJump.isKeyDown()) {
+				if (getTimesJumped(player.getUniqueID().toString()) < 2) {
+					if (!player.onGround) {
+
+					}
+				}
+			}
+		}
+
+	}
 
 
 	@SubscribeEvent
@@ -69,7 +92,7 @@ public class CloudWalker extends Enchantment {
 		timesJumped.put(UUID, jumped);
 	}
 
-	public static HashMap<String, Integer> getTimesJumped() {
-		return timesJumped;
+	public static int getTimesJumped(String UUID) {
+		return timesJumped.get(UUID);
 	}
 }
