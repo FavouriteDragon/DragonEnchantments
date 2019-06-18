@@ -23,6 +23,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
+import java.util.Random;
+
 @Mod.EventBusSubscriber(modid = DragonEnchants.MODID)
 public class DragonUtils {
 	private static final DataParameter<Boolean> POWERED;
@@ -133,5 +135,10 @@ public class DragonUtils {
 		}
 
 		return teleport;
+	}
+
+	public static int getRandomNumberInRange(int min, int max) {
+		Random r = new Random();
+		return r.nextInt((max - min) + 1) + min;
 	}
 }
