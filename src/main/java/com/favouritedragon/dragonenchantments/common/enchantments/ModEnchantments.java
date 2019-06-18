@@ -7,6 +7,7 @@ import com.favouritedragon.dragonenchantments.common.enchantments.sword.ThunderA
 import com.favouritedragon.dragonenchantments.common.enchantments.weapon.DragonSlayer;
 import com.favouritedragon.dragonenchantments.common.enchantments.weapon.Enderference;
 import com.favouritedragon.dragonenchantments.common.enchantments.weapon.Lifesteal;
+import com.favouritedragon.dragonenchantments.common.enchantments.weapon.Venomous;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.item.ItemAxe;
@@ -27,5 +28,6 @@ public class ModEnchantments {
 	public static final Enchantment lifeSteal = new Lifesteal();
 	public static final Enchantment thunderAspect = new ThunderAspect();
 	public static final Enchantment soulDevour = new SoulDevour();
+	public static final Enchantment venomous = new Venomous();
 
 }

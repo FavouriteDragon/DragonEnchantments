@@ -42,7 +42,7 @@ public class ThunderAspect extends Enchantment {
 						hurt.attackEntityFrom(DamageSource.LIGHTNING_BOLT, level * 2);
 						Vec3d lookVec = player.getLookVec();
 						hurt.motionX += lookVec.x * (1 + 0.2 * level);
-						hurt.motionY += lookVec.y > 0 ? lookVec.y * (1 + 0.2 * level) : 0.3 * level;
+						hurt.motionY += lookVec.y > 0 ? lookVec.y * (1 + 0.2 * level) : 0.2 * level;
 						hurt.motionZ += lookVec.z * (1 + 0.2 * level);
 					}
 					if (player.world.isRemote) {
@@ -57,7 +57,7 @@ public class ThunderAspect extends Enchantment {
 						hurt.attackEntityFrom(DamageSource.LIGHTNING_BOLT, level);
 						Vec3d lookVec = player.getLookVec();
 						hurt.motionX += lookVec.x * (1 + 0.1 * level);
-						hurt.motionY += lookVec.y > 0 ? lookVec.y * (1 + 0.15 * level) : 0.15 * level;
+						hurt.motionY += lookVec.y > 0 ? lookVec.y * (1 + 0.1 * level) : 0.1 * level;
 						hurt.motionZ += lookVec.z * (1 + 0.1 * level);
 					}
 				}

@@ -34,7 +34,7 @@ public class DragonEnchants {
 		proxy.preInit(event);
 		proxy.registerRender();
 		RegisterHandler.registerAll();
-		NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel("dragon_enchants");
+		NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel(DragonEnchants.MODID);
 	}
 
 	@EventHandler
