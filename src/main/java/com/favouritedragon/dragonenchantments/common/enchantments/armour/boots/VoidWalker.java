@@ -1,4 +1,4 @@
-package com.favouritedragon.dragonenchantments.common.enchantments.boots;
+package com.favouritedragon.dragonenchantments.common.enchantments.armour.boots;
 
 import com.favouritedragon.dragonenchantments.DragonEnchants;
 import com.favouritedragon.dragonenchantments.common.enchantments.ModEnchantments;
@@ -41,7 +41,10 @@ public class VoidWalker extends Enchantment {
 		if (player != null) {
 			if (mc.gameSettings.keyBindSneak.isKeyDown()) {
 				int level = EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.voidWalker, player);
+				System.out.println(level);
+				System.out.println(player.getEntityWorld().isDaytime());
 				if (level > 0 && (player.getEntityWorld().getLight(player.getPosition()) < 7 || !player.getEntityWorld().isDaytime())) {
+					System.out.println("yay?");
 					player.getEntityWorld().sendPacketToServer(
 							DragonEnchants.NETWORK.getPacketFrom(new PacketSVoidWalk(player.getEntityId())));
 				}
@@ -52,14 +55,18 @@ public class VoidWalker extends Enchantment {
 
 	public static void onVoidWalk(EntityPlayer entity) {
 		int level = EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.voidWalker, entity);
+		System.out.println(level);
 		RayTraceResult result = entity.rayTrace(8 * level,1);
 		if (result != null && result.typeOfHit == RayTraceResult.Type.BLOCK) {
 			BlockPos position = result.getBlockPos().offset(result.sideHit);
+			System.out.println("Step 1");
 			double distance = entity.getDistance(position.getX(), position.getY(), position.getZ());
 			if (entity.getEntityWorld().getLight(entity.getPosition()) < 7 || !entity.getEntityWorld().isDaytime()) {
+				System.out.println("Step 2");
 				int foodlevel = entity.getFoodStats().getFoodLevel();
 				foodlevel -= Double.valueOf(distance / 3).intValue();
-				if (foodlevel >= 0) {
+				if (foodlevel >= 0 || entity.isCreative()) {
+					System.out.println("Step 3");
 					DragonUtils.teleportTo(entity, position.getX(), position.getY(), position.getZ());
 					entity.getFoodStats().setFoodLevel(foodlevel);
 				}

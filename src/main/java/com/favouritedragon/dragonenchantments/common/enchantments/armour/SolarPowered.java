@@ -31,7 +31,7 @@ public class SolarPowered extends Enchantment {
 		EntityLivingBase entity = event.getEntityLiving();
 		if (entity != null) {
 			if (entity.world.isDaytime()) {
-				if(entity.world.canSeeSky(entity.getPosition())) {
+				if(entity.world.canSeeSky(entity.getPosition()) && !entity.world.isRaining() && !entity.world.isThundering()) {
 					int level = EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.solarPowered, entity);
 					if (level > 0) {
 						if (!entity.isPotionActive(MobEffects.REGENERATION)) {

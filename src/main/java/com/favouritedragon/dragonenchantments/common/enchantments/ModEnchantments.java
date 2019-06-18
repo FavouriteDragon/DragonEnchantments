@@ -2,11 +2,11 @@ package com.favouritedragon.dragonenchantments.common.enchantments;
 
 import com.favouritedragon.dragonenchantments.DragonEnchants;
 import com.favouritedragon.dragonenchantments.common.enchantments.armour.SolarPowered;
-import com.favouritedragon.dragonenchantments.common.enchantments.boots.CloudWalker;
-import com.favouritedragon.dragonenchantments.common.enchantments.boots.EndWalker;
-import com.favouritedragon.dragonenchantments.common.enchantments.boots.VoidWalker;
-import com.favouritedragon.dragonenchantments.common.enchantments.sword.SoulDevour;
-import com.favouritedragon.dragonenchantments.common.enchantments.sword.ThunderAspect;
+import com.favouritedragon.dragonenchantments.common.enchantments.armour.boots.CloudWalker;
+import com.favouritedragon.dragonenchantments.common.enchantments.armour.boots.EndWalker;
+import com.favouritedragon.dragonenchantments.common.enchantments.armour.boots.VoidWalker;
+import com.favouritedragon.dragonenchantments.common.enchantments.weapon.sword.SoulDevour;
+import com.favouritedragon.dragonenchantments.common.enchantments.weapon.sword.ThunderAspect;
 import com.favouritedragon.dragonenchantments.common.enchantments.weapon.DragonSlayer;
 import com.favouritedragon.dragonenchantments.common.enchantments.weapon.Enderference;
 import com.favouritedragon.dragonenchantments.common.enchantments.weapon.Lifesteal;

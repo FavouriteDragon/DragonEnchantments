@@ -1,4 +1,4 @@
-package com.favouritedragon.dragonenchantments.common.enchantments.boots;
+package com.favouritedragon.dragonenchantments.common.enchantments.armour.boots;
 
 import com.favouritedragon.dragonenchantments.DragonEnchants;
 import com.favouritedragon.dragonenchantments.common.enchantments.ModEnchantments;

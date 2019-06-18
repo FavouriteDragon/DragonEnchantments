@@ -1,7 +1,6 @@
 package com.favouritedragon.dragonenchantments.common.network;
 
-import com.favouritedragon.dragonenchantments.common.enchantments.boots.CloudWalker;
-import com.favouritedragon.dragonenchantments.common.enchantments.boots.VoidWalker;
+import com.favouritedragon.dragonenchantments.common.enchantments.armour.boots.VoidWalker;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
