@@ -3,6 +3,7 @@ package com.favouritedragon.dragonenchantments.common.enchantments;
 import com.favouritedragon.dragonenchantments.DragonEnchants;
 import com.favouritedragon.dragonenchantments.common.enchantments.boots.CloudWalker;
 import com.favouritedragon.dragonenchantments.common.enchantments.boots.EndWalker;
+import com.favouritedragon.dragonenchantments.common.enchantments.boots.VoidWalker;
 import com.favouritedragon.dragonenchantments.common.enchantments.sword.SoulDevour;
 import com.favouritedragon.dragonenchantments.common.enchantments.sword.ThunderAspect;
 import com.favouritedragon.dragonenchantments.common.enchantments.weapon.DragonSlayer;
@@ -31,5 +32,6 @@ public class ModEnchantments {
 	public static final Enchantment thunderAspect = new ThunderAspect();
 	public static final Enchantment soulDevour = new SoulDevour();
 	public static final Enchantment venomous = new Venomous();
+	public static final Enchantment voidWalker = new VoidWalker();
 
 }

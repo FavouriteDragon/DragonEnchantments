@@ -4,6 +4,7 @@ import com.favouritedragon.dragonenchantments.common.enchantments.ModEnchantment
 import com.favouritedragon.dragonenchantments.common.enchantments.weapon.DragonSlayer;
 import com.favouritedragon.dragonenchantments.common.enchantments.weapon.Lifesteal;
 import com.favouritedragon.dragonenchantments.common.network.PacketSDoubleJump;
+import com.favouritedragon.dragonenchantments.common.network.PacketSVoidWalk;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
@@ -60,6 +61,7 @@ public class RegisterHandler {
 
 	public static void registerPackets(){
 		DragonEnchants.NETWORK.registerMessage(PacketSDoubleJump.Handler.class, PacketSDoubleJump.class, 1, Side.SERVER);
+		DragonEnchants.NETWORK.registerMessage(PacketSVoidWalk.Handler.class, PacketSVoidWalk.class, 2, Side.SERVER);
 	}
 
 	@SubscribeEvent
@@ -72,6 +74,7 @@ public class RegisterHandler {
 		event.getRegistry().register(ModEnchantments.thunderAspect);
 		event.getRegistry().register(ModEnchantments.soulDevour);
 		event.getRegistry().register(ModEnchantments.venomous);
+		event.getRegistry().register(ModEnchantments.voidWalker);
 	}
 
 	static void registerAll() {
