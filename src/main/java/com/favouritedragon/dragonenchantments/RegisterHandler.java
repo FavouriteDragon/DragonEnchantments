@@ -59,7 +59,7 @@ public class RegisterHandler {
 	}
 
 	public static void registerPackets(){
-		//DragonEnchants.NETWORK.registerMessage(PacketSDoubleJump.Handler.class, PacketSDoubleJump.class, 1, Side.SERVER);
+		DragonEnchants.NETWORK.registerMessage(PacketSDoubleJump.Handler.class, PacketSDoubleJump.class, 1, Side.SERVER);
 	}
 
 	@SubscribeEvent
@@ -70,6 +70,7 @@ public class RegisterHandler {
 		event.getRegistry().register(ModEnchantments.endWalker);
 		event.getRegistry().register(ModEnchantments.lifeSteal);
 		event.getRegistry().register(ModEnchantments.thunderAspect);
+		event.getRegistry().register(ModEnchantments.soulDevour);
 		event.getRegistry().register(ModEnchantments.venomous);
 	}
 

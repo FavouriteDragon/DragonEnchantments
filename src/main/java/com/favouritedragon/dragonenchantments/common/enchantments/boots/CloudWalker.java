@@ -2,6 +2,8 @@ package com.favouritedragon.dragonenchantments.common.enchantments.boots;
 
 import com.favouritedragon.dragonenchantments.DragonEnchants;
 import com.favouritedragon.dragonenchantments.common.enchantments.ModEnchantments;
+import com.favouritedragon.dragonenchantments.common.network.PacketSDoubleJump;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -66,7 +68,7 @@ public class CloudWalker extends Enchantment {
 			if (mc.gameSettings.keyBindJump.isKeyDown()) {
 				if (getTimesJumped(player.getUniqueID().toString()) < 1) {
 					if (!player.onGround) {
-						//player.getEntityWorld().sendPacketToServer(DragonEnchants.NETWORK.getPacketFrom(new PacketSDoubleJump()));
+						player.getEntityWorld().sendPacketToServer(DragonEnchants.NETWORK.getPacketFrom(new PacketSDoubleJump(player.getEntityId())));
 						setTimesJumped(player.getUniqueID().toString(), 1);
 					}
 				}
@@ -77,8 +79,7 @@ public class CloudWalker extends Enchantment {
 
 	// Called on the server
 	public static void doDoubleJump(EntityPlayer entity) {
-		entity.motionY = 0.42F;
-		entity.isAirBorne = true;
+		entity.addVelocity(0, 0.46F, 0);
 		net.minecraftforge.common.ForgeHooks.onLivingJump(entity);
 	}
 
@@ -91,7 +92,11 @@ public class CloudWalker extends Enchantment {
 	}
 
 	private static int getTimesJumped(String UUID) {
-		return timesJumped.get(UUID);
+		if(timesJumped.containsKey(UUID)){
+			return timesJumped.get(UUID);
+		} else {
+			return 0;
+		}
 	}
 
 	@Override
