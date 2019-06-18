@@ -13,6 +13,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -64,7 +66,7 @@ public class CloudWalker extends Enchantment {
 					entity.motionY *= 0.7f - level / 100F;
 				}
 				if (!timesJumped.containsKey(entity.getUniqueID().toString())) {
-					addTimesJumped(entity.getUniqueID().toString(), 0);
+					setTimesJumped(entity.getUniqueID().toString(), 0);
 				}
 			}
 		}
@@ -100,15 +102,27 @@ public class CloudWalker extends Enchantment {
 		else {
 			entity.motionY = 0.46f * (1 + level / 10F);
 		}
+		if (entity.world instanceof WorldServer) {
+			WorldServer world = (WorldServer) entity.world;
+			for (int angle = 0; angle < 360; angle += 3) {
+				double radians = Math.toRadians(angle);
+				double x = Math.cos(radians);
+				double z = Math.sin(radians);
+				world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, x + entity.posX, entity.getEntityBoundingBox().minY,
+						z + entity.posZ, 1, 0, 0, 0, 0.01);
+
+			}
+		}
 		net.minecraftforge.common.ForgeHooks.onLivingJump(entity);
 	}
 
 	private static void setTimesJumped(String UUID, int jumped) {
-		timesJumped.replace(UUID, jumped);
-	}
-
-	private static void addTimesJumped(String UUID, int jumped) {
-		timesJumped.put(UUID, jumped);
+		if (timesJumped.containsKey(UUID)) {
+			timesJumped.replace(UUID, jumped);
+		}
+		else {
+			timesJumped.put(UUID, jumped);
+		}
 	}
 
 	private static int getTimesJumped(String UUID) {
