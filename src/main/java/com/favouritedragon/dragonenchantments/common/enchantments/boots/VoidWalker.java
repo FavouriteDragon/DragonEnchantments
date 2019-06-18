@@ -39,9 +39,9 @@ public class VoidWalker extends Enchantment {
 		Minecraft mc = Minecraft.getMinecraft();
 		EntityPlayer player = mc.player;
 		if (player != null) {
-			if (mc.gameSettings.keyBindSprint.isKeyDown()) {
+			if (mc.gameSettings.keyBindSneak.isKeyDown()) {
 				int level = EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.voidWalker, player);
-				if (level > 0 && player.getEntityWorld().getLight(player.getPosition()) < 6) {
+				if (level > 0 && (player.getEntityWorld().getLight(player.getPosition()) < 7 || !player.getEntityWorld().isDaytime())) {
 					player.getEntityWorld().sendPacketToServer(
 							DragonEnchants.NETWORK.getPacketFrom(new PacketSVoidWalk(player.getEntityId())));
 				}
@@ -52,13 +52,13 @@ public class VoidWalker extends Enchantment {
 
 	public static void onVoidWalk(EntityPlayer entity) {
 		int level = EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.voidWalker, entity);
-		RayTraceResult result = entity.rayTrace(8 * level, 1);
-		if (result.typeOfHit == RayTraceResult.Type.BLOCK) {
+		RayTraceResult result = entity.rayTrace(8 * level,1);
+		if (result != null && result.typeOfHit == RayTraceResult.Type.BLOCK) {
 			BlockPos position = result.getBlockPos().offset(result.sideHit);
 			double distance = entity.getDistance(position.getX(), position.getY(), position.getZ());
-			if (entity.getEntityWorld().getLight(entity.getPosition()) < 6) {
+			if (entity.getEntityWorld().getLight(entity.getPosition()) < 7 || !entity.getEntityWorld().isDaytime()) {
 				int foodlevel = entity.getFoodStats().getFoodLevel();
-				foodlevel -= Integer.valueOf(Double.valueOf(distance / 3).intValue());
+				foodlevel -= Double.valueOf(distance / 3).intValue();
 				if (foodlevel >= 0) {
 					DragonUtils.teleportTo(entity, position.getX(), position.getY(), position.getZ());
 					entity.getFoodStats().setFoodLevel(foodlevel);
@@ -70,5 +70,10 @@ public class VoidWalker extends Enchantment {
 	@Override
 	public int getMaxLevel() {
 		return 3;
+	}
+
+	@Override
+	protected boolean canApplyTogether(Enchantment ench) {
+		return super.canApplyTogether(ench) && ench != ModEnchantments.endWalker;
 	}
 }

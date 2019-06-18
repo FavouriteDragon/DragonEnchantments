@@ -15,6 +15,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -33,10 +34,23 @@ public class ThunderAspect extends Enchantment {
 	}
 
 
+	//Ensures isSweepAttack is never null
+	@SubscribeEvent
+	public static void onEnchantmentGet(LivingEvent.LivingUpdateEvent event) {
+		if (event.getEntityLiving() != null) {
+			EntityLivingBase entity = event.getEntityLiving();
+			int level = EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.thunderAspect, entity);
+			if (level > 0) {
+				if (!isSweepAttack.containsKey(entity.getUniqueID().toString())) {
+					setIsSweepAttack(entity.getUniqueID().toString(), false);
+				}
+			}
+		}
+	}
+
 	@SubscribeEvent
 	public static void onPlayerSweep(AttackEntityEvent event) {
 		EntityPlayer player = event.getEntityPlayer();
-		Entity hurt = event.getTarget();
 		if (player != null) {
 			if (player.getCooledAttackStrength(0) >= 1.0) {
 				setIsSweepAttack(player.getUniqueID().toString(), true);
@@ -94,7 +108,7 @@ public class ThunderAspect extends Enchantment {
 	}
 
 	private static boolean getSweepAttack(String UUID) {
-		return isSweepAttack.get(UUID);
+		return isSweepAttack.get(UUID) == null ? false : isSweepAttack.get(UUID);
 	}
 
 	@Override
