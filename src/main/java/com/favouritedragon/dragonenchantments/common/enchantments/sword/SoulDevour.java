@@ -1,5 +1,8 @@
 package com.favouritedragon.dragonenchantments.common.enchantments.sword;
 
+import com.favouritedragon.dragonenchantments.DragonEnchants;
+import com.favouritedragon.dragonenchantments.common.enchantments.ModEnchantments;
+import com.favouritedragon.dragonenchantments.common.util.DragonUtils;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.Entity;
@@ -9,30 +12,21 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.nbt.NBTTagString;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.UUID;
-
-import com.favouritedragon.dragonenchantments.DragonEnchants;
-import com.favouritedragon.dragonenchantments.common.enchantments.ModEnchantments;
-import com.favouritedragon.dragonenchantments.common.util.DragonUtils;
-
-import akka.japi.Pair;
 
 @Mod.EventBusSubscriber(modid = DragonEnchants.MODID)
 public class SoulDevour extends Enchantment {
 
 	public final static UUID MODIFIER_UUID = UUID.fromString("294093da-54f0-4c1b-9dbb-13b77534a84c");
 
+	//TODO: Add souls as a nbt value, based on enemies killed (every 10 health of enemies killed is a soul). Use it for cool stuff.
 	public SoulDevour() {
-		super(Rarity.VERY_RARE, EnumEnchantmentType.WEAPON, new EntityEquipmentSlot[] { EntityEquipmentSlot.MAINHAND });
+		super(Rarity.VERY_RARE, EnumEnchantmentType.WEAPON, new EntityEquipmentSlot[]{EntityEquipmentSlot.MAINHAND});
 		setRegistryName("soul_devour");
 		setName(DragonEnchants.MODID + ":" + "soul_devour");
 	}
@@ -53,8 +47,8 @@ public class SoulDevour extends Enchantment {
 				writeNbt(stack, number_killed, getAttackDamage(stack));
 				trueEntity.heal(((EntityLivingBase) target).getHealth() / 2);
 				System.out.println(readInitalDamage(stack) + " " + stack.getItem().getDamage(stack));
-				if(number_killed < 76){
-				writeModifier(stack,  readInitalDamage(stack) * ((100F + number_killed) / 100F));
+				if (number_killed < 76) {
+					writeModifier(stack, readInitalDamage(stack) * ((100F + number_killed) / 100F));
 				}
 			}
 		}
@@ -67,9 +61,10 @@ public class SoulDevour extends Enchantment {
 		} else {
 			nbt = new NBTTagCompound();
 		}
+		assert nbt != null;
 		nbt.setShort("SoulDevourKills", number_killed);
-		if(!nbt.hasKey("IntialDamage"))
-		nbt.setDouble("IntialDamage", intial_damage);
+		if (!nbt.hasKey("IntialDamage"))
+			nbt.setDouble("IntialDamage", intial_damage);
 	}
 
 	private static void writeModifier(ItemStack stack, double value) {
@@ -79,6 +74,7 @@ public class SoulDevour extends Enchantment {
 		} else {
 			nbt = new NBTTagCompound();
 		}
+		assert nbt != null;
 		NBTTagCompound nestedNbt = new NBTTagCompound();
 		AttributeModifier modifier = new AttributeModifier(MODIFIER_UUID, "Damage Boost", value, 0);
 		nestedNbt.setString("AttributeName", SharedMonsterAttributes.ATTACK_DAMAGE.getName());
@@ -92,9 +88,9 @@ public class SoulDevour extends Enchantment {
 		nbt.setTag("AttributeModifiers", list);
 	}
 
-	private static double getAttackDamage(ItemStack stack){
+	private static double getAttackDamage(ItemStack stack) {
 		double value = 0;
-		for(AttributeModifier modifier : stack.getAttributeModifiers(EntityEquipmentSlot.MAINHAND).get(SharedMonsterAttributes.ATTACK_DAMAGE.getName())){
+		for (AttributeModifier modifier : stack.getAttributeModifiers(EntityEquipmentSlot.MAINHAND).get(SharedMonsterAttributes.ATTACK_DAMAGE.getName())) {
 			value = modifier.getAmount();
 		}
 		return value;
@@ -107,6 +103,7 @@ public class SoulDevour extends Enchantment {
 		} else {
 			nbt = new NBTTagCompound();
 		}
+		assert nbt != null;
 		if (nbt.hasKey("SoulDevourKills")) {
 			return nbt.getShort("SoulDevourKills");
 		} else {

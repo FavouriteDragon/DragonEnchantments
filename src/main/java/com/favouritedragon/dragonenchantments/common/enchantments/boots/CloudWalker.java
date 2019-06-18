@@ -27,7 +27,7 @@ import java.util.HashSet;
 @Mod.EventBusSubscriber(modid = DragonEnchants.MODID)
 public class CloudWalker extends Enchantment {
 
-	private static HashMap<String, Integer> timesJumped;
+	private static HashMap<String, Integer> timesJumped = new HashMap<>();
 
 	public CloudWalker() {
 		super(Rarity.VERY_RARE, EnumEnchantmentType.ARMOR_FEET, new EntityEquipmentSlot[]{EntityEquipmentSlot.FEET});
@@ -44,6 +44,9 @@ public class CloudWalker extends Enchantment {
 				if (entity.motionY < 0 && !entity.onGround) {
 					entity.motionY += 0.03 + level / 100F;
 				}
+				if (!timesJumped.containsKey(entity.getUniqueID().toString())) {
+					addTimesJumped(entity.getUniqueID().toString(), 0);
+				}
 			}
 		}
 	}
@@ -55,9 +58,10 @@ public class CloudWalker extends Enchantment {
 		EntityPlayer player = mc.player;
 		if (player != null) {
 			if (mc.gameSettings.keyBindJump.isKeyDown()) {
-				if (getTimesJumped(player.getUniqueID().toString()) < 2) {
+				if (getTimesJumped(player.getUniqueID().toString()) < 1) {
 					if (!player.onGround) {
 						player.getEntityWorld().sendPacketToServer(DragonEnchants.NETWORK.getPacketFrom(new PacketSDoubleJump()));
+						setTimesJumped(player.getUniqueID().toString(), 1);
 					}
 				}
 			}
@@ -66,8 +70,10 @@ public class CloudWalker extends Enchantment {
 	}
 
 	// Called on the server
-	public static void doDoubleJump(EntityPlayer entity){
-
+	public static void doDoubleJump(EntityPlayer entity) {
+		entity.motionY = 0.42F;
+		entity.isAirBorne = true;
+		net.minecraftforge.common.ForgeHooks.onLivingJump(entity);
 	}
 
 
