@@ -31,7 +31,7 @@ public class EndWalker extends Enchantment {
 				if (level > 0) {
 					if (DragonUtils.getRandomNumberInRange(1, 10) <= 2 * level) {
 						for (int i = 0; i < 64; ++i) {
-							if (DragonUtils.teleportRandomly(entity)) {
+							if (DragonUtils.teleportRandomly(entity, 30)) {
 								event.setCanceled(true);
 								return true;
 							}

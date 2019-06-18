@@ -117,10 +117,10 @@ public class DragonUtils {
 	}
 
 
-	public static boolean teleportRandomly(EntityLivingBase entity) {
-		double d0 = entity.posX + (entity.world.rand.nextDouble() - 0.5D) * 64.0D;
-		double d1 = entity.posY + (double)(entity.world.rand.nextInt(64) - 32);
-		double d2 = entity.posZ + (entity.world.rand.nextDouble() - 0.5D) * 64.0D;
+	public static boolean teleportRandomly(EntityLivingBase entity, double radiusMult) {
+		double d0 = entity.posX + (entity.world.rand.nextDouble() - 0.5D) * radiusMult;
+		double d1 = entity.posY + (double)(entity.world.rand.nextInt((int) radiusMult) - radiusMult / 2);
+		double d2 = entity.posZ + (entity.world.rand.nextDouble() - 0.5D) * radiusMult;
 		return teleportTo(entity, d0, d1, d2);
 	}
 
