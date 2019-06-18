@@ -3,8 +3,8 @@ package com.favouritedragon.dragonenchantments.common.enchantments.boots;
 import com.favouritedragon.dragonenchantments.DragonEnchants;
 import com.favouritedragon.dragonenchantments.common.enchantments.ModEnchantments;
 import com.favouritedragon.dragonenchantments.common.network.PacketSDoubleJump;
-
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnumEnchantmentType;
@@ -14,7 +14,6 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -22,10 +21,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.Sys;
 
 import java.util.HashMap;
-import java.util.UUID;
 
 @Mod.EventBusSubscriber(modid = DragonEnchants.MODID)
 public class CloudWalker extends Enchantment {
@@ -83,6 +80,16 @@ public class CloudWalker extends Enchantment {
 				if (level > 0) {
 					if (getTimesJumped(player.getUniqueID().toString()) < level) {
 						if (!player.onGround) {
+							if (player.world instanceof WorldClient) {
+								WorldClient world = (WorldClient) player.world;
+								for (int angle = 0; angle < 360; angle += 3) {
+									double radians = Math.toRadians(angle);
+									double x = Math.cos(radians);
+									double z = Math.sin(radians);
+									world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, true, x + player.posX, player.getEntityBoundingBox().minY,
+											z + player.posZ, 0, 0, 0);
+								}
+							}
 							player.getEntityWorld().sendPacketToServer(DragonEnchants.NETWORK.getPacketFrom(new PacketSDoubleJump(player.getEntityId())));
 							setTimesJumped(player.getUniqueID().toString(), getTimesJumped(player.getUniqueID().toString()) + 1);
 						}
@@ -98,20 +105,8 @@ public class CloudWalker extends Enchantment {
 		int level = EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.cloudWalker, entity);
 		if (entity.motionY >= 0) {
 			entity.addVelocity(0, 0.46F * (1 + level / 10F), 0);
-		}
-		else {
+		} else {
 			entity.motionY = 0.46f * (1 + level / 10F);
-		}
-		if (entity.world instanceof WorldServer) {
-			WorldServer world = (WorldServer) entity.world;
-			for (int angle = 0; angle < 360; angle += 3) {
-				double radians = Math.toRadians(angle);
-				double x = Math.cos(radians);
-				double z = Math.sin(radians);
-				world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, x + entity.posX, entity.getEntityBoundingBox().minY,
-						z + entity.posZ, 1, 0, 0, 0, 0.01);
-
-			}
 		}
 		net.minecraftforge.common.ForgeHooks.onLivingJump(entity);
 	}
@@ -119,8 +114,7 @@ public class CloudWalker extends Enchantment {
 	private static void setTimesJumped(String UUID, int jumped) {
 		if (timesJumped.containsKey(UUID)) {
 			timesJumped.replace(UUID, jumped);
-		}
-		else {
+		} else {
 			timesJumped.put(UUID, jumped);
 		}
 	}
