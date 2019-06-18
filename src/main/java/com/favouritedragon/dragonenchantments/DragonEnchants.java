@@ -34,10 +34,10 @@ public class DragonEnchants {
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		logger = event.getModLog();
+		NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel("dragonenchants");
 		proxy.preInit(event);
 		proxy.registerRender();
 		RegisterHandler.registerAll();
-		NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel("dragonenchants");
 	}
 
 	@EventHandler
