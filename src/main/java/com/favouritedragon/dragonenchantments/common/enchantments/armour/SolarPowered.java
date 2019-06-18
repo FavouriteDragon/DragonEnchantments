@@ -6,7 +6,8 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 
 public class SolarPowered extends Enchantment {
 	//Restores health and durability
-	public SolarPowered(Rarity rarityIn, EnumEnchantmentType typeIn, EntityEquipmentSlot[] slots) {
-		super(rarityIn, typeIn, slots);
+	public SolarPowered() {
+		super(Rarity.VERY_RARE, EnumEnchantmentType.ARMOR, new EntityEquipmentSlot[] {EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS,
+		EntityEquipmentSlot.FEET});
 	}
 }

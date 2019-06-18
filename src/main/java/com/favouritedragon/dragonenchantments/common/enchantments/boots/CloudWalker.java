@@ -10,7 +10,9 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.potion.PotionEffect;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -18,8 +20,10 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.Sys;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 @Mod.EventBusSubscriber(modid = DragonEnchants.MODID)
 public class CloudWalker extends Enchantment {
@@ -39,6 +43,10 @@ public class CloudWalker extends Enchantment {
 			int level = EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.cloudWalker, entity);
 			if (level > 0) {
 				setTimesJumped(entity.getUniqueID().toString(), 0);
+				event.setCanceled(level >= 3);
+				for (int i = 0; i < event.getDistance(); i++) {
+					event.setDamageMultiplier((float) Math.pow(0.3 - level / 100F, i == 0 ? 1 : i));
+				}
 			}
 		}
 	}
@@ -49,8 +57,11 @@ public class CloudWalker extends Enchantment {
 		if (entity != null) {
 			int level = EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.cloudWalker, entity);
 			if (level > 0) {
+				if (!entity.isPotionActive(MobEffects.JUMP_BOOST)) {
+					entity.addPotionEffect(new PotionEffect(MobEffects.JUMP_BOOST, 1000000000, level - 2, false, false));
+				}
 				if (entity.motionY < 0 && !entity.onGround) {
-					entity.motionY *= 0.8f - level / 100F;
+					entity.motionY *= 0.7f - level / 100F;
 				}
 				if (!timesJumped.containsKey(entity.getUniqueID().toString())) {
 					addTimesJumped(entity.getUniqueID().toString(), 0);
@@ -66,10 +77,13 @@ public class CloudWalker extends Enchantment {
 		EntityPlayer player = mc.player;
 		if (player != null) {
 			if (mc.gameSettings.keyBindJump.isKeyDown()) {
-				if (getTimesJumped(player.getUniqueID().toString()) < 1) {
-					if (!player.onGround) {
-						player.getEntityWorld().sendPacketToServer(DragonEnchants.NETWORK.getPacketFrom(new PacketSDoubleJump(player.getEntityId())));
-						setTimesJumped(player.getUniqueID().toString(), 1);
+				int level = EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.cloudWalker, player);
+				if (level > 0) {
+					if (getTimesJumped(player.getUniqueID().toString()) < level) {
+						if (!player.onGround) {
+							player.getEntityWorld().sendPacketToServer(DragonEnchants.NETWORK.getPacketFrom(new PacketSDoubleJump(player.getEntityId())));
+							setTimesJumped(player.getUniqueID().toString(), getTimesJumped(player.getUniqueID().toString()) + 1);
+						}
 					}
 				}
 			}
@@ -79,7 +93,13 @@ public class CloudWalker extends Enchantment {
 
 	// Called on the server
 	public static void doDoubleJump(EntityPlayer entity) {
-		entity.addVelocity(0, 0.46F, 0);
+		int level = EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.cloudWalker, entity);
+		if (entity.motionY >= 0) {
+			entity.addVelocity(0, 0.46F * (1 + level / 10F), 0);
+		}
+		else {
+			entity.motionY = 0.46f * (1 + level / 10F);
+		}
 		net.minecraftforge.common.ForgeHooks.onLivingJump(entity);
 	}
 
@@ -92,11 +112,7 @@ public class CloudWalker extends Enchantment {
 	}
 
 	private static int getTimesJumped(String UUID) {
-		if(timesJumped.containsKey(UUID)){
-			return timesJumped.get(UUID);
-		} else {
-			return 0;
-		}
+		return timesJumped.getOrDefault(UUID, 0);
 	}
 
 	@Override
