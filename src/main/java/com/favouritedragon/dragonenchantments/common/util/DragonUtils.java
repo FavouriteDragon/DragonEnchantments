@@ -5,18 +5,25 @@ import com.favouritedragon.dragonenchantments.DragonEnchants;
 import akka.japi.Pair;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityCreeper;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.util.DamageSource;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+
+import java.util.Random;
 
 @Mod.EventBusSubscriber(modid = DragonEnchants.MODID)
 public class DragonUtils {
@@ -107,5 +114,31 @@ public class DragonUtils {
 			}
 		}
 		return stack != null ? EnchantmentHelper.getEnchantmentLevel(enchantment, stack) : 0;
+	}
+
+
+	public static boolean teleportRandomly(EntityLivingBase entity, double radiusMult) {
+		double d0 = entity.posX + (entity.world.rand.nextDouble() - 0.5D) * radiusMult;
+		double d1 = entity.posY + (double)(entity.world.rand.nextInt((int) radiusMult) - radiusMult / 2);
+		double d2 = entity.posZ + (entity.world.rand.nextDouble() - 0.5D) * radiusMult;
+		return teleportTo(entity, d0, d1, d2);
+	}
+
+	public static boolean teleportTo(EntityLivingBase entity, double x, double y, double z) {
+		EnderTeleportEvent event = new EnderTeleportEvent(entity, x, y, z, 0);
+		if (MinecraftForge.EVENT_BUS.post(event)) return false;
+		boolean teleport = entity.attemptTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ());
+
+		if (teleport) {
+			entity.world.playSound(null, entity.prevPosX, entity.prevPosY, entity.prevPosZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, entity.getSoundCategory(), 1.0F, 1.0F);
+			entity.playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 1.0F, 1.0F);
+		}
+
+		return teleport;
+	}
+
+	public static int getRandomNumberInRange(int min, int max) {
+		Random r = new Random();
+		return r.nextInt((max - min) + 1) + min;
 	}
 }
