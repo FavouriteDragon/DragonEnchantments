@@ -23,15 +23,22 @@ public class Enderference extends Enchantment {
 
 	@SubscribeEvent
 	public static void onEndTeleport(EnderTeleportEvent event) {
-		List<EntityLivingBase> entities = event.getEntityLiving().getEntityWorld().getEntities(
-				EntityLivingBase.class,
-				e -> DragonUtils.getHeldLevelForEnchantment(e, ModEnchantments.enderference) > 0);
-		for (EntityLivingBase entity : entities) {
-			int level = DragonUtils.getHeldLevelForEnchantment(entity, ModEnchantments.enderference);
-			if (entity != event.getEntityLiving()) {
-				if (entity.getDistance(event.getEntityLiving()) < 3 + level * 2) {
-					event.setCanceled(true);
-					return;
+		if (event.getEntityLiving() != null) {
+			List<EntityLivingBase> entities = event.getEntityLiving().getEntityWorld().getEntities(
+					EntityLivingBase.class,
+					e -> {
+						if (e != null) {
+							return DragonUtils.getHeldLevelForEnchantment(e, ModEnchantments.enderference) > 0;
+						}
+						else return false;
+					});
+			for (EntityLivingBase entity : entities) {
+				int level = DragonUtils.getHeldLevelForEnchantment(entity, ModEnchantments.enderference);
+				if (entity != event.getEntityLiving()) {
+					if (entity.getDistance(event.getEntityLiving()) < 3 + level * 2) {
+						event.setCanceled(true);
+						return;
+					}
 				}
 			}
 		}

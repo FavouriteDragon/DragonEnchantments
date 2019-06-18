@@ -1,6 +1,7 @@
 package com.favouritedragon.dragonenchantments.common.enchantments;
 
 import com.favouritedragon.dragonenchantments.DragonEnchants;
+import com.favouritedragon.dragonenchantments.common.enchantments.armour.SolarPowered;
 import com.favouritedragon.dragonenchantments.common.enchantments.boots.CloudWalker;
 import com.favouritedragon.dragonenchantments.common.enchantments.boots.EndWalker;
 import com.favouritedragon.dragonenchantments.common.enchantments.boots.VoidWalker;
@@ -30,6 +31,7 @@ public class ModEnchantments {
 	public static final Enchantment endWalker = new EndWalker();
 	public static final Enchantment lifeSteal = new Lifesteal();
 	public static final Enchantment thunderAspect = new ThunderAspect();
+	public static final Enchantment solarPowered = new SolarPowered();
 	public static final Enchantment soulDevour = new SoulDevour();
 	public static final Enchantment venomous = new Venomous();
 	public static final Enchantment voidWalker = new VoidWalker();
