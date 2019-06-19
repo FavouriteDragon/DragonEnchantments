@@ -65,7 +65,7 @@ public class CloudWalker extends Enchantment {
 				if (!timesJumped.containsKey(entity.getUniqueID().toString())) {
 					setTimesJumped(entity.getUniqueID().toString(), 0);
 				}
-				if (entity.onGround) {
+				if (entity.onGround && getTimesJumped(entity.getUniqueID().toString()) != 0) {
 					setTimesJumped(entity.getUniqueID().toString(), 0);
 				}
 			}

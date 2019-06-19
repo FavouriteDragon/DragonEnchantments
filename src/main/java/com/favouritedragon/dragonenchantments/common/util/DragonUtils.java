@@ -127,11 +127,9 @@ public class DragonUtils {
 	public static boolean teleportTo(EntityLivingBase entity, double x, double y, double z) {
 		EnderTeleportEvent event = new EnderTeleportEvent(entity, x, y, z, 0);
 		if (MinecraftForge.EVENT_BUS.post(event)) return false;
-		System.out.println("Step 4");
 		boolean teleport = entity.attemptTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ());
 
 		if (teleport) {
-			System.out.println("I am confused");
 			applyPlayerKnockback(entity);
 			entity.world.playSound(null, entity.prevPosX, entity.prevPosY, entity.prevPosZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, entity.getSoundCategory(), 1.0F, 1.0F);
 			entity.playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 1.0F, 1.0F);
