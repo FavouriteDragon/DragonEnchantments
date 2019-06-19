@@ -2,6 +2,7 @@ package com.favouritedragon.dragonenchantments.common.enchantments.weapon.sword;
 
 import com.favouritedragon.dragonenchantments.DragonEnchants;
 import com.favouritedragon.dragonenchantments.common.enchantments.ModEnchantments;
+import com.favouritedragon.dragonenchantments.common.util.DragonUtils;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnumEnchantmentType;
@@ -12,6 +13,8 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
@@ -39,7 +42,7 @@ public class ThunderAspect extends Enchantment {
 	public static void onEnchantmentGet(LivingEvent.LivingUpdateEvent event) {
 		if (event.getEntityLiving() != null) {
 			EntityLivingBase entity = event.getEntityLiving();
-			int level = EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.thunderAspect, entity);
+			int level = DragonUtils.getHeldLevelForEnchantment(entity, ModEnchantments.thunderAspect);
 			if (level > 0) {
 				if (!isSweepAttack.containsKey(entity.getUniqueID().toString())) {
 					setIsSweepAttack(entity.getUniqueID().toString(), false);
@@ -66,7 +69,7 @@ public class ThunderAspect extends Enchantment {
 		EntityLivingBase hurt = event.getEntityLiving();
 		if (attacker instanceof EntityLivingBase) {
 			ItemStack stack = ((EntityLivingBase) attacker).getHeldItemMainhand();
-			if (stack.isItemEnchanted()) {
+			if (stack.isItemEnchanted() && !(event.getSource() instanceof EntityDamageSourceIndirect)) {
 				if (getSweepAttack(attacker.getUniqueID().toString())) {
 					int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.thunderAspect, stack);
 					if (hurt != null) {
