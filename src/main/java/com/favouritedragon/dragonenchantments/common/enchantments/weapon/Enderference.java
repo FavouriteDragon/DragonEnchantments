@@ -6,6 +6,7 @@ import com.favouritedragon.dragonenchantments.common.util.DragonUtils;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -24,14 +25,12 @@ public class Enderference extends Enchantment {
 	@SubscribeEvent
 	public static void onEndTeleport(EnderTeleportEvent event) {
 		if (event.getEntityLiving() != null) {
-			List<EntityLivingBase> entities = event.getEntityLiving().getEntityWorld().getEntities(
-					EntityLivingBase.class,
-					e -> {
-						if (e != null) {
-							return DragonUtils.getHeldLevelForEnchantment(e, ModEnchantments.enderference) > 0;
-						}
-						else return false;
-					});
+			EntityLivingBase base = event.getEntityLiving();
+			//Grows an obscene amount to support commands giving ridiculously strong enderference
+			List<EntityLivingBase> entities = event.getEntityLiving().getEntityWorld().getEntitiesWithinAABB(
+					EntityLivingBase.class, new AxisAlignedBB(base.posX, base.getEntityBoundingBox().minY, base.posZ, base.posX, base.getEyeHeight() * 4/3,
+					base.posZ).grow(24));
+			if (!entities.isEmpty()) {
 			for (EntityLivingBase entity : entities) {
 				int level = DragonUtils.getHeldLevelForEnchantment(entity, ModEnchantments.enderference);
 				if (entity != event.getEntityLiving()) {
@@ -41,7 +40,7 @@ public class Enderference extends Enchantment {
 					}
 				}
 			}
-		}
+		}}
 	}
 
 	@Override
