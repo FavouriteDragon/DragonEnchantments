@@ -1,14 +1,14 @@
 [
 {
-  "modid": "dragonenchantments",
+  "modid": "dragon_enchants",
   "name": "Dragon Enchantments",
-  "description": "Adds a lot of enchantments",
+  "description": "Adds a bunch of awesome enchantments!",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "",
   "updateUrl": "",
-  "authorList": [""],
-  "credits": "The Forge and FML guys, for making this example",
+  "authorList": ["FavouriteDragon", "Aang23"],
+  "credits": "FavouriteDragon and Aang23",
   "logoFile": "",
   "screenshots": [],
   "dependencies": []
