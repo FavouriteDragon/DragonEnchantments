@@ -1,7 +1,7 @@
 package com.favouritedragon.dragonenchantments.common.enchantments;
 
 import com.favouritedragon.dragonenchantments.DragonEnchants;
-import com.favouritedragon.dragonenchantments.common.enchantments.armour.SolarPowered;
+import com.favouritedragon.dragonenchantments.common.enchantments.all.SolarPowered;
 import com.favouritedragon.dragonenchantments.common.enchantments.armour.boots.CloudWalker;
 import com.favouritedragon.dragonenchantments.common.enchantments.armour.boots.EndWalker;
 import com.favouritedragon.dragonenchantments.common.enchantments.armour.boots.VoidWalker;
