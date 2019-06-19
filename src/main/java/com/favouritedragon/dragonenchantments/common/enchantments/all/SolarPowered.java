@@ -3,6 +3,7 @@ package com.favouritedragon.dragonenchantments.common.enchantments.all;
 import com.favouritedragon.dragonenchantments.DragonEnchants;
 import com.favouritedragon.dragonenchantments.common.enchantments.ModEnchantments;
 import com.favouritedragon.dragonenchantments.common.util.DragonUtils;
+import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnumEnchantmentType;
@@ -38,30 +39,36 @@ public class SolarPowered extends Enchantment {
 						if (!entity.isPotionActive(MobEffects.REGENERATION)) {
 							entity.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 20 + level * 5, level - 1, false, false));
 						}
+					//	spawnParticles(entity);
 						Iterable<ItemStack> armour = entity.getEquipmentAndArmor();
 						for (ItemStack stack : armour) {
 							int armourLevel = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.solarPowered, stack);
 							if (entity.ticksExisted % 120 - level * 2 == 0 && DragonUtils.getRandomNumberInRange(1, 10) <= level) {
 								stack.damageItem(-armourLevel, entity);
 							}
+						}
 
-						}
-						if (entity.world instanceof WorldServer) {
-							WorldServer world = (WorldServer) entity.world;
-							for (int i = 0; i < level + 2; i++) {
-								float xOffset = world.rand.nextBoolean() ? world.rand.nextFloat() / 30 : -world.rand.nextFloat() / 30;
-								float yOffset = world.rand.nextBoolean() ? world.rand.nextFloat() / 30 : -world.rand.nextFloat() / 30;
-								float zOffset = world.rand.nextBoolean() ? world.rand.nextFloat() / 30 : -world.rand.nextFloat() / 30;
-								world.spawnParticle(EnumParticleTypes.VILLAGER_ANGRY, entity.posX, entity.posY + entity.getEyeHeight(), entity.posZ,
-										1 + DragonUtils.getRandomNumberInRange(0, 5), xOffset, yOffset, zOffset, 0.1);
-							}
-						}
 					}
 				}
 			}
 		}
 	}
 
+
+	/*private static void spawnParticles(EntityLivingBase entity) {
+		if (entity.world instanceof WorldClient) {
+			WorldClient world = (WorldClient) entity.world;
+			if (entity.ticksExisted % 20 == 0 && DragonUtils.getRandomNumberInRange(1, 10) <= 3) {
+				for (int i = 0; i < 5; i++) {
+					float xSpeed = world.rand.nextBoolean() ? world.rand.nextFloat() / 100 : -world.rand.nextFloat() / 100;
+					float ySpeed = world.rand.nextBoolean() ? world.rand.nextFloat() / 100 : -world.rand.nextFloat() / 100;
+					float zSpeed = world.rand.nextBoolean() ? world.rand.nextFloat() / 100 : -world.rand.nextFloat() / 100;
+					world.spawnParticle(EnumParticleTypes.VILLAGER_HAPPY, entity.posX, entity.posY + entity.getEyeHeight(), entity.posZ,
+							xSpeed, ySpeed, zSpeed);
+				}
+			}
+		}
+	}**/
 
 	@Override
 	public int getMaxLevel() {
