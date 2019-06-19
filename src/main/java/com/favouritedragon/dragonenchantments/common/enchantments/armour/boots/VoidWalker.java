@@ -54,7 +54,7 @@ public class VoidWalker extends Enchantment {
 			if (entity.getEntityWorld().getLight(entity.getPosition()) < 7 || entity.world.getSunBrightness(1.0F) < 0.4F) {
 				int foodlevel = entity.getFoodStats().getFoodLevel();
 				foodlevel -= Double.valueOf(distance / 3).intValue();
-				if (foodlevel >= 0 || entity.isCreative()) {
+				if (foodlevel >= Double.valueOf(distance / 3).intValue() || entity.isCreative()) {
 					DragonUtils.teleportTo(entity, position.getX(), position.getY(), position.getZ());
 					entity.getFoodStats().setFoodLevel(foodlevel);
 				}
