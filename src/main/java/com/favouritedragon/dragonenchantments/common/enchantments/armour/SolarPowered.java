@@ -2,6 +2,7 @@ package com.favouritedragon.dragonenchantments.common.enchantments.armour;
 
 import com.favouritedragon.dragonenchantments.DragonEnchants;
 import com.favouritedragon.dragonenchantments.common.enchantments.ModEnchantments;
+import com.favouritedragon.dragonenchantments.common.util.DragonUtils;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnumEnchantmentType;
@@ -30,7 +31,7 @@ public class SolarPowered extends Enchantment {
 	public static void onSun(LivingEvent.LivingUpdateEvent event) {
 		EntityLivingBase entity = event.getEntityLiving();
 		if (entity != null) {
-			if (entity.world.isDaytime()) {
+			if (entity.world.getSunBrightness(1.0F) >= 0.8F) {
 				if(entity.world.canSeeSky(entity.getPosition()) && !entity.world.isRaining() && !entity.world.isThundering()) {
 					int level = EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.solarPowered, entity);
 					if (level > 0) {
@@ -40,7 +41,7 @@ public class SolarPowered extends Enchantment {
 						Iterable<ItemStack> armour = entity.getEquipmentAndArmor();
 						for (ItemStack stack : armour) {
 							int armourLevel = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.solarPowered, stack);
-							if (entity.ticksExisted % 400 - level * 20 == 0) {
+							if (entity.ticksExisted % 20 - level * 2 == 0 && DragonUtils.getRandomNumberInRange(1, 10) <= level) {
 								stack.damageItem(-armourLevel, entity);
 							}
 
