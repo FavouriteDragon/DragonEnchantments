@@ -1,11 +1,8 @@
 package com.favouritedragon.dragonenchantments;
 
 import com.favouritedragon.dragonenchantments.common.enchantments.ModEnchantments;
-import com.favouritedragon.dragonenchantments.common.enchantments.weapon.DragonSlayer;
-import com.favouritedragon.dragonenchantments.common.enchantments.weapon.Lifesteal;
 import com.favouritedragon.dragonenchantments.common.network.PacketSDoubleJump;
 import com.favouritedragon.dragonenchantments.common.network.PacketSVoidWalk;
-
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.crafting.IRecipe;
@@ -59,7 +56,7 @@ public class RegisterHandler {
 
 	}
 
-	public static void registerPackets(){
+	public static void registerPackets() {
 		DragonEnchants.NETWORK.registerMessage(PacketSDoubleJump.Handler.class, PacketSDoubleJump.class, 1, Side.SERVER);
 		DragonEnchants.NETWORK.registerMessage(PacketSVoidWalk.Handler.class, PacketSVoidWalk.class, 2, Side.SERVER);
 	}
