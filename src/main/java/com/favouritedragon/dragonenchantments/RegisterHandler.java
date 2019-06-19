@@ -75,6 +75,7 @@ public class RegisterHandler {
 		event.getRegistry().register(ModEnchantments.soulDevour);
 		event.getRegistry().register(ModEnchantments.thunderAspect);
 		event.getRegistry().register(ModEnchantments.venomous);
+		event.getRegistry().register(ModEnchantments.voidHuger);
 		event.getRegistry().register(ModEnchantments.voidWalker);
 	}
 

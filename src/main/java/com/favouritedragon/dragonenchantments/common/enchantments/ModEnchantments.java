@@ -5,6 +5,7 @@ import com.favouritedragon.dragonenchantments.common.enchantments.all.SolarPower
 import com.favouritedragon.dragonenchantments.common.enchantments.armour.boots.CloudWalker;
 import com.favouritedragon.dragonenchantments.common.enchantments.armour.boots.EndWalker;
 import com.favouritedragon.dragonenchantments.common.enchantments.armour.boots.VoidWalker;
+import com.favouritedragon.dragonenchantments.common.enchantments.armour.chest.VoidHunger;
 import com.favouritedragon.dragonenchantments.common.enchantments.weapon.sword.SoulDevour;
 import com.favouritedragon.dragonenchantments.common.enchantments.weapon.sword.ThunderAspect;
 import com.favouritedragon.dragonenchantments.common.enchantments.weapon.DragonSlayer;
@@ -34,6 +35,7 @@ public class ModEnchantments {
 	public static final Enchantment solarPowered = new SolarPowered();
 	public static final Enchantment soulDevour = new SoulDevour();
 	public static final Enchantment venomous = new Venomous();
+	public static final Enchantment voidHuger = new VoidHunger();
 	public static final Enchantment voidWalker = new VoidWalker();
 
 }

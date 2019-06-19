@@ -11,6 +11,8 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -43,6 +45,16 @@ public class SolarPowered extends Enchantment {
 								stack.damageItem(-armourLevel, entity);
 							}
 
+						}
+						if (entity.world instanceof WorldServer) {
+							WorldServer world = (WorldServer) entity.world;
+							for (int i = 0; i < level + 2; i++) {
+								float xOffset = world.rand.nextBoolean() ? world.rand.nextFloat() / 30 : -world.rand.nextFloat() / 30;
+								float yOffset = world.rand.nextBoolean() ? world.rand.nextFloat() / 30 : -world.rand.nextFloat() / 30;
+								float zOffset = world.rand.nextBoolean() ? world.rand.nextFloat() / 30 : -world.rand.nextFloat() / 30;
+								world.spawnParticle(EnumParticleTypes.VILLAGER_ANGRY, entity.posX, entity.posY + entity.getEyeHeight(), entity.posZ,
+										1 + DragonUtils.getRandomNumberInRange(0, 5), xOffset, yOffset, zOffset, 0.1);
+							}
 						}
 					}
 				}
