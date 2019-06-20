@@ -1,14 +1,12 @@
 package com.favouritedragon.dragonenchantments.common.util;
 
-import com.favouritedragon.dragonenchantments.DragonEnchants;
-
 import akka.japi.Pair;
+import com.favouritedragon.dragonenchantments.DragonEnchants;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityCreeper;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Items;
@@ -26,7 +24,6 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
-import org.lwjgl.Sys;
 
 import java.util.Random;
 
@@ -155,7 +152,7 @@ public class DragonUtils {
 
 	/**
 	 * Small util method to clean up code and prevent having those < checks
-	 * 
+	 *
 	 * @param world
 	 * @param min
 	 * @param max
