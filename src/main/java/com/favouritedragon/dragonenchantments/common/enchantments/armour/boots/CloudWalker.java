@@ -59,7 +59,7 @@ public class CloudWalker extends Enchantment {
 			int level = EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.cloudWalker, entity);
 			if (level > 0) {
 				if (!entity.isPotionActive(MobEffects.JUMP_BOOST)) {
-					entity.addPotionEffect(new PotionEffect(MobEffects.JUMP_BOOST, 1000000000, level - 2, false, false));
+					entity.addPotionEffect(new PotionEffect(MobEffects.JUMP_BOOST, 20 + level * 5, level - 2, false, false));
 				}
 				if (entity.motionY < 0 && !entity.onGround) {
 					entity.motionY *= 0.7f - level / 100F;
