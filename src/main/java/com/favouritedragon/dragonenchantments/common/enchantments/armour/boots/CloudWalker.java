@@ -114,7 +114,6 @@ public class CloudWalker extends Enchantment {
 				if (entity.motionY > 0) {
 					entity.addVelocity(0, 0.5F * (1 + level / 10F), 0);
 					entity.velocityChanged = true;
-					DragonUtils.applyPlayerKnockback(entity);
 				} else {
 					entity.motionY = 0.5F * (1 + level / 10F);
 					entity.velocityChanged = true;
