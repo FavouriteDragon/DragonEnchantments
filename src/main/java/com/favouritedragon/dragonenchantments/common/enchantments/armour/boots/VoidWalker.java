@@ -35,29 +35,31 @@ public class VoidWalker extends Enchantment {
 		if (player != null) {
 			if (mc.gameSettings.keyBindSneak.isKeyDown()) {
 				int level = EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.voidWalker, player);
-				//Have to use the sun brightness, because isDaytime and skylight stuff are completely screwed.
-				if (level > 0 && (player.getEntityWorld().getLight(player.getPosition()) < 7 || player.world.getSunBrightness(1.0F) < 0.4F)) {
-					player.getEntityWorld().sendPacketToServer(
-							DragonEnchants.NETWORK.getPacketFrom(new PacketSVoidWalk(player.getEntityId())));
+				// Have to use the sun brightness, because isDaytime and skylight stuff are
+				// completely screwed.
+				if (level > 0 && (player.getEntityWorld().getLight(player.getPosition()) < 7
+						|| player.world.getSunBrightness(1.0F) < 0.4F)) {
+					RayTraceResult result = player.rayTrace(8 * level, 1);
+					if (result != null && result.typeOfHit == RayTraceResult.Type.BLOCK) {
+						BlockPos position = result.getBlockPos().add(0, 1, 0);
+						player.getEntityWorld().sendPacketToServer(DragonEnchants.NETWORK
+								.getPacketFrom(new PacketSVoidWalk(player.getCachedUniqueIdString(), position)));
+					}
 				}
 			}
 		}
 
 	}
 
-	public static void onVoidWalk(EntityPlayer entity) {
-		int level = EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.voidWalker, entity);
-		RayTraceResult result = entity.rayTrace(8 * level, 1);
-		if (result != null && result.typeOfHit == RayTraceResult.Type.BLOCK) {
-			BlockPos position = result.getBlockPos().add(0, 1, 0);
-			double distance = entity.getDistance(position.getX(), position.getY(), position.getZ());
-			if (entity.getEntityWorld().getLight(entity.getPosition()) < 7 || entity.world.getSunBrightness(1.0F) < 0.4F) {
-				int foodlevel = entity.getFoodStats().getFoodLevel();
-				foodlevel -= Double.valueOf(distance / 3).intValue();
-				if (foodlevel >= Double.valueOf(distance / 3).intValue() || entity.isCreative()) {
-					DragonUtils.teleportTo(entity, position.getX(), position.getY(), position.getZ());
-					entity.getFoodStats().setFoodLevel(foodlevel);
-				}
+	public static void onVoidWalk(EntityPlayer entity, BlockPos position) {
+		double distance = entity.getDistance(position.getX(), position.getY(), position.getZ());
+		if (entity.getEntityWorld().getLight(entity.getPosition()) < 7
+				|| DragonUtils.isTimeBetween(entity.world, 13000, 22550)) {
+			int foodlevel = entity.getFoodStats().getFoodLevel();
+			foodlevel -= Double.valueOf(distance / 3).intValue();
+			if (foodlevel >= Double.valueOf(distance / 3).intValue() || entity.isCreative()) {
+				DragonUtils.teleportTo(entity, position.getX(), position.getY(), position.getZ());
+				entity.getFoodStats().setFoodLevel(foodlevel);
 			}
 		}
 	}

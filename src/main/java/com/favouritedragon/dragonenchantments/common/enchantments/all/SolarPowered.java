@@ -32,7 +32,7 @@ public class SolarPowered extends Enchantment {
 	public static void onSun(LivingEvent.LivingUpdateEvent event) {
 		EntityLivingBase entity = event.getEntityLiving();
 		if (entity != null) {
-			if (entity.world.getSunBrightness(1.0F) >= 0.8F) {
+			if (!DragonUtils.isTimeBetween(entity.world, 12566, 22916)) {
 				if (entity.world.canSeeSky(entity.getPosition()) && !entity.world.isRaining() && !entity.world.isThundering()) {
 					int level = EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.solarPowered, entity);
 					if (level > 0) {

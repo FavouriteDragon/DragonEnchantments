@@ -93,7 +93,7 @@ public class CloudWalker extends Enchantment {
 											z + player.posZ, 0, 0, 0);
 								}
 							}
-							player.getEntityWorld().sendPacketToServer(DragonEnchants.NETWORK.getPacketFrom(new PacketSDoubleJump(player.getEntityId())));
+							player.getEntityWorld().sendPacketToServer(DragonEnchants.NETWORK.getPacketFrom(new PacketSDoubleJump(player.getCachedUniqueIdString())));
 							setTimesJumped(player.getUniqueID().toString(), getTimesJumped(player.getUniqueID().toString()) + 1);
 						}
 					}
@@ -107,9 +107,9 @@ public class CloudWalker extends Enchantment {
 	public static void doDoubleJump(EntityPlayer entity) {
 		int level = EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.cloudWalker, entity);
 		if (entity.motionY >= 0) {
-			entity.addVelocity(0, 0.46F * (1 + level / 10F), 0);
+			entity.addVelocity(0, 0.46F * (1 + level / 10F) + 10, 0);
 		} else {
-			entity.motionY = 0.46f * (1 + level / 10F);
+			entity.addVelocity(0, 0.46f * (1 + level / 10F) + 10, 0);
 		}
 		net.minecraftforge.common.ForgeHooks.onLivingJump(entity);
 	}

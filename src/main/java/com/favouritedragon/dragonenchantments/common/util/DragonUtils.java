@@ -18,6 +18,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.play.server.SPacketEntityTeleport;
 import net.minecraft.network.play.server.SPacketEntityVelocity;
 import net.minecraft.util.DamageSource;
+import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
@@ -149,5 +150,10 @@ public class DragonUtils {
 			((EntityPlayerMP) target).connection.sendPacket(new SPacketEntityTeleport(target));
 
 		}
+	}
+
+	public static boolean isTimeBetween(World world, long min, long max) {
+		long time = world.getWorldTime();
+		return min < time && time < max;
 	}
 }
