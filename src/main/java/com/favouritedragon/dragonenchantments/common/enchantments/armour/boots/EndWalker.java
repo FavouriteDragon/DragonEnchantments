@@ -26,7 +26,7 @@ public class EndWalker extends Enchantment {
 	public static boolean onAttackedIndirectly(LivingAttackEvent event) {
 		if (event.getEntityLiving() != null) {
 			EntityLivingBase entity = event.getEntityLiving();
-			if (event.getSource() instanceof EntityDamageSourceIndirect) {
+			if (event.getSource().getImmediateSource() != null) {
 				int level = EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.endWalker, entity);
 				if (level > 0) {
 					if (DragonUtils.getRandomNumberInRange(1, 10) <= 2 * level) {
