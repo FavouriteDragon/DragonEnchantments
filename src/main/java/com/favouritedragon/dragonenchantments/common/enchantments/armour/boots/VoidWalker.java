@@ -9,6 +9,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -58,7 +59,13 @@ public class VoidWalker extends Enchantment {
 			int foodlevel = entity.getFoodStats().getFoodLevel();
 			foodlevel -= Double.valueOf(distance / 3).intValue();
 			if (foodlevel >= Double.valueOf(distance / 3).intValue() || entity.isCreative()) {
-				DragonUtils.teleportTo(entity, position.getX(), position.getY(), position.getZ());
+				((EntityPlayerMP) entity).getServerWorld().addScheduledTask(new Runnable() {
+					@Override
+					public void run() {
+						// Make sure to run on main server thread
+						DragonUtils.teleportTo(entity, position.getX(), position.getY(), position.getZ());
+					}
+				});
 				entity.getFoodStats().setFoodLevel(foodlevel);
 			}
 		}

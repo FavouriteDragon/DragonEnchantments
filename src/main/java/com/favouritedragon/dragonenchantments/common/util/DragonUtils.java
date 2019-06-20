@@ -154,6 +154,7 @@ public class DragonUtils {
 
 	/**
 	 * Small util method to clean up code and prevent having those < checks
+	 * 
 	 * @param world
 	 * @param min
 	 * @param max
