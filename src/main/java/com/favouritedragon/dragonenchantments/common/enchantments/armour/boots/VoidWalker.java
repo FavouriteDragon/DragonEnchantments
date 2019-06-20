@@ -57,8 +57,8 @@ public class VoidWalker extends Enchantment {
 		if (entity.getEntityWorld().getLight(entity.getPosition()) < 7
 				|| !DragonUtils.isTimeBetween(entity.world, 0, 11750)) {
 			int foodlevel = entity.getFoodStats().getFoodLevel();
-			foodlevel -= Double.valueOf(distance / 3).intValue();
-			if (foodlevel >= Double.valueOf(distance / 3).intValue() || entity.isCreative()) {
+			foodlevel -= Double.valueOf(distance / 4).intValue();
+			if (foodlevel >= Double.valueOf(distance / 4).intValue() || entity.isCreative()) {
 				((EntityPlayerMP) entity).getServerWorld().addScheduledTask(new Runnable() {
 					@Override
 					public void run() {
