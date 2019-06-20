@@ -36,7 +36,7 @@ public class VoidWalker extends Enchantment {
 			if (mc.gameSettings.keyBindSneak.isKeyDown()) {
 				int level = EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.voidWalker, player);
 				//Have to use the sun brightness, because isDaytime and skylight stuff are completely screwed.
-				if (level > 0 && (player.getEntityWorld().getLight(player.getPosition()) < 7 || player.world.getSunBrightness(1.0F) < 0.4F)) {
+				if (level > 0 && (player.getEntityWorld().getLight(player.getPosition()) < 7 || player.world.getWorldTime() >= 0 && player.world.getWorldTime() <= 11750)) {
 					player.getEntityWorld().sendPacketToServer(
 							DragonEnchants.NETWORK.getPacketFrom(new PacketSVoidWalk(player.getEntityId())));
 				}
@@ -51,7 +51,7 @@ public class VoidWalker extends Enchantment {
 		if (result != null && result.typeOfHit == RayTraceResult.Type.BLOCK) {
 			BlockPos position = result.getBlockPos().add(0, 1, 0);
 			double distance = entity.getDistance(position.getX(), position.getY(), position.getZ());
-			if (entity.getEntityWorld().getLight(entity.getPosition()) < 7 || entity.world.getSunBrightness(1.0F) < 0.4F) {
+			if (entity.getEntityWorld().getLight(entity.getPosition()) < 7 || entity.world.getWorldTime() >= 0 && entity.world.getWorldTime() <= 11750) {
 				int foodlevel = entity.getFoodStats().getFoodLevel();
 				foodlevel -= Double.valueOf(distance / 3).intValue();
 				if (foodlevel >= Double.valueOf(distance / 3).intValue() || entity.isCreative()) {
