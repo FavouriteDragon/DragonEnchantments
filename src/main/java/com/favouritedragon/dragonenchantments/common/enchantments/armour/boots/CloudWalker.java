@@ -3,6 +3,7 @@ package com.favouritedragon.dragonenchantments.common.enchantments.armour.boots;
 import com.favouritedragon.dragonenchantments.DragonEnchants;
 import com.favouritedragon.dragonenchantments.common.enchantments.ModEnchantments;
 import com.favouritedragon.dragonenchantments.common.network.PacketSDoubleJump;
+import com.favouritedragon.dragonenchantments.common.util.DragonUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.enchantment.Enchantment;
@@ -10,6 +11,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.potion.PotionEffect;
@@ -106,12 +108,20 @@ public class CloudWalker extends Enchantment {
 	// Called on the server
 	public static void doDoubleJump(EntityPlayer entity) {
 		int level = EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.cloudWalker, entity);
-		if (entity.motionY >= 0) {
-			entity.addVelocity(0, 0.46F * (1 + level / 10F) + 10, 0);
-		} else {
-			entity.motionY = 0.46F * (1 + level / 10f);
-		}
-		net.minecraftforge.common.ForgeHooks.onLivingJump(entity);
+		((EntityPlayerMP) entity).getServerWorld().addScheduledTask(new Runnable() {
+			@Override
+			public void run() {
+				if (entity.motionY > 0) {
+					entity.addVelocity(0, 0.5F * (1 + level / 10F), 0);
+					entity.velocityChanged = true;
+					DragonUtils.applyPlayerKnockback(entity);
+				} else {
+					entity.motionY = 0.5F * (1 + level / 10F);
+					entity.velocityChanged = true;
+				}
+				net.minecraftforge.common.ForgeHooks.onLivingJump(entity);
+			}
+		});
 	}
 
 	private static void setTimesJumped(String UUID, int jumped) {

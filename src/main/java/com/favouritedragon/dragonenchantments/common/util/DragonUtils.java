@@ -145,6 +145,7 @@ public class DragonUtils {
 	}
 
 	public static void applyPlayerKnockback(Entity target) {
+		target.velocityChanged = true;
 		if (target instanceof EntityPlayerMP) {
 			((EntityPlayerMP) target).connection.sendPacket(new SPacketEntityVelocity(target));
 			((EntityPlayerMP) target).connection.sendPacket(new SPacketEntityTeleport(target));
