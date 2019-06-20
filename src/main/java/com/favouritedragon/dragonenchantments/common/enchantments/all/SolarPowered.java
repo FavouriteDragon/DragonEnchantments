@@ -50,7 +50,6 @@ public class SolarPowered extends Enchantment {
 
 					}
 				}
-			}
 		}
 	}
 

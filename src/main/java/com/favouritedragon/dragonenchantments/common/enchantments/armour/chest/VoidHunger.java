@@ -7,12 +7,12 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -39,31 +39,71 @@ public class VoidHunger extends Enchantment {
 				EntityLivingBase hurt = event.getEntityLiving();
 				int level = EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.voidHuger, hurt);
 				if (level > 0) {
-					if (DragonUtils.getRandomNumberInRange(1, 10) <= level) {
-						if (event.getSource().getImmediateSource() != null) {
-							if (event.getAmount() <= level * 6) {
+					if (event.getSource().getImmediateSource() != null) {
+						if (event.getAmount() <= level * 6) {
+							if (hurt instanceof EntityPlayer && (((EntityPlayer) hurt).getFoodStats().getFoodLevel() / (float) level >= event.getAmount() ||
+									((EntityPlayer) hurt).isCreative())) {
 								event.getSource().getImmediateSource().setDead();
 								hurt.world.playSound(hurt.posX, hurt.posY, hurt.posZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.PLAYERS,
 										1.0F + hurt.world.rand.nextFloat() / 10, 1.0F + hurt.world.rand.nextFloat() / 10, false);
+								if (hurt.world instanceof WorldServer) {
+									WorldServer world = (WorldServer) hurt.world;
+									for (int i = 0; i < level + 5; i++) {
+										double midHeight = (hurt.getEntityBoundingBox().maxY - hurt.getEntityBoundingBox().minY) * 3 / 5;
+										world.spawnParticle(EnumParticleTypes.DRAGON_BREATH, hurt.posX, hurt.getEntityBoundingBox().minY + midHeight, hurt.posZ,
+												1 + DragonUtils.getRandomNumberInRange(0, 3), 0, 0, 0, 0.015);
+									}
+								}
+								((EntityPlayer) hurt).getFoodStats().setFoodLevel(((EntityPlayer) hurt).getFoodStats().getFoodLevel() / level);
+								event.setCanceled(true);
+							} else if (!(hurt instanceof EntityPlayer)) {
+								event.getSource().getImmediateSource().setDead();
+								hurt.world.playSound(hurt.posX, hurt.posY, hurt.posZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.PLAYERS,
+										1.0F + hurt.world.rand.nextFloat() / 10, 1.0F + hurt.world.rand.nextFloat() / 10, false);
+								if (hurt.world instanceof WorldServer) {
+									WorldServer world = (WorldServer) hurt.world;
+									for (int i = 0; i < level + 5; i++) {
+										double midHeight = (hurt.getEntityBoundingBox().maxY - hurt.getEntityBoundingBox().minY) * 3 / 5;
+										world.spawnParticle(EnumParticleTypes.DRAGON_BREATH, hurt.posX, hurt.getEntityBoundingBox().minY + midHeight, hurt.posZ,
+												1 + DragonUtils.getRandomNumberInRange(0, 3), 0, 0, 0, 0.015);
+									}
+								}
 								event.setCanceled(true);
 							}
+						}
 						}
 					}
 				}
 			}
 		}
-	}
 
-	@SubscribeEvent
+
+	/*@SubscribeEvent
 	public static void onProjectileHurt(LivingHurtEvent event) {
 		if (event.getSource() instanceof EntityDamageSourceIndirect) {
 			if (event.getEntityLiving() != null) {
 				EntityLivingBase hurt = event.getEntityLiving();
 				int level = EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.voidHuger, hurt);
 				if (level > 0) {
-					if (DragonUtils.getRandomNumberInRange(1, 10) <= level) {
-						if (event.getSource().getImmediateSource() != null) {
-							if (event.getAmount() <= level * 6) {
+					if (event.getSource().getImmediateSource() != null) {
+						if (event.getAmount() <= level * 6) {
+							if (hurt instanceof EntityPlayer && (((EntityPlayer) hurt).getFoodStats().getFoodLevel() / (float) level >= event.getAmount() ||
+									((EntityPlayer) hurt).isCreative())) {
+								event.getSource().getImmediateSource().setDead();
+								hurt.world.playSound(hurt.posX, hurt.posY, hurt.posZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.PLAYERS,
+										1.0F + hurt.world.rand.nextFloat() / 10, 1.0F + hurt.world.rand.nextFloat() / 10, false);
+								if (hurt.world instanceof WorldServer) {
+									WorldServer world = (WorldServer) hurt.world;
+									for (int i = 0; i < level + 5; i++) {
+										double midHeight = (hurt.getEntityBoundingBox().maxY - hurt.getEntityBoundingBox().minY) * 3 / 5;
+										world.spawnParticle(EnumParticleTypes.DRAGON_BREATH, hurt.posX, hurt.getEntityBoundingBox().minY + midHeight, hurt.posZ,
+												1 + DragonUtils.getRandomNumberInRange(0, 3), 0, 0, 0, 0.015);
+									}
+								}
+								((EntityPlayer) hurt).getFoodStats().setFoodLevel(((EntityPlayer) hurt).getFoodStats().getFoodLevel() / level);
+								event.setAmount(0.0F);
+								event.setCanceled(true);
+							} else if (!(hurt instanceof EntityPlayer)) {
 								event.getSource().getImmediateSource().setDead();
 								hurt.world.playSound(hurt.posX, hurt.posY, hurt.posZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.PLAYERS,
 										1.0F + hurt.world.rand.nextFloat() / 10, 1.0F + hurt.world.rand.nextFloat() / 10, false);
@@ -83,7 +123,7 @@ public class VoidHunger extends Enchantment {
 				}
 			}
 		}
-	}
+	}**/
 
 	@Override
 	public int getMinEnchantability(int enchantmentLevel) {
