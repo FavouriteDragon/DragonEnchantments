@@ -54,7 +54,7 @@ public class VoidWalker extends Enchantment {
 	public static void onVoidWalk(EntityPlayer entity, BlockPos position) {
 		double distance = entity.getDistance(position.getX(), position.getY(), position.getZ());
 		if (entity.getEntityWorld().getLight(entity.getPosition()) < 7
-				|| DragonUtils.isTimeBetween(entity.world, 13000, 22550)) {
+				|| !DragonUtils.isTimeBetween(entity.world, 0, 11750)) {
 			int foodlevel = entity.getFoodStats().getFoodLevel();
 			foodlevel -= Double.valueOf(distance / 3).intValue();
 			if (foodlevel >= Double.valueOf(distance / 3).intValue() || entity.isCreative()) {

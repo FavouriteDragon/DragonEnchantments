@@ -152,6 +152,13 @@ public class DragonUtils {
 		}
 	}
 
+	/**
+	 * Small util method to clean up code and prevent having those < checks
+	 * @param world
+	 * @param min
+	 * @param max
+	 * @return
+	 */
 	public static boolean isTimeBetween(World world, long min, long max) {
 		long time = world.getWorldTime();
 		return min < time && time < max;
