@@ -109,7 +109,7 @@ public class CloudWalker extends Enchantment {
 		if (entity.motionY >= 0) {
 			entity.addVelocity(0, 0.46F * (1 + level / 10F) + 10, 0);
 		} else {
-			entity.motionY = 0.46F * (1 + level / 10f)
+			entity.motionY = 0.46F * (1 + level / 10f);
 		}
 		net.minecraftforge.common.ForgeHooks.onLivingJump(entity);
 	}
