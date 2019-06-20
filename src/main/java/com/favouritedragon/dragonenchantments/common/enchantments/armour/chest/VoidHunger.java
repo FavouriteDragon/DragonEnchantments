@@ -43,7 +43,7 @@ public class VoidHunger extends Enchantment {
 				if (level > 0) {
 					if (event.getSource().getImmediateSource() != null) {
 						if (event.getAmount() <= level * 6) {
-							if (hurt instanceof EntityPlayer && (((EntityPlayer) hurt).getFoodStats().getFoodLevel() / (level * 2F) >= event.getAmount() ||
+							if (hurt instanceof EntityPlayer && (((EntityPlayer) hurt).getFoodStats().getFoodLevel() / (5F / level) >= event.getAmount() / 1.5F ||
 									((EntityPlayer) hurt).isCreative())) {
 								event.getSource().getImmediateSource().setDead();
 								hurt.world.playSound(hurt.posX, hurt.posY, hurt.posZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.PLAYERS,
@@ -66,8 +66,8 @@ public class VoidHunger extends Enchantment {
 									WorldServer world = (WorldServer) hurt.world;
 									for (int i = 0; i < level + 5; i++) {
 										double midHeight = (hurt.getEntityBoundingBox().maxY - hurt.getEntityBoundingBox().minY) * 3 / 5;
-										world.spawnParticle(EnumParticleTypes.DRAGON_BREATH, hurt.posX, hurt.getEntityBoundingBox().minY + midHeight, hurt.posZ,
-												1 + DragonUtils.getRandomNumberInRange(0, 3), 0, 0, 0, 0.015);
+										world.spawnParticle(EnumParticleTypes.PORTAL, hurt.posX, hurt.getEntityBoundingBox().minY + midHeight, hurt.posZ,
+												1 + DragonUtils.getRandomNumberInRange(0, 3), 0, 0, 0, 0.01);
 									}
 								}
 								event.setCanceled(true);
