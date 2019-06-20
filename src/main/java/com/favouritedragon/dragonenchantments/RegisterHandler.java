@@ -64,7 +64,7 @@ public class RegisterHandler {
 	@SubscribeEvent
 	public static void registerEnchantments(RegistryEvent.Register<Enchantment> event) {
 		event.getRegistry().register(ModEnchantments.cloudWalker);
-		event.getRegistry().register(ModEnchantments.dolphin);
+	//	event.getRegistry().register(ModEnchantments.dolphin);
 		event.getRegistry().register(ModEnchantments.dragonSlayer);
 		event.getRegistry().register(ModEnchantments.enderference);
 		event.getRegistry().register(ModEnchantments.endWalker);
