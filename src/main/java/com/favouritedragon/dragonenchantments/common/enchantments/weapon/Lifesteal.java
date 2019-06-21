@@ -16,7 +16,7 @@ import java.util.Objects;
 @Mod.EventBusSubscriber(modid = DragonEnchants.MODID)
 public class Lifesteal extends Enchantment {
 	public Lifesteal() {
-		super(Rarity.RARE, Objects.requireNonNull(ModEnchantments.WEAPONS), new EntityEquipmentSlot[]{EntityEquipmentSlot.MAINHAND, EntityEquipmentSlot.OFFHAND});
+		super(Enchantment.Rarity.RARE, Objects.requireNonNull(ModEnchantments.WEAPONS), new EntityEquipmentSlot[]{EntityEquipmentSlot.MAINHAND, EntityEquipmentSlot.OFFHAND});
 		setRegistryName("life_steal");
 		setName(DragonEnchants.MODID + ":" + "life_steal");
 	}
@@ -33,6 +33,7 @@ public class Lifesteal extends Enchantment {
 			}
 		}
 	}
+
 
 	@Override
 	public boolean isTreasureEnchantment() {

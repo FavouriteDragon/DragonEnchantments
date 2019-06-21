@@ -43,11 +43,6 @@ public class StormProtection extends Enchantment {
 	}
 
 	@Override
-	public int calcModifierDamage(int level, DamageSource source) {
-		return super.calcModifierDamage(level, source);
-	}
-
-	@Override
 	public int getMaxLevel() {
 		return 5;
 	}
