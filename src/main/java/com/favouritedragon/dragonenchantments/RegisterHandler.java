@@ -68,6 +68,7 @@ public class RegisterHandler {
 		event.getRegistry().register(ModEnchantments.dragonSlayer);
 		event.getRegistry().register(ModEnchantments.enderference);
 		event.getRegistry().register(ModEnchantments.endWalker);
+		event.getRegistry().register(ModEnchantments.homing);
 		event.getRegistry().register(ModEnchantments.lifeSteal);
 		event.getRegistry().register(ModEnchantments.solarPowered);
 		event.getRegistry().register(ModEnchantments.soulDevour);

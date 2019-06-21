@@ -7,6 +7,7 @@ import com.favouritedragon.dragonenchantments.common.enchantments.armour.boots.E
 import com.favouritedragon.dragonenchantments.common.enchantments.armour.boots.VoidWalker;
 import com.favouritedragon.dragonenchantments.common.enchantments.armour.chest.VoidHunger;
 import com.favouritedragon.dragonenchantments.common.enchantments.armour.leggings.Dolphin;
+import com.favouritedragon.dragonenchantments.common.enchantments.weapon.bow.Homing;
 import com.favouritedragon.dragonenchantments.common.enchantments.weapon.sword.SoulDevour;
 import com.favouritedragon.dragonenchantments.common.enchantments.weapon.sword.ThunderAspect;
 import com.favouritedragon.dragonenchantments.common.enchantments.weapon.DragonSlayer;
@@ -32,6 +33,7 @@ public class ModEnchantments {
 	public static final Enchantment dragonSlayer = new DragonSlayer();
 	public static final Enchantment enderference = new Enderference();
 	public static final Enchantment endWalker = new EndWalker();
+	public static final Enchantment homing = new Homing();
 	public static final Enchantment lifeSteal = new Lifesteal();
 	public static final Enchantment thunderAspect = new ThunderAspect();
 	public static final Enchantment solarPowered = new SolarPowered();
