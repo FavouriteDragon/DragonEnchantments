@@ -10,6 +10,9 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -26,6 +29,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
@@ -33,9 +37,12 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
+import java.util.UUID;
 
 @Mod.EventBusSubscriber(modid = DragonEnchants.MODID)
 public class StormStrider extends Enchantment {
+
+	private static final UUID MOVEMENT_MODIFIER_ID = UUID.fromString("356f2c26-63e7-449e-b1d3-7de2f8967aca");
 
 	public StormStrider() {
 		super(Rarity.VERY_RARE, EnumEnchantmentType.ARMOR_FEET, new EntityEquipmentSlot[]{EntityEquipmentSlot.FEET});
@@ -43,6 +50,27 @@ public class StormStrider extends Enchantment {
 		setRegistryName("storm_strider");
 	}
 
+	@SubscribeEvent
+	public static void onThunder(LivingEvent.LivingUpdateEvent event) {
+		if (event.getEntityLiving() != null) {
+			EntityLivingBase entity = event.getEntityLiving();
+			int level = EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.stormStrider, entity);
+			if (level > 0) {
+				if (entity.world.isThundering()) {
+					if (entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getModifier(MOVEMENT_MODIFIER_ID) == null) {
+						applyMovementModifier(entity, 1.5F + level / 5F);
+					}
+				}
+				else if (entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getModifier(MOVEMENT_MODIFIER_ID) != null) {
+					entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).removeModifier(MOVEMENT_MODIFIER_ID);
+				}
+
+			}
+			else if (entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getModifier(MOVEMENT_MODIFIER_ID) != null) {
+				entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).removeModifier(MOVEMENT_MODIFIER_ID);
+			}
+		}
+	}
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public static void onLightningEvent(InputEvent.KeyInputEvent event) {
@@ -127,6 +155,15 @@ public class StormStrider extends Enchantment {
 	}
 
 
+	private static void applyMovementModifier(EntityLivingBase entity, float multiplier) {
+
+		IAttributeInstance moveSpeed = entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED);
+
+		moveSpeed.removeModifier(MOVEMENT_MODIFIER_ID);
+
+		moveSpeed.applyModifier(new AttributeModifier(MOVEMENT_MODIFIER_ID, "Storm Strider Modifier", multiplier, 1));
+
+	}
 	@Override
 	public int getMaxLevel() {
 		return 3;
