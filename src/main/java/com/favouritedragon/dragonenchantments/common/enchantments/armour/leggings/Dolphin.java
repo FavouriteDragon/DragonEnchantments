@@ -33,6 +33,7 @@ public class Dolphin extends Enchantment {
 				int level = EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.dolphin, entity);
 				if (level > 0) {
 					entity.motionX *= level * 1.25F;
+					entity.motionY *= 0.85F - level / 20F;
 					entity.motionZ *= level * 1.25F;
 					entity.velocityChanged = true;
 				}

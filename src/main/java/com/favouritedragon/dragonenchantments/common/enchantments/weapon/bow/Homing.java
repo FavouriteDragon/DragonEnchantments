@@ -38,7 +38,7 @@ public class Homing extends Enchantment {
 					double dist = 100;
 					Entity target = null;
 					AxisAlignedBB box = entity.getEntityBoundingBox();
-					box = box.grow(12 * level);
+					box = box.grow(8 * level);
 					List<Entity> targets = entity.world.getEntitiesWithinAABB(Entity.class, box);
 					if (!targets.isEmpty()) {
 						for (Entity e : targets) {
@@ -52,9 +52,9 @@ public class Homing extends Enchantment {
 						}
 					}
 					if (target == null) return;
-					double motionX = (target.posX - entity.posX) * 0.01 * scale;
-					double motionY = (target.posY + target.getEyeHeight() - entity.posY) * 0.01 * scale;
-					double motionZ = (target.posZ - entity.posZ) * 0.01 * scale;
+					double motionX = (target.posX - entity.posX) * 0.008 * scale;
+					double motionY = (target.posY + target.height / 2 - entity.posY) * 0.008 * scale;
+					double motionZ = (target.posZ - entity.posZ) * 0.008 * scale;
 					entity.shoot(motionX, motionY, motionZ, 1.25F, 0.F);
 					entity.velocityChanged = true;
 				}

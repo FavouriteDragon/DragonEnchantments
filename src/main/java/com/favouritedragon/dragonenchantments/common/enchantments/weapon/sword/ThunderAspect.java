@@ -73,7 +73,14 @@ public class ThunderAspect extends Enchantment {
 					int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.thunderAspect, stack);
 					if (hurt != null) {
 						if (level > 0) {
-							hurt.attackEntityFrom(DamageSource.LIGHTNING_BOLT, event.getAmount() / 5 * level);
+							float amount = level;
+							if (attacker.world.isRaining()) {
+								level *= 1.25F;
+							}
+							else if (attacker.world.isThundering()) {
+								level *= 1.5f;
+							}
+							hurt.attackEntityFrom(DamageSource.LIGHTNING_BOLT, event.getAmount() / 5 * amount);
 							Vec3d lookVec = attacker.getLookVec();
 							hurt.motionX += lookVec.x * (1 + 0.2 * level);
 							hurt.motionY += lookVec.y > 0 ? lookVec.y * (1 + 0.2 * level) : 0.2 * level;
@@ -88,7 +95,14 @@ public class ThunderAspect extends Enchantment {
 				} else {
 					int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.thunderAspect, stack);
 					if (level > 0 && hurt != null) {
-						hurt.attackEntityFrom(DamageSource.LIGHTNING_BOLT, event.getAmount() / 10 * level);
+						float amount = level;
+						if (attacker.world.isRaining()) {
+							level *= 1.25F;
+						}
+						else if (attacker.world.isThundering()) {
+							level *= 1.5f;
+						}
+						hurt.attackEntityFrom(DamageSource.LIGHTNING_BOLT, event.getAmount() / 10 * amount);
 						Vec3d lookVec = attacker.getLookVec();
 						hurt.motionX += lookVec.x * (1 + 0.1 * level);
 						hurt.motionY += lookVec.y > 0 ? lookVec.y * (1 + 0.1 * level) : 0.1 * level;

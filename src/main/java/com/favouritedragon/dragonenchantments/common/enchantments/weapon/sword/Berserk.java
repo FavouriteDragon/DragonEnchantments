@@ -13,6 +13,8 @@ public class Berserk extends Enchantment {
 
 	public Berserk() {
 		super(Rarity.RARE, EnumEnchantmentType.WEAPON, new EntityEquipmentSlot[]{EntityEquipmentSlot.MAINHAND});
+		setName(DragonEnchants.MODID + ":" + "berserk");
+		setRegistryName("berserk");
 	}
 
 	@Override

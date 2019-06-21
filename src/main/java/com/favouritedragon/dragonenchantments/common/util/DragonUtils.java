@@ -161,7 +161,7 @@ public class DragonUtils {
 	 */
 	public static boolean isTimeBetween(World world, long min, long max) {
 		long time = world.getWorldTime();
-		return min < time && time < max;
+		return min <= time && time <= max;
 	}
 
 	//Pretty performance heavy
