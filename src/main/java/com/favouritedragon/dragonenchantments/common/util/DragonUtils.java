@@ -16,6 +16,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.play.server.SPacketEntityTeleport;
 import net.minecraft.network.play.server.SPacketEntityVelocity;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
@@ -161,5 +162,10 @@ public class DragonUtils {
 	public static boolean isTimeBetween(World world, long min, long max) {
 		long time = world.getWorldTime();
 		return min < time && time < max;
+	}
+
+	//Pretty performance heavy
+	public static double getMagnitude(Vec3d vector) {
+		return Math.sqrt(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z);
 	}
 }

@@ -9,7 +9,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.event.entity.EntityEvent;
@@ -31,9 +30,11 @@ public class Homing extends Enchantment {
 	public static void onHomingArrows(EntityEvent event) {
 		if (event.getEntity() instanceof EntityArrow) {
 			EntityArrow entity = (EntityArrow) event.getEntity();
-			if (entity.shootingEntity instanceof EntityLivingBase) {
+			if (entity.shootingEntity instanceof EntityLivingBase && entity.ticksExisted > 1) {
 				int level = DragonUtils.getHeldLevelForEnchantment((EntityLivingBase) entity.shootingEntity, ModEnchantments.homing);
 				if (level > 0) {
+					Vec3d initialVelocity = new Vec3d(entity.motionX, entity.motionY, entity.motionZ);
+					double scale = DragonUtils.getMagnitude(initialVelocity);
 					double dist = 100;
 					Entity target = null;
 					AxisAlignedBB box = entity.getEntityBoundingBox();
@@ -41,7 +42,8 @@ public class Homing extends Enchantment {
 					List<Entity> targets = entity.world.getEntitiesWithinAABB(Entity.class, box);
 					if (!targets.isEmpty()) {
 						for (Entity e : targets) {
-							if (e instanceof EntityLivingBase && e != entity.shootingEntity && e != entity) {
+							if (e instanceof EntityLivingBase && e != entity.shootingEntity && e != entity &&
+									((EntityLivingBase) entity.shootingEntity).canEntityBeSeen(e)) {
 								if (entity.getDistance(e) < dist) {
 									dist = entity.getDistance(e);
 									target = e;
@@ -50,9 +52,10 @@ public class Homing extends Enchantment {
 						}
 					}
 					if (target == null) return;
-					entity.motionX = (target.posX - entity.posX) * 0.1;
-					entity.motionY = (target.posY + target.getEyeHeight() - entity.posY) * 0.1;
-					entity.motionZ = (target.posZ - entity.posZ) * 0.1;
+					double motionX = (target.posX - entity.posX) * 0.01 * scale;
+					double motionY = (target.posY + target.getEyeHeight() - entity.posY) * 0.01 * scale;
+					double motionZ = (target.posZ - entity.posZ) * 0.01 * scale;
+					entity.shoot(motionX, motionY, motionZ, 1.25F, 0.F);
 					entity.velocityChanged = true;
 				}
 			}
