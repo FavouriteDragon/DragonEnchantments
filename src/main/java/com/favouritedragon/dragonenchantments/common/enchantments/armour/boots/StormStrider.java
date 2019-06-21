@@ -101,7 +101,7 @@ public class StormStrider extends Enchantment {
 	public static void StormStride(EntityPlayer entity, double x, double y, double z, int level) {
 		int foodlevel = entity.getFoodStats().getFoodLevel();
 		double distance = entity.getDistance(x, y, z);
-		if (distance / (level * 2) <= foodlevel || entity.isCreative()) {
+		if (distance / (level) <= foodlevel || entity.isCreative()) {
 			((EntityPlayerMP) entity).getServerWorld().addScheduledTask(() -> {
 				// Make sure to run on main server thread
 				if (lightningTeleportTo(entity, x, y, z)) {
@@ -133,9 +133,10 @@ public class StormStrider extends Enchantment {
 									0, 0, 0, 2);
 						}
 					}
+					entity.getFoodStats().setFoodLevel(entity.isCreative() ? foodlevel : foodlevel - (int) (distance / (level)));
 				}
 			});
-			entity.getFoodStats().setFoodLevel(entity.isCreative() ? foodlevel : foodlevel - (int) (distance / (level * 2)));
+
 		}
 	}
 
