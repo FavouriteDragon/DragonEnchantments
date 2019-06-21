@@ -34,6 +34,8 @@ public class StormStrider extends Enchantment {
 
 	public StormStrider() {
 		super(Rarity.VERY_RARE, EnumEnchantmentType.ARMOR_FEET, new EntityEquipmentSlot[]{EntityEquipmentSlot.FEET});
+		setName(DragonEnchants.MODID + ":" + "storm_strider");
+		setRegistryName("storm_strider");
 	}
 
 	@SubscribeEvent
