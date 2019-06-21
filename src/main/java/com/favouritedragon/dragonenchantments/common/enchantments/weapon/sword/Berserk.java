@@ -33,6 +33,11 @@ public class Berserk extends Enchantment {
 	}
 
 	@Override
+	public int getMaxEnchantability(int enchantmentLevel) {
+		return getMinEnchantability(enchantmentLevel) + 80;
+	}
+
+	@Override
 	public int getMaxLevel() {
 		return 4;
 	}
