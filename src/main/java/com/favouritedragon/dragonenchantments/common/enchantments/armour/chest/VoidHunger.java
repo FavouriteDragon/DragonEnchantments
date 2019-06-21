@@ -39,7 +39,7 @@ public class VoidHunger extends Enchantment {
 	public static void onProjectileAttack(LivingAttackEvent event) {
 			if (event.getEntityLiving() != null) {
 				EntityLivingBase hurt = event.getEntityLiving();
-				int level = EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.voidHuger, hurt);
+				int level = EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.voidHunger, hurt);
 				if (level > 0) {
 					if (event.getSource().getImmediateSource() != null) {
 						if (event.getAmount() <= level * 6) {

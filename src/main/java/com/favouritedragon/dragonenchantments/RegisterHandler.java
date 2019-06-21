@@ -2,6 +2,7 @@ package com.favouritedragon.dragonenchantments;
 
 import com.favouritedragon.dragonenchantments.common.enchantments.ModEnchantments;
 import com.favouritedragon.dragonenchantments.common.network.PacketSDoubleJump;
+import com.favouritedragon.dragonenchantments.common.network.PacketSStormStride;
 import com.favouritedragon.dragonenchantments.common.network.PacketSVoidWalk;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
@@ -12,6 +13,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.relauncher.Side;
+
+import java.rmi.MarshalledObject;
 
 @Mod.EventBusSubscriber(modid = DragonEnchants.MODID)
 public class RegisterHandler {
@@ -59,10 +62,12 @@ public class RegisterHandler {
 	public static void registerPackets() {
 		DragonEnchants.NETWORK.registerMessage(PacketSDoubleJump.Handler.class, PacketSDoubleJump.class, 1, Side.SERVER);
 		DragonEnchants.NETWORK.registerMessage(PacketSVoidWalk.Handler.class, PacketSVoidWalk.class, 2, Side.SERVER);
+		DragonEnchants.NETWORK.registerMessage(PacketSStormStride.Handler.class, PacketSStormStride.class, 3, Side.SERVER);
 	}
 
 	@SubscribeEvent
 	public static void registerEnchantments(RegistryEvent.Register<Enchantment> event) {
+		event.getRegistry().register(ModEnchantments.berserk);
 		event.getRegistry().register(ModEnchantments.cloudWalker);
 		event.getRegistry().register(ModEnchantments.dolphin);
 		event.getRegistry().register(ModEnchantments.dragonSlayer);
@@ -72,9 +77,11 @@ public class RegisterHandler {
 		event.getRegistry().register(ModEnchantments.lifeSteal);
 		event.getRegistry().register(ModEnchantments.solarPowered);
 		event.getRegistry().register(ModEnchantments.soulDevour);
+		event.getRegistry().register(ModEnchantments.stormProtection);
+		event.getRegistry().register(ModEnchantments.stormStrider);
 		event.getRegistry().register(ModEnchantments.thunderAspect);
 		event.getRegistry().register(ModEnchantments.venomous);
-		event.getRegistry().register(ModEnchantments.voidHuger);
+		event.getRegistry().register(ModEnchantments.voidHunger);
 		event.getRegistry().register(ModEnchantments.voidWalker);
 	}
 

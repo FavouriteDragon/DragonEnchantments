@@ -34,7 +34,7 @@ public class VoidWalker extends Enchantment {
 		Minecraft mc = Minecraft.getMinecraft();
 		EntityPlayer player = mc.player;
 		if (player != null) {
-			if (mc.gameSettings.keyBindSneak.isKeyDown()) {
+			if (mc.gameSettings.keyBindSneak.isPressed()) {
 				int level = EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.voidWalker, player);
 				// Have to use the sun brightness, because isDaytime and skylight stuff are
 				// completely screwed.

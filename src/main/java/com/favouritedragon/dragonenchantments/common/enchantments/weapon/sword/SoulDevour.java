@@ -34,10 +34,10 @@ public class SoulDevour extends Enchantment {
 	@SubscribeEvent
 	public static void onDeath(LivingDeathEvent event) {
 		Entity source = event.getSource().getTrueSource();
-		Entity target = event.getSource().getTrueSource();
+		Entity target = event.getEntity();
 		if (source == null || target == null)
 			return;
-		if (source instanceof EntityLivingBase) {
+		if (source instanceof EntityLivingBase && target instanceof EntityLivingBase) {
 			EntityLivingBase trueEntity = (EntityLivingBase) source;
 			if (DragonUtils.getHeldLevelForEnchantment(trueEntity, ModEnchantments.soulDevour) > 0) {
 				ItemStack stack = DragonUtils
@@ -45,8 +45,7 @@ public class SoulDevour extends Enchantment {
 				short number_killed = readNbt(stack);
 				number_killed++;
 				writeNbt(stack, number_killed, getAttackDamage(stack));
-				trueEntity.heal(((EntityLivingBase) target).getHealth() / 2);
-				System.out.println(readInitalDamage(stack) + " " + stack.getItem().getDamage(stack));
+				trueEntity.heal(((EntityLivingBase) target).getMaxHealth() / 4);
 				if (number_killed < 76) {
 					writeModifier(stack, readInitalDamage(stack) * ((100F + number_killed) / 100F));
 				}
