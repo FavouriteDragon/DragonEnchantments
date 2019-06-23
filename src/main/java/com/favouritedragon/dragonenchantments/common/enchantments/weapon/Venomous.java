@@ -39,7 +39,7 @@ public class Venomous extends Enchantment {
 	public void onEntityDamaged(EntityLivingBase user, Entity target, int level) {
 		super.onEntityDamaged(user, target, level);
 		if (target instanceof EntityLivingBase) {
-			((EntityLivingBase) target).addPotionEffect(new PotionEffect(MobEffects.POISON, 40 * level, level - 1));
+			((EntityLivingBase) target).addPotionEffect(new PotionEffect(MobEffects.POISON, 80 * level, level - 1));
 		}
 	}
 }

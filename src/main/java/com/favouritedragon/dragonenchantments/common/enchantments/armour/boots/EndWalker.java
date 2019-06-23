@@ -29,7 +29,7 @@ public class EndWalker extends Enchantment {
 			if (event.getSource().getImmediateSource() != null) {
 				int level = EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.endWalker, entity);
 				if (level > 0) {
-					if (DragonUtils.getRandomNumberInRange(1, 10) <= 2 * level) {
+					if (DragonUtils.getRandomNumberInRange(1, 100) <= 25 * level) {
 						for (int i = 0; i < 64; ++i) {
 							if (DragonUtils.teleportRandomly(entity, 30)) {
 								event.setCanceled(true);

@@ -56,7 +56,9 @@ public class VoidHunger extends Enchantment {
 												1 + DragonUtils.getRandomNumberInRange(0, 3), 0, 0, 0, 0.015);
 									}
 								}
-								((EntityPlayer) hurt).getFoodStats().setFoodLevel(((EntityPlayer) hurt).getFoodStats().getFoodLevel() - (int) event.getAmount() / (2 * level));
+								int foodamount = (int) event.getAmount() / level;
+								foodamount += (int) (1.5 - level / 10);
+								((EntityPlayer) hurt).getFoodStats().setFoodLevel(((EntityPlayer) hurt).getFoodStats().getFoodLevel() - foodamount);
 								event.setCanceled(true);
 							} else if (!(hurt instanceof EntityPlayer)) {
 								event.getSource().getImmediateSource().setDead();
