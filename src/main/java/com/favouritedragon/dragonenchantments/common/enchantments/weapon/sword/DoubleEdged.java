@@ -61,7 +61,8 @@ public class DoubleEdged extends Enchantment {
 			int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.doubleEdge, attacker.getHeldItemMainhand());
 			if (level > 0) {
 				if (isCrit(attacker.getUniqueID().toString())) {
-					attacker.attackEntityFrom(DamageSource.causeThornsDamage(attacker), event.getAmount() / (3 + level));
+					attacker.attackEntityFrom(DamageSource.causeThornsDamage(attacker), event.getAmount() / (2 + level));
+					attacker.setPosition(attacker.posX, attacker.posY, attacker.posZ);
 				}
 			}
 		}
