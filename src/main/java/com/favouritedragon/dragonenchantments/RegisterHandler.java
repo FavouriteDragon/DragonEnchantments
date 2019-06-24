@@ -70,6 +70,7 @@ public class RegisterHandler {
 		event.getRegistry().register(ModEnchantments.berserk);
 		event.getRegistry().register(ModEnchantments.cloudWalker);
 		event.getRegistry().register(ModEnchantments.dolphin);
+		event.getRegistry().register(ModEnchantments.doubleEdge);
 		event.getRegistry().register(ModEnchantments.dragonSlayer);
 		event.getRegistry().register(ModEnchantments.enderference);
 		event.getRegistry().register(ModEnchantments.endWalker);

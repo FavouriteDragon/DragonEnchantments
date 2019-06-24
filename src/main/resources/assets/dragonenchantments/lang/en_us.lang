@@ -2,6 +2,7 @@
 enchantment.dragon_enchants:berserk=Berserk
 enchantment.dragon_enchants:cloud_walker=Cloud Walker
 enchantment.dragon_enchants:dolphin=Dolphin
+enchantment.dragon_enchants:double_edge=Double Edged
 enchantment.dragon_enchants:dragon_slayer=Dragon Slayer
 enchantment.dragon_enchants:enderference=Enderference
 enchantment.dragon_enchants:end_walker=End Walker
@@ -19,6 +20,7 @@ enchantment.dragon_enchants:void_walker=Void Walker
 enchantment.dragon_enchants.berserk.desc=Does more damage based on the amount of health you're missing! Does (missing health / (4 / level))% damage.
 enchantment.dragon_enchants.cloud_walker.desc=Gives you slow falling, jump boost, and an increasing number of jumps in the air depending on your level.
 enchantment.dragon_enchants.dolphin.desc=Increases your movement speed in water.
+enchantment.dragon_enchants.double_edge.desc=Do 20% extra damage on critical attacks per level, but receive damage as well.
 enchantment.dragon_enchants.dragon_slayer.desc=Deals more damage to the ender dragon! 10% extra damage per level.
 enchantment.dragon_enchants.enderference.desc=Prevents endermen from teleporting within 3 + level * 2 blocks. Also prevents players from teleporting with end walker.
 enchantment.dragon_enchants.end_walker.desc=Gives a 25% chance per level to dodge incoming projectile attacks by teleporting to a nearby random location! Blocked by enderference. Great for fighting those pesky skeletons!
