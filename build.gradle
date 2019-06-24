@@ -20,6 +20,17 @@ compileJava {
     sourceCompatibility = targetCompatibility = '1.8'
 }
 
+repositories {
+	maven {
+		name = "altillimity"
+		url = "http://www.altillimity.com/nexus/content/groups/maven/"
+	}
+	maven {
+		name = "codechickenlib"
+		url = "http://chickenbones.net/maven/"
+	}
+}
+
 minecraft {
     version = "1.12.2-14.23.5.2838"
     runDir = "run"
@@ -54,6 +65,7 @@ dependencies {
     // for more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
+    compile "com.aang23.renderingutils:aangrenderingutils:1.0-1.12.2"
 
 }
 
