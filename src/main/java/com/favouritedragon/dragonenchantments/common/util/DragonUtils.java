@@ -2,9 +2,11 @@ package com.favouritedragon.dragonenchantments.common.util;
 
 import akka.japi.Pair;
 import com.favouritedragon.dragonenchantments.DragonEnchants;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -16,6 +18,9 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.play.server.SPacketEntityTeleport;
 import net.minecraft.network.play.server.SPacketEntityVelocity;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -120,21 +125,70 @@ public class DragonUtils {
 		double d0 = entity.posX + (entity.world.rand.nextDouble() - 0.5D) * radiusMult;
 		double d1 = entity.posY + (entity.world.rand.nextInt((int) radiusMult) - radiusMult / 2);
 		double d2 = entity.posZ + (entity.world.rand.nextDouble() - 0.5D) * radiusMult;
-		return teleportTo(entity, d0, d1, d2);
+		return teleportTo(entity, d0, d1, d2, SoundEvents.ENTITY_ENDERMEN_TELEPORT);
 	}
 
-	public static boolean teleportTo(EntityLivingBase entity, double x, double y, double z) {
+	public static boolean teleportTo(EntityLivingBase entity, double x, double y, double z, SoundEvent sound) {
 		EnderTeleportEvent event = new EnderTeleportEvent(entity, x, y, z, 0);
 		if (MinecraftForge.EVENT_BUS.post(event)) return false;
-		boolean teleport = entity.attemptTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ());
+		boolean teleport = attemptTeleport(entity, event.getTargetX(), event.getTargetY(), event.getTargetZ());
 
 		if (teleport) {
 			applyPlayerKnockback(entity);
-			entity.world.playSound(null, entity.prevPosX, entity.prevPosY, entity.prevPosZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, entity.getSoundCategory(), 1.0F, 1.0F);
-			entity.playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 1.0F, 1.0F);
+			entity.world.playSound(null, entity.prevPosX, entity.prevPosY, entity.prevPosZ, sound, entity.getSoundCategory(), 1.0F, 1.0F);
+			entity.playSound(sound, 1.0F, 1.0F);
 		}
 
 		return teleport;
+	}
+
+	//Same as the original method, but without particles
+	public static boolean attemptTeleport(EntityLivingBase entity, double x, double y, double z) {
+		double d0 = entity.posX;
+		double d1 = entity.posY;
+		double d2 = entity.posZ;
+		entity.posX = x;
+		entity.posY = y;
+		entity.posZ = z;
+		boolean flag = false;
+		BlockPos blockpos = new BlockPos(entity);
+		World world = entity.world;
+
+		if (world.isBlockLoaded(blockpos)) {
+			boolean flag1 = false;
+
+			while (!flag1 && blockpos.getY() > 0) {
+				BlockPos blockpos1 = blockpos.down();
+				IBlockState iblockstate = world.getBlockState(blockpos1);
+
+				if (iblockstate.getMaterial().blocksMovement()) {
+					flag1 = true;
+				} else {
+					--entity.posY;
+					blockpos = blockpos1;
+				}
+			}
+
+			if (flag1) {
+				entity.setPositionAndUpdate(entity.posX, entity.posY, entity.posZ);
+
+				if (world.getCollisionBoxes(entity, entity.getEntityBoundingBox()).isEmpty() && !world.containsAnyLiquid(entity.getEntityBoundingBox())) {
+					flag = true;
+				}
+			}
+		}
+
+		if (!flag) {
+			entity.setPositionAndUpdate(d0, d1, d2);
+			return false;
+		} else {
+
+			if (entity instanceof EntityCreature) {
+				((EntityCreature) entity).getNavigator().clearPath();
+			}
+
+			return true;
+		}
 	}
 
 	public static int getRandomNumberInRange(int min, int max) {
@@ -167,5 +221,14 @@ public class DragonUtils {
 	//Pretty performance heavy
 	public static double getMagnitude(Vec3d vector) {
 		return Math.sqrt(vector.x * vector.x + vector.y * vector.y + vector.z * vector.z);
+	}
+
+	//Vec3d from pitch and yaw of an entity
+	public static Vec3d getVectorForRotation(float pitch, float yaw) {
+		float f = MathHelper.cos(-yaw * 0.017453292F - (float)Math.PI);
+		float f1 = MathHelper.sin(-yaw * 0.017453292F - (float)Math.PI);
+		float f2 = -MathHelper.cos(-pitch * 0.017453292F);
+		float f3 = MathHelper.sin(-pitch * 0.017453292F);
+		return new Vec3d((double)(f1 * f2), (double)f3, (double)(f * f2));
 	}
 }
