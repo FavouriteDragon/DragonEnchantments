@@ -20,10 +20,15 @@ compileJava {
     sourceCompatibility = targetCompatibility = '1.8'
 }
 
+configurations {
+    shade
+    compile.extendsFrom shade
+}
+
 repositories {
 	maven {
 		name = "altillimity"
-		url = "http://www.altillimity.com/nexus/content/groups/maven/"
+		url = "https://maven.altillimity.com/content/groups/maven/"
 	}
 	maven {
 		name = "codechickenlib"
@@ -66,7 +71,15 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
     compile "com.aang23.renderingutils:aangrenderingutils:1.0-1.12.2"
+    shade group: 'org.joml', name: 'joml', version: '1.9.16'
+}
 
+jar {
+    configurations.shade.each { dep ->
+        from(project.zipTree(dep)){
+            exclude 'META-INF', 'META-INF/**'
+        }
+    }
 }
 
 processResources {
