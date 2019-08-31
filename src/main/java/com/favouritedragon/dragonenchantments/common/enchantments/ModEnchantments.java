@@ -3,10 +3,7 @@ package com.favouritedragon.dragonenchantments.common.enchantments;
 import com.favouritedragon.dragonenchantments.DragonEnchants;
 import com.favouritedragon.dragonenchantments.common.enchantments.all.SolarPowered;
 import com.favouritedragon.dragonenchantments.common.enchantments.armour.StormProtection;
-import com.favouritedragon.dragonenchantments.common.enchantments.armour.boots.CloudWalker;
-import com.favouritedragon.dragonenchantments.common.enchantments.armour.boots.EndWalker;
-import com.favouritedragon.dragonenchantments.common.enchantments.armour.boots.StormStrider;
-import com.favouritedragon.dragonenchantments.common.enchantments.armour.boots.VoidWalker;
+import com.favouritedragon.dragonenchantments.common.enchantments.armour.boots.*;
 import com.favouritedragon.dragonenchantments.common.enchantments.armour.chest.VoidHunger;
 import com.favouritedragon.dragonenchantments.common.enchantments.armour.leggings.Dolphin;
 import com.favouritedragon.dragonenchantments.common.enchantments.weapon.bow.Homing;
@@ -49,5 +46,6 @@ public class ModEnchantments {
 	public static final Enchantment venomous = new Venomous();
 	public static final Enchantment voidHunger = new VoidHunger();
 	public static final Enchantment voidWalker = new VoidWalker();
+	public static final Enchantment windWalker = new WindWalker();
 
 }

@@ -4,6 +4,7 @@ import com.favouritedragon.dragonenchantments.common.enchantments.ModEnchantment
 import com.favouritedragon.dragonenchantments.common.network.PacketSDoubleJump;
 import com.favouritedragon.dragonenchantments.common.network.PacketSStormStride;
 import com.favouritedragon.dragonenchantments.common.network.PacketSVoidWalk;
+import com.favouritedragon.dragonenchantments.common.network.PacketSWindWalk;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.crafting.IRecipe;
@@ -63,6 +64,7 @@ public class RegisterHandler {
 		DragonEnchants.NETWORK.registerMessage(PacketSDoubleJump.Handler.class, PacketSDoubleJump.class, 1, Side.SERVER);
 		DragonEnchants.NETWORK.registerMessage(PacketSVoidWalk.Handler.class, PacketSVoidWalk.class, 2, Side.SERVER);
 		DragonEnchants.NETWORK.registerMessage(PacketSStormStride.Handler.class, PacketSStormStride.class, 3, Side.SERVER);
+		DragonEnchants.NETWORK.registerMessage(PacketSWindWalk.Handler.class, PacketSWindWalk.class, 4, Side.SERVER);
 	}
 
 	@SubscribeEvent

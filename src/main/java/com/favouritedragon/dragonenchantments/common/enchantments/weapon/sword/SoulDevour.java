@@ -14,6 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -42,18 +43,36 @@ public class SoulDevour extends Enchantment {
 			if (DragonUtils.getHeldLevelForEnchantment(trueEntity, ModEnchantments.soulDevour) > 0) {
 				ItemStack stack = DragonUtils
 						.getHeldLevelForEnchantmentAndHeldItem(trueEntity, ModEnchantments.soulDevour).second();
-				short number_killed = readNbt(stack);
-				number_killed++;
-				writeNbt(stack, number_killed, getAttackDamage(stack));
+				short numberKilled = readSoulsKilled(stack);
+				numberKilled++;
+				writeNbt(stack, numberKilled, getAttackDamage(stack), readTotalHealthConsumed(stack));
 				trueEntity.heal(((EntityLivingBase) target).getMaxHealth() / 4);
-				if (number_killed < 76) {
-					writeModifier(stack, readInitalDamage(stack) * ((100F + number_killed) / 100F));
+				if (numberKilled < 76) {
+					writeModifier(stack, readInitalDamage(stack) * ((100F + numberKilled) / 100F));
 				}
 			}
 		}
 	}
 
-	private static void writeNbt(ItemStack stack, short number_killed, double intial_damage) {
+	@SubscribeEvent
+	public static void onHurt(LivingHurtEvent event) {
+		Entity source = event.getSource().getTrueSource();
+		Entity target = event.getEntity();
+		if (source == null || target == null)
+			return;
+		if (source instanceof EntityLivingBase && target instanceof EntityLivingBase) {
+			EntityLivingBase trueEntity = (EntityLivingBase) source;
+			if (DragonUtils.getHeldLevelForEnchantment(trueEntity, ModEnchantments.soulDevour) > 0) {
+				ItemStack stack = DragonUtils
+						.getHeldLevelForEnchantmentAndHeldItem(trueEntity, ModEnchantments.soulDevour).second();
+				double healthConsumed = readTotalHealthConsumed(stack);
+				healthConsumed += event.getAmount();
+				writeNbt(stack, readSoulsKilled(stack), getAttackDamage(stack), healthConsumed);
+			}
+		}
+	}
+
+	private static void writeNbt(ItemStack stack, short numberKilled, double initialDamage, double healthConsumed) {
 		NBTTagCompound nbt;
 		if (stack.hasTagCompound()) {
 			nbt = stack.getTagCompound();
@@ -61,9 +80,10 @@ public class SoulDevour extends Enchantment {
 			nbt = new NBTTagCompound();
 		}
 		assert nbt != null;
-		nbt.setShort("SoulDevourKills", number_killed);
+		nbt.setDouble("ConsumedHealth", healthConsumed);
+		nbt.setShort("SoulDevourKills", numberKilled);
 		if (!nbt.hasKey("IntialDamage"))
-			nbt.setDouble("IntialDamage", intial_damage);
+			nbt.setDouble("IntialDamage", initialDamage);
 	}
 
 	private static void writeModifier(ItemStack stack, double value) {
@@ -95,7 +115,7 @@ public class SoulDevour extends Enchantment {
 		return value;
 	}
 
-	private static short readNbt(ItemStack stack) {
+	private static short readSoulsKilled(ItemStack stack) {
 		NBTTagCompound nbt;
 		if (stack.hasTagCompound()) {
 			nbt = stack.getTagCompound();
@@ -105,6 +125,21 @@ public class SoulDevour extends Enchantment {
 		assert nbt != null;
 		if (nbt.hasKey("SoulDevourKills")) {
 			return nbt.getShort("SoulDevourKills");
+		} else {
+			return 0;
+		}
+	}
+
+	private static double readTotalHealthConsumed(ItemStack stack) {
+		NBTTagCompound nbt;
+		if (stack.hasTagCompound()) {
+			nbt = stack.getTagCompound();
+		} else {
+			nbt = new NBTTagCompound();
+		}
+		assert nbt != null;
+		if (nbt.hasKey("ConsumedHealth")) {
+			return nbt.getDouble("ConsumedHealth");
 		} else {
 			return 0;
 		}
