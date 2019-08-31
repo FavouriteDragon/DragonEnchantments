@@ -86,6 +86,7 @@ public class RegisterHandler {
 		event.getRegistry().register(ModEnchantments.venomous);
 		event.getRegistry().register(ModEnchantments.voidHunger);
 		event.getRegistry().register(ModEnchantments.voidWalker);
+		event.getRegistry().register(ModEnchantments.windWalker);
 	}
 
 	static void registerAll() {
