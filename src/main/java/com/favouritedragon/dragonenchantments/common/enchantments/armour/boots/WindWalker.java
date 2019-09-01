@@ -29,7 +29,7 @@ import java.util.HashMap;
 @Mod.EventBusSubscriber(modid = DragonEnchants.MODID)
 public class WindWalker extends Enchantment {
 
-	
+
 	//UUID, Keycode, then cooldown and double-tap timer.
 	private static HashMap<String, Pair<Integer, Pair<Integer, Integer>>> dodgeMap = new HashMap<>();
 
@@ -102,7 +102,7 @@ public class WindWalker extends Enchantment {
 						if (getDoubleTapTicks(UUID) <= 8) {
 							if (getCooldown(UUID) <= 0) {
 								//Send Packet
-								origin = origin.add(DragonUtils.getVectorForRotation(player.rotationPitch, player.rotationYaw - 90).scale(level * 2.5));
+								origin = origin.add(DragonUtils.getVectorForRotation(player.rotationPitch, player.rotationYaw - 90).scale(level * 3));
 								origin = new Vec3d(origin.x, player.getEntityBoundingBox().minY, origin.z);
 								player.world.sendPacketToServer(DragonEnchants.NETWORK.getPacketFrom(new PacketSWindWalk(player.getUniqueID().toString(),
 										origin.x, origin.y, origin.z, EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.windWalker, player))));
@@ -116,7 +116,7 @@ public class WindWalker extends Enchantment {
 						if (getDoubleTapTicks(UUID) <= 8) {
 							if (getCooldown(UUID) <= 0) {
 								//Send Packet
-								origin = origin.add(player.getLookVec().scale(level * 2.5));
+								origin = origin.add(player.getLookVec().scale(level * 3));
 								origin = new Vec3d(origin.x, player.getEntityBoundingBox().minY, origin.z);
 								player.world.sendPacketToServer(DragonEnchants.NETWORK.getPacketFrom(new PacketSWindWalk(player.getUniqueID().toString(),
 										origin.x, origin.y, origin.z, EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.windWalker, player))));
@@ -130,7 +130,7 @@ public class WindWalker extends Enchantment {
 						if (getDoubleTapTicks(UUID) <= 8) {
 							if (getCooldown(UUID) <= 0) {
 								//Send Packet
-								origin = origin.add(DragonUtils.getVectorForRotation(player.rotationPitch, player.rotationYaw + 90).scale(level * 2.5));
+								origin = origin.add(DragonUtils.getVectorForRotation(player.rotationPitch, player.rotationYaw + 90).scale(level * 3));
 								origin = new Vec3d(origin.x, player.getEntityBoundingBox().minY, origin.z);
 								player.world.sendPacketToServer(DragonEnchants.NETWORK.getPacketFrom(new PacketSWindWalk(player.getUniqueID().toString(),
 										origin.x, origin.y, origin.z, EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.windWalker, player))));
@@ -144,7 +144,7 @@ public class WindWalker extends Enchantment {
 						if (getDoubleTapTicks(UUID) <= 8) {
 							if (getCooldown(UUID) <= 0) {
 								//Send Packet
-								origin = origin.add(DragonUtils.getVectorForRotation(player.rotationPitch, player.rotationYaw + 180).scale(level * 2.5));
+								origin = origin.add(DragonUtils.getVectorForRotation(player.rotationPitch, player.rotationYaw + 180).scale(level * 3));
 								origin = new Vec3d(origin.x, player.getEntityBoundingBox().minY, origin.z);
 								player.world.sendPacketToServer(DragonEnchants.NETWORK.getPacketFrom(new PacketSWindWalk(player.getUniqueID().toString(),
 										origin.x, origin.y, origin.z, level)));
@@ -178,11 +178,11 @@ public class WindWalker extends Enchantment {
 		setDoubleTapTicks(entity.getUniqueID().toString(), 0);
 		int foodlevel = entity.getFoodStats().getFoodLevel();
 		double distance = entity.getDistance(x, y, z);
-		if (distance <= level * 2.5) {
+		if (distance <= level * 3) {
 			if (foodlevel >= distance / 2) {
 				if (!entity.isSneaking() || entity.isCreative()) {
 					((EntityPlayerMP) entity).getServerWorld().addScheduledTask(() -> {
-						if (DragonUtils.teleportTo(entity, x, y, z, SoundEvents.ENTITY_VEX_CHARGE)) {
+						if (DragonUtils.teleportTo(entity, x, y, z, SoundEvents.ENTITY_FIREWORK_LAUNCH)) {
 							if (!entity.isCreative())
 								entity.getFoodStats().setFoodLevel(entity.getFoodStats().getFoodLevel() - (int) (distance / 2));
 							setCooldown(entity.getUniqueID().toString(), 100 - level * 10);
