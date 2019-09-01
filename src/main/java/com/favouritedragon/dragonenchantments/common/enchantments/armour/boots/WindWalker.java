@@ -73,6 +73,7 @@ public class WindWalker extends Enchantment {
 		return coolDown.getOrDefault(UUID, 0);
 	}
 
+	//Doesn't work????
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public static void onDoubleTapEvent(InputEvent.KeyInputEvent event) {
@@ -88,63 +89,70 @@ public class WindWalker extends Enchantment {
 		if (level > 0) {
 			if (left.isPressed()) {
 				if (getLastPressedKey(UUID) == left.getKeyCode()) {
-					if (getDoubleTapTicks(UUID) <= 6) {
+					if (getDoubleTapTicks(UUID) <= 8) {
 						if (getCooldown(UUID) <= 0) {
 							//Send Packet
 							origin = origin.add(DragonUtils.getVectorForRotation(player.rotationPitch, player.rotationYaw - 90).scale(level * 2.5));
+							origin = new Vec3d(origin.x, player.getEntityBoundingBox().minY, origin.z);
 							player.world.sendPacketToServer(DragonEnchants.NETWORK.getPacketFrom(new PacketSWindWalk(player.getUniqueID().toString(),
 									origin.x, origin.y, origin.z, EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.windWalker, player))));
 						}
 					}
-				} else {
-					setLastPressedKey(UUID, left.getKeyCode());
 					setDoubleTapTicks(UUID, 0);
 				}
+				setLastPressedKey(UUID, left.getKeyCode());
+				setDoubleTapTicks(UUID, 0);
 			}
 			if (forward.isPressed()) {
 				if (getLastPressedKey(UUID) == forward.getKeyCode()) {
-					if (getDoubleTapTicks(UUID) <= 6) {
+					if (getDoubleTapTicks(UUID) <= 8) {
 						if (getCooldown(UUID) <= 0) {
 							//Send Packet
 							origin = origin.add(player.getLookVec().scale(level * 2.5));
+							origin = new Vec3d(origin.x, player.getEntityBoundingBox().minY, origin.z);
 							player.world.sendPacketToServer(DragonEnchants.NETWORK.getPacketFrom(new PacketSWindWalk(player.getUniqueID().toString(),
 									origin.x, origin.y, origin.z, EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.windWalker, player))));
 							setDoubleTapTicks(UUID, 0);
 						}
 					}
-				} else {
-					setLastPressedKey(UUID, forward.getKeyCode());
+					setDoubleTapTicks(UUID, 0);
 				}
+				setLastPressedKey(UUID, forward.getKeyCode());
+				setDoubleTapTicks(UUID, 0);
+
 			}
 			if (right.isPressed()) {
 				if (getLastPressedKey(UUID) == right.getKeyCode()) {
-					if (getDoubleTapTicks(UUID) <= 6) {
+					if (getDoubleTapTicks(UUID) <= 8) {
 						if (getCooldown(UUID) <= 0) {
 							//Send Packet
 							origin = origin.add(DragonUtils.getVectorForRotation(player.rotationPitch, player.rotationYaw + 90).scale(level * 2.5));
+							origin = new Vec3d(origin.x, player.getEntityBoundingBox().minY, origin.z);
 							player.world.sendPacketToServer(DragonEnchants.NETWORK.getPacketFrom(new PacketSWindWalk(player.getUniqueID().toString(),
 									origin.x, origin.y, origin.z, EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.windWalker, player))));
 						}
 					}
-				} else {
-					setLastPressedKey(UUID, right.getKeyCode());
 					setDoubleTapTicks(UUID, 0);
 				}
+				setLastPressedKey(UUID, right.getKeyCode());
+				setDoubleTapTicks(UUID, 0);
+
 			}
 			if (back.isPressed()) {
 				if (getLastPressedKey(UUID) == back.getKeyCode()) {
-					if (getDoubleTapTicks(UUID) <= 6) {
+					if (getDoubleTapTicks(UUID) <= 8) {
 						if (getCooldown(UUID) <= 0) {
 							//Send Packet
 							origin = origin.add(DragonUtils.getVectorForRotation(player.rotationPitch, player.rotationYaw + 180).scale(level * 2.5));
+							origin = new Vec3d(origin.x, player.getEntityBoundingBox().minY, origin.z);
 							player.world.sendPacketToServer(DragonEnchants.NETWORK.getPacketFrom(new PacketSWindWalk(player.getUniqueID().toString(),
 									origin.x, origin.y, origin.z, level)));
 						}
 					}
-				} else {
-					setLastPressedKey(UUID, back.getKeyCode());
 					setDoubleTapTicks(UUID, 0);
 				}
+				setLastPressedKey(UUID, back.getKeyCode());
+				setDoubleTapTicks(UUID, 0);
 			}
 		}
 	}
@@ -169,7 +177,8 @@ public class WindWalker extends Enchantment {
 				if (!entity.isSneaking() || entity.isCreative()) {
 					((EntityPlayerMP) entity).getServerWorld().addScheduledTask(() -> {
 						if (DragonUtils.teleportTo(entity, x, y, z, SoundEvents.ENTITY_VEX_CHARGE)) {
-							entity.getFoodStats().setFoodLevel(entity.getFoodStats().getFoodLevel() - (int) (distance / 2));
+							if (!entity.isCreative())
+								entity.getFoodStats().setFoodLevel(entity.getFoodStats().getFoodLevel() - (int) (distance / 2));
 							setCooldown(entity.getUniqueID().toString(), 100 - level * 10);
 						}
 					});

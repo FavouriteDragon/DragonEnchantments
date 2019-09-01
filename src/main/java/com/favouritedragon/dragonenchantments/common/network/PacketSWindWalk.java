@@ -58,8 +58,8 @@ public class PacketSWindWalk implements IMessage {
 		@Override
 		public IMessage onMessage(PacketSWindWalk message, MessageContext ctx) {
 			EntityPlayer player = (EntityPlayer) FMLCommonHandler.instance().getMinecraftServerInstance().getEntityFromUuid(UUID.fromString(message.uuid));
-			if (player != null)
-				WindWalker.windWalk(player, message.x, message.y, message.z, message.level);
+			assert player != null;
+			WindWalker.windWalk(player, message.x, message.y, message.z, message.level);
 			return null;
 		}
 	}
