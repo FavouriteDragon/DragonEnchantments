@@ -1,5 +1,6 @@
 package com.favouritedragon.dragonenchantments.common.enchantments.armour.boots;
 
+import akka.japi.Pair;
 import com.favouritedragon.dragonenchantments.DragonEnchants;
 import com.favouritedragon.dragonenchantments.common.enchantments.ModEnchantments;
 import com.favouritedragon.dragonenchantments.common.network.PacketSWindWalk;
@@ -21,15 +22,16 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.input.Keyboard;
 
 import java.util.HashMap;
 
 @Mod.EventBusSubscriber(modid = DragonEnchants.MODID)
 public class WindWalker extends Enchantment {
 
-	public static HashMap<String, Integer> lastPressedKey = new HashMap<>();
-	public static HashMap<String, Integer> doubleTapTicks = new HashMap<>();
-	public static HashMap<String, Integer> coolDown = new HashMap<>();
+	
+	//UUID, Keycode, then cooldown and double-tap timer.
+	private static HashMap<String, Pair<Integer, Pair<Integer, Integer>>> dodgeMap = new HashMap<>();
 
 	public WindWalker() {
 		super(Rarity.VERY_RARE, EnumEnchantmentType.ARMOR_FEET, new EntityEquipmentSlot[]{EntityEquipmentSlot.FEET});
@@ -37,43 +39,49 @@ public class WindWalker extends Enchantment {
 		setRegistryName("wind_walker");
 	}
 
-	public static void setLastPressedKey(String UUID, int keyCode) {
-		if (!lastPressedKey.containsKey(UUID)) {
-			lastPressedKey.put(UUID, keyCode);
-		} else {
-			doubleTapTicks.replace(UUID, keyCode);
+	private static int getCooldown(String UUID) {
+		if (!dodgeMap.containsKey(UUID)) {
+			return 0;
 		}
+		else return dodgeMap.get(UUID).second().first();
 	}
 
-	public static int getLastPressedKey(String UUID) {
-		return lastPressedKey.getOrDefault(UUID, Minecraft.getMinecraft().gameSettings.keyBindForward.getKeyCodeDefault());
-	}
-
-	public static void setDoubleTapTicks(String UUID, int ticks) {
-		if (!doubleTapTicks.containsKey(UUID)) {
-			doubleTapTicks.put(UUID, ticks);
-		} else {
-			doubleTapTicks.replace(UUID, ticks);
+	private static int getLastPressedKey(String UUID) {
+		if (!dodgeMap.containsKey(UUID)) {
+			return 0;
 		}
+		else return dodgeMap.get(UUID).first();
 	}
 
-	public static int getDoubleTapTicks(String UUID) {
-		return doubleTapTicks.getOrDefault(UUID, 0);
-	}
 
-	public static void setCooldown(String UUID, int ticks) {
-		if (!coolDown.containsKey(UUID)) {
-			coolDown.put(UUID, ticks);
-		} else {
-			coolDown.replace(UUID, ticks);
+	private static int getDoubleTapTicks(String UUID) {
+		if (!dodgeMap.containsKey(UUID)) {
+			return 0;
 		}
+		else return dodgeMap.get(UUID).second().second();
 	}
 
-	public static int getCooldown(String UUID) {
-		return coolDown.getOrDefault(UUID, 0);
+	private static void setCooldown(String UUID, int ticks) {
+		if (dodgeMap.containsKey(UUID)) {
+			dodgeMap.replace(UUID, new Pair<>(getLastPressedKey(UUID), new Pair<>(ticks, getDoubleTapTicks(UUID))));
+		}
+		else dodgeMap.put(UUID, new Pair<>(getLastPressedKey(UUID), new Pair<>(ticks, getDoubleTapTicks(UUID))));
 	}
 
-	//Doesn't work????
+	private static void setLastPressedKey(String UUID, int keycode) {
+		if (dodgeMap.containsKey(UUID)) {
+			dodgeMap.replace(UUID, new Pair<>(keycode, new Pair<>(getCooldown(UUID), getDoubleTapTicks(UUID))));
+		}
+		else dodgeMap.put(UUID, new Pair<>(keycode, new Pair<>(getCooldown(UUID), getDoubleTapTicks(UUID))));
+	}
+
+	private static void setDoubleTapTicks(String UUID, int ticks) {
+		if (dodgeMap.containsKey(UUID)) {
+			dodgeMap.replace(UUID, new Pair<>(getLastPressedKey(UUID), new Pair<>(getCooldown(UUID), ticks)));
+		}
+		else dodgeMap.put(UUID, new Pair<>(getLastPressedKey(UUID), new Pair<>(getCooldown(UUID), ticks)));
+	}
+
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public static void onDoubleTapEvent(InputEvent.KeyInputEvent event) {
@@ -87,75 +95,73 @@ public class WindWalker extends Enchantment {
 		Vec3d origin = player.getPositionVector();
 		int level = EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.windWalker, player);
 		if (level > 0) {
-			if (left.isPressed()) {
-				if (getLastPressedKey(UUID) == left.getKeyCode()) {
-					if (getDoubleTapTicks(UUID) <= 8) {
-						if (getCooldown(UUID) <= 0) {
-							//Send Packet
-							origin = origin.add(DragonUtils.getVectorForRotation(player.rotationPitch, player.rotationYaw - 90).scale(level * 2.5));
-							origin = new Vec3d(origin.x, player.getEntityBoundingBox().minY, origin.z);
-							player.world.sendPacketToServer(DragonEnchants.NETWORK.getPacketFrom(new PacketSWindWalk(player.getUniqueID().toString(),
-									origin.x, origin.y, origin.z, EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.windWalker, player))));
+			int pressed = Keyboard.getEventKey();
+			if (Keyboard.getEventKeyState() && !Keyboard.isRepeatEvent()) {
+				if (left.getKeyCode() == pressed) {
+					if (getLastPressedKey(UUID) == left.getKeyCode()) {
+						if (getDoubleTapTicks(UUID) <= 8) {
+							if (getCooldown(UUID) <= 0) {
+								//Send Packet
+								origin = origin.add(DragonUtils.getVectorForRotation(player.rotationPitch, player.rotationYaw - 90).scale(level * 2.5));
+								origin = new Vec3d(origin.x, player.getEntityBoundingBox().minY, origin.z);
+								player.world.sendPacketToServer(DragonEnchants.NETWORK.getPacketFrom(new PacketSWindWalk(player.getUniqueID().toString(),
+										origin.x, origin.y, origin.z, EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.windWalker, player))));
+							}
 						}
 					}
-					setDoubleTapTicks(UUID, 0);
 				}
-				setLastPressedKey(UUID, left.getKeyCode());
-				setDoubleTapTicks(UUID, 0);
-			}
-			if (forward.isPressed()) {
-				if (getLastPressedKey(UUID) == forward.getKeyCode()) {
-					if (getDoubleTapTicks(UUID) <= 8) {
-						if (getCooldown(UUID) <= 0) {
-							//Send Packet
-							origin = origin.add(player.getLookVec().scale(level * 2.5));
-							origin = new Vec3d(origin.x, player.getEntityBoundingBox().minY, origin.z);
-							player.world.sendPacketToServer(DragonEnchants.NETWORK.getPacketFrom(new PacketSWindWalk(player.getUniqueID().toString(),
-									origin.x, origin.y, origin.z, EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.windWalker, player))));
-							setDoubleTapTicks(UUID, 0);
-						}
-					}
-					setDoubleTapTicks(UUID, 0);
-				}
-				setLastPressedKey(UUID, forward.getKeyCode());
-				setDoubleTapTicks(UUID, 0);
 
-			}
-			if (right.isPressed()) {
-				if (getLastPressedKey(UUID) == right.getKeyCode()) {
-					if (getDoubleTapTicks(UUID) <= 8) {
-						if (getCooldown(UUID) <= 0) {
-							//Send Packet
-							origin = origin.add(DragonUtils.getVectorForRotation(player.rotationPitch, player.rotationYaw + 90).scale(level * 2.5));
-							origin = new Vec3d(origin.x, player.getEntityBoundingBox().minY, origin.z);
-							player.world.sendPacketToServer(DragonEnchants.NETWORK.getPacketFrom(new PacketSWindWalk(player.getUniqueID().toString(),
-									origin.x, origin.y, origin.z, EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.windWalker, player))));
+				if (forward.getKeyCode() == pressed) {
+					if (getLastPressedKey(UUID) == forward.getKeyCode()) {
+						if (getDoubleTapTicks(UUID) <= 8) {
+							if (getCooldown(UUID) <= 0) {
+								//Send Packet
+								origin = origin.add(player.getLookVec().scale(level * 2.5));
+								origin = new Vec3d(origin.x, player.getEntityBoundingBox().minY, origin.z);
+								player.world.sendPacketToServer(DragonEnchants.NETWORK.getPacketFrom(new PacketSWindWalk(player.getUniqueID().toString(),
+										origin.x, origin.y, origin.z, EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.windWalker, player))));
+							}
 						}
 					}
-					setDoubleTapTicks(UUID, 0);
 				}
-				setLastPressedKey(UUID, right.getKeyCode());
-				setDoubleTapTicks(UUID, 0);
 
-			}
-			if (back.isPressed()) {
-				if (getLastPressedKey(UUID) == back.getKeyCode()) {
-					if (getDoubleTapTicks(UUID) <= 8) {
-						if (getCooldown(UUID) <= 0) {
-							//Send Packet
-							origin = origin.add(DragonUtils.getVectorForRotation(player.rotationPitch, player.rotationYaw + 180).scale(level * 2.5));
-							origin = new Vec3d(origin.x, player.getEntityBoundingBox().minY, origin.z);
-							player.world.sendPacketToServer(DragonEnchants.NETWORK.getPacketFrom(new PacketSWindWalk(player.getUniqueID().toString(),
-									origin.x, origin.y, origin.z, level)));
+				if (right.getKeyCode() == pressed) {
+					if (getLastPressedKey(UUID) == right.getKeyCode()) {
+						if (getDoubleTapTicks(UUID) <= 8) {
+							if (getCooldown(UUID) <= 0) {
+								//Send Packet
+								origin = origin.add(DragonUtils.getVectorForRotation(player.rotationPitch, player.rotationYaw + 90).scale(level * 2.5));
+								origin = new Vec3d(origin.x, player.getEntityBoundingBox().minY, origin.z);
+								player.world.sendPacketToServer(DragonEnchants.NETWORK.getPacketFrom(new PacketSWindWalk(player.getUniqueID().toString(),
+										origin.x, origin.y, origin.z, EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.windWalker, player))));
+							}
 						}
 					}
-					setDoubleTapTicks(UUID, 0);
 				}
-				setLastPressedKey(UUID, back.getKeyCode());
+
+				if (back.getKeyCode() == pressed) {
+					if (getLastPressedKey(UUID) == back.getKeyCode()) {
+						if (getDoubleTapTicks(UUID) <= 8) {
+							if (getCooldown(UUID) <= 0) {
+								//Send Packet
+								origin = origin.add(DragonUtils.getVectorForRotation(player.rotationPitch, player.rotationYaw + 180).scale(level * 2.5));
+								origin = new Vec3d(origin.x, player.getEntityBoundingBox().minY, origin.z);
+								player.world.sendPacketToServer(DragonEnchants.NETWORK.getPacketFrom(new PacketSWindWalk(player.getUniqueID().toString(),
+										origin.x, origin.y, origin.z, level)));
+								System.out.println("Teleportation position is wack.");
+							}
+						}
+
+					}
+
+				}
+
+				setLastPressedKey(UUID, pressed);
 				setDoubleTapTicks(UUID, 0);
 			}
 		}
 	}
+
 
 	@SubscribeEvent
 	public static void onTickEvent(LivingEvent.LivingUpdateEvent event) {
