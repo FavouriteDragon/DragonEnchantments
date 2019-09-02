@@ -13,8 +13,10 @@ import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -165,12 +167,14 @@ public class WindWalker extends Enchantment {
 
 	@SubscribeEvent
 	public static void onTickEvent(LivingEvent.LivingUpdateEvent event) {
-		if (EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.windWalker, event.getEntityLiving()) > 0) {
+		int level = EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.windWalker, event.getEntityLiving());
+		if (level > 0) {
 			EntityLivingBase entity = event.getEntityLiving();
 			String UUID = entity.getUniqueID().toString();
 			if (getCooldown(UUID) > 0)
 				setCooldown(UUID, getCooldown(UUID) - 1);
 			setDoubleTapTicks(UUID, getDoubleTapTicks(UUID) + 1);
+			entity.addPotionEffect(new PotionEffect(MobEffects.SPEED, 5, level - 1));
 		}
 	}
 
@@ -203,4 +207,6 @@ public class WindWalker extends Enchantment {
 	protected boolean canApplyTogether(Enchantment ench) {
 		return super.canApplyTogether(ench) && ench != ModEnchantments.stormStrider && ench != ModEnchantments.voidWalker && ench != ModEnchantments.endWalker;
 	}
+
+
 }
