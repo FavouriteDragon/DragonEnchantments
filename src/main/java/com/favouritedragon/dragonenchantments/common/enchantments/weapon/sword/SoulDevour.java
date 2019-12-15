@@ -82,8 +82,8 @@ public class SoulDevour extends Enchantment {
 		assert nbt != null;
 		nbt.setDouble("ConsumedHealth", healthConsumed);
 		nbt.setShort("SoulDevourKills", numberKilled);
-		if (!nbt.hasKey("IntialDamage"))
-			nbt.setDouble("IntialDamage", initialDamage);
+		if (!nbt.hasKey("InitialDamage"))
+			nbt.setDouble("InitialDamage", initialDamage);
 	}
 
 	private static void writeModifier(ItemStack stack, double value) {
@@ -95,7 +95,7 @@ public class SoulDevour extends Enchantment {
 		}
 		assert nbt != null;
 		NBTTagCompound nestedNbt = new NBTTagCompound();
-		AttributeModifier modifier = new AttributeModifier(MODIFIER_UUID, "Damage Boost", value, 0);
+		AttributeModifier modifier = new AttributeModifier(MODIFIER_UUID, "Soul Devour Damage Boost", value, 0);
 		nestedNbt.setString("AttributeName", SharedMonsterAttributes.ATTACK_DAMAGE.getName());
 		nestedNbt.setString("Name", modifier.getName());
 		nestedNbt.setDouble("Amount", modifier.getAmount());
@@ -152,8 +152,8 @@ public class SoulDevour extends Enchantment {
 		} else {
 			nbt = new NBTTagCompound();
 		}
-		if (nbt.hasKey("IntialDamage")) {
-			return nbt.getDouble("IntialDamage");
+		if (nbt.hasKey("InitialDamage")) {
+			return nbt.getDouble("InitialDamage");
 		} else {
 			return 0;
 		}

@@ -28,7 +28,7 @@ public class DragonEnchants {
 	public static IProxy proxy;
 	private static Logger logger;
 
-	//TODO: Figure out weird knockback bug where get affected by your own attack's knocback, but not its damage. Yay?
+	//TODO: Add visual enchantments!
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		logger = event.getModLog();

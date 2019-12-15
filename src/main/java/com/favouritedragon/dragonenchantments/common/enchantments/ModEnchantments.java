@@ -6,15 +6,9 @@ import com.favouritedragon.dragonenchantments.common.enchantments.armour.StormPr
 import com.favouritedragon.dragonenchantments.common.enchantments.armour.boots.*;
 import com.favouritedragon.dragonenchantments.common.enchantments.armour.chest.VoidHunger;
 import com.favouritedragon.dragonenchantments.common.enchantments.armour.leggings.Dolphin;
+import com.favouritedragon.dragonenchantments.common.enchantments.weapon.*;
 import com.favouritedragon.dragonenchantments.common.enchantments.weapon.bow.Homing;
-import com.favouritedragon.dragonenchantments.common.enchantments.weapon.sword.Berserk;
-import com.favouritedragon.dragonenchantments.common.enchantments.weapon.sword.DoubleEdged;
-import com.favouritedragon.dragonenchantments.common.enchantments.weapon.sword.SoulDevour;
-import com.favouritedragon.dragonenchantments.common.enchantments.weapon.sword.ThunderAspect;
-import com.favouritedragon.dragonenchantments.common.enchantments.weapon.DragonSlayer;
-import com.favouritedragon.dragonenchantments.common.enchantments.weapon.Enderference;
-import com.favouritedragon.dragonenchantments.common.enchantments.weapon.Lifesteal;
-import com.favouritedragon.dragonenchantments.common.enchantments.weapon.Venomous;
+import com.favouritedragon.dragonenchantments.common.enchantments.weapon.sword.*;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.item.ItemAxe;
@@ -36,8 +30,10 @@ public class ModEnchantments {
 	public static final Enchantment dragonSlayer = new DragonSlayer();
 	public static final Enchantment enderference = new Enderference();
 	public static final Enchantment endWalker = new EndWalker();
+	public static final Enchantment gigaSlash = new Gigaslash();
 	public static final Enchantment homing = new Homing();
 	public static final Enchantment lifeSteal = new Lifesteal();
+	public static final Enchantment oblivion = new Oblivion();
 	public static final Enchantment thunderAspect = new ThunderAspect();
 	public static final Enchantment solarPowered = new SolarPowered();
 	public static final Enchantment soulDevour = new SoulDevour();

@@ -108,18 +108,15 @@ public class CloudWalker extends Enchantment {
 	// Called on the server
 	public static void doDoubleJump(EntityPlayer entity) {
 		int level = EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.cloudWalker, entity);
-		((EntityPlayerMP) entity).getServerWorld().addScheduledTask(new Runnable() {
-			@Override
-			public void run() {
-				if (entity.motionY > 0) {
-					entity.addVelocity(0, 0.5F * (1 + level / 10F), 0);
-					entity.velocityChanged = true;
-				} else {
-					entity.motionY = 0.5F * (1 + level / 10F);
-					entity.velocityChanged = true;
-				}
-				net.minecraftforge.common.ForgeHooks.onLivingJump(entity);
+		((EntityPlayerMP) entity).getServerWorld().addScheduledTask(() -> {
+			if (entity.motionY > 0) {
+				entity.addVelocity(0, 0.5F * (1 + level / 10F), 0);
+				entity.velocityChanged = true;
+			} else {
+				entity.motionY = 0.5F * (1 + level / 10F);
+				entity.velocityChanged = true;
 			}
+			net.minecraftforge.common.ForgeHooks.onLivingJump(entity);
 		});
 	}
 

@@ -28,7 +28,7 @@ public class DragonSlayer extends Enchantment {
 		if (attacker instanceof EntityLivingBase && !attacker.world.isRemote) {
 			int level = DragonUtils.getHeldLevelForEnchantment((EntityLivingBase) attacker, ModEnchantments.dragonSlayer, event);
 			if (level > 0) {
-				float amount = event.getAmount() > event.getEntityLiving().getHealth() ? event.getAmount() : event.getEntityLiving().getHealth();
+				float amount = Math.max(event.getAmount(), event.getEntityLiving().getHealth());
 				if (event.getEntityLiving() instanceof EntityDragon) {
 					event.setAmount(event.getAmount() * (1 + 0.1F * level));
 				}
@@ -43,7 +43,7 @@ public class DragonSlayer extends Enchantment {
 
 	@Override
 	public int getMinEnchantability(int enchantmentLevel) {
-		return 20 + 80 * enchantmentLevel;
+		return 20 + 5 * enchantmentLevel;
 	}
 
 	@Override
