@@ -1,10 +1,7 @@
 package com.favouritedragon.dragonenchantments;
 
 import com.favouritedragon.dragonenchantments.common.enchantments.ModEnchantments;
-import com.favouritedragon.dragonenchantments.common.network.PacketSDoubleJump;
-import com.favouritedragon.dragonenchantments.common.network.PacketSStormStride;
-import com.favouritedragon.dragonenchantments.common.network.PacketSVoidWalk;
-import com.favouritedragon.dragonenchantments.common.network.PacketSWindWalk;
+import com.favouritedragon.dragonenchantments.common.network.*;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.crafting.IRecipe;
@@ -65,6 +62,7 @@ public class RegisterHandler {
 		DragonEnchants.NETWORK.registerMessage(PacketSVoidWalk.Handler.class, PacketSVoidWalk.class, 2, Side.SERVER);
 		DragonEnchants.NETWORK.registerMessage(PacketSStormStride.Handler.class, PacketSStormStride.class, 3, Side.SERVER);
 		DragonEnchants.NETWORK.registerMessage(PacketSWindWalk.Handler.class, PacketSWindWalk.class, 4, Side.SERVER);
+		DragonEnchants.NETWORK.registerMessage(PacketSGigaSlash.Handler.class, PacketSGigaSlash.class, 5, Side.SERVER);
 	}
 
 	@SubscribeEvent
@@ -76,6 +74,7 @@ public class RegisterHandler {
 		event.getRegistry().register(ModEnchantments.dragonSlayer);
 		event.getRegistry().register(ModEnchantments.enderference);
 		event.getRegistry().register(ModEnchantments.endWalker);
+		event.getRegistry().register(ModEnchantments.gigaSlash);
 		event.getRegistry().register(ModEnchantments.homing);
 		event.getRegistry().register(ModEnchantments.lifeSteal);
 		event.getRegistry().register(ModEnchantments.oblivion);
