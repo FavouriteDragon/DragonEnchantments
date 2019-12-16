@@ -16,7 +16,7 @@ public class Oblivion extends Enchantment {
 	//Low chance for instantaneous death
 	public Oblivion() {
 		super(Rarity.VERY_RARE, ModEnchantments.WEAPONS, new EntityEquipmentSlot[] {EntityEquipmentSlot.OFFHAND, EntityEquipmentSlot.MAINHAND});
-		setRegistryName(DragonEnchants.MODID + "oblivion");
+		setRegistryName(DragonEnchants.MODID + ":" + "oblivion");
 		setName("oblivion");
 	}
 

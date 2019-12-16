@@ -3,6 +3,7 @@ package com.favouritedragon.dragonenchantments.common.enchantments.weapon.sword;
 import com.favouritedragon.dragonenchantments.DragonEnchants;
 import com.favouritedragon.dragonenchantments.common.enchantments.ModEnchantments;
 import com.favouritedragon.dragonenchantments.common.network.PacketSGigaSlash;
+import com.favouritedragon.dragonenchantments.common.util.DragonUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -10,6 +11,7 @@ import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
@@ -28,7 +30,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.InputEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -42,15 +44,49 @@ public class Gigaslash extends Enchantment {
 
 	public Gigaslash() {
 		super(Rarity.VERY_RARE, EnumEnchantmentType.WEAPON, new EntityEquipmentSlot[]{EntityEquipmentSlot.MAINHAND});
+		setName(DragonEnchants.MODID + ":" + "gigaslash");
+		setRegistryName("gigaslash");
 	}
 
-	@SubscribeEvent
+	/*@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public static void onChargeEvent(InputEvent.KeyInputEvent event) {
 		Minecraft mc = Minecraft.getMinecraft();
 		EntityPlayer player = mc.player;
 		if (player != null) {
-			if (player.getHeldItemMainhand().getItem() instanceof ItemSword && player.getHeldItemMainhand() == player.getActiveItemStack()) {
+			if (player.getHeldItemMainhand().getItem() instanceof ItemSword) {
+				ItemStack stack = player.getHeldItemMainhand();
+				int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.gigaSlash, stack);
+				if (level > 0) {
+					//Send packets
+					int maxChargeTime = 40 + 5 * level;
+					float damageMod = readChargeTime(stack) / (float) maxChargeTime * level;
+					if (mc.gameSettings.keyBindLeft.isKeyDown() && mc.gameSettings.keyBindRight.isKeyDown() && mc.gameSettings.keyBindBack.isKeyDown()) {
+						System.out.println(readChargeTime(stack));
+						player.world.sendPacketToServer(DragonEnchants.NETWORK.getPacketFrom(new PacketSGigaSlash(player.getUniqueID().toString(), damageMod, level, true)));
+					} else {
+						if (readChargeTime(stack) > 0) {
+							//Send packets for attacking
+							player.world.sendPacketToServer(DragonEnchants.NETWORK.getPacketFrom(new PacketSGigaSlash(player.getUniqueID().toString(), damageMod,
+									level, false)));
+							player.playSound(SoundEvents.ENTITY_LIGHTNING_IMPACT, 1.5F + level / 10F, 0.8F + player.world.rand.nextFloat() / 5);
+							player.playSound(SoundEvents.ENTITY_LIGHTNING_THUNDER, 2.0F + level / 10F, 0.8F + player.world.rand.nextFloat() / 5);
+							player.swingArm(EnumHand.MAIN_HAND);
+							writeNbt(player.getHeldItemMainhand(), ((ItemSword) player.getHeldItemMainhand().getItem()).getAttackDamage(), 0);
+						}
+					}
+				}
+			}
+		}
+	}**/
+
+	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
+	public static void onUpdateTick(TickEvent.PlayerTickEvent event) {
+		Minecraft mc = Minecraft.getMinecraft();
+		EntityPlayer player = mc.player;
+		if (player != null) {
+			if (player.getHeldItemMainhand().getItem() instanceof ItemSword) {
 				ItemStack stack = player.getHeldItemMainhand();
 				int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.gigaSlash, stack);
 				if (level > 0) {
@@ -58,13 +94,16 @@ public class Gigaslash extends Enchantment {
 					int maxChargeTime = 40 + 5 * level;
 					float damageMod = readChargeTime(stack) / (float) maxChargeTime * level;
 					if (mc.gameSettings.keyBindUseItem.isKeyDown()) {
-						player.world.sendPacketToServer(DragonEnchants.NETWORK.getPacketFrom(new PacketSGigaSlash(player.getUniqueID().toString(), damageMod, level, true)));
+						player.getEntityWorld().sendPacketToServer(DragonEnchants.NETWORK.getPacketFrom(new PacketSGigaSlash(player.getUniqueID().toString(), damageMod, level, true)));
 					} else {
 						if (readChargeTime(stack) > 0) {
 							//Send packets for attacking
-							player.world.sendPacketToServer(DragonEnchants.NETWORK.getPacketFrom(new PacketSGigaSlash(player.getUniqueID().toString(), damageMod,
+							player.getEntityWorld().sendPacketToServer(DragonEnchants.NETWORK.getPacketFrom(new PacketSGigaSlash(player.getUniqueID().toString(), damageMod,
 									level, false)));
-							writeNbt(stack, ((ItemSword) stack.getItem()).getAttackDamage(), 0);
+							player.playSound(SoundEvents.ENTITY_LIGHTNING_IMPACT, 1.5F + level / 10F, 0.8F + player.world.rand.nextFloat() / 5);
+							player.playSound(SoundEvents.ENTITY_LIGHTNING_THUNDER, 2.0F + level / 10F, 0.8F + player.world.rand.nextFloat() / 5);
+							player.swingArm(EnumHand.MAIN_HAND);
+							writeNbt(player.getHeldItemMainhand(), ((ItemSword) player.getHeldItemMainhand().getItem()).getAttackDamage(), 0);
 						}
 					}
 				}
@@ -85,26 +124,38 @@ public class Gigaslash extends Enchantment {
 				World world = player.world;
 				if (!targets.isEmpty()) {
 					for (EntityLivingBase living : targets) {
-						if (player.canEntityBeSeen(living)) {
-							Vec3d vel = living.getPositionVector().subtract(player.getPositionVector());
-							vel = vel.scale(1 + 0.5f * level);
-							living.attackEntityFrom(DamageSource.LIGHTNING_BOLT, (float) getAttackDamage(player.getHeldItemMainhand()));
-							living.addVelocity(vel.x, vel.y, vel.z);
-							living.setFire(level + 1);
-							//living.attackEntityFrom(DamageSource.causePlayerDamage(player), (float) (getAttackDamage(player.getHeldItemMainhand()) - damageMod));
+						if (living != player && player.getRidingEntity() != living) {
+							if (living.getTeam() != null && living.getTeam() != player.getTeam() || living.getTeam() == null) {
+								Vec3d vel = living.getPositionVector().subtract(player.getPositionVector()).scale(0.25);
+								vel = vel.scale(1 / DragonUtils.getMagnitude(vel));
+								vel = vel.scale(0.25F);
+								vel = vel.scale(1 + 0.5F * level);
+								living.attackEntityFrom(DamageSource.LIGHTNING_BOLT, (float) getAttackDamage(player.getHeldItemMainhand()));
+								living.addVelocity(vel.x, vel.y, vel.z);
+								living.setFire(level + 1);
+								//living.attackEntityFrom(DamageSource.causePlayerDamage(player), (float) (getAttackDamage(player.getHeldItemMainhand()) - damageMod));
+							}
 						}
 					}
-					player.playSound(SoundEvents.ENTITY_LIGHTNING_IMPACT, 1.5F + level / 10F, 0.8F + world.rand.nextFloat() / 5);
-					player.playSound(SoundEvents.ENTITY_LIGHTNING_THUNDER, 2.0F + level / 10F, 0.8F + world.rand.nextFloat() / 5);
-					if (world instanceof WorldServer) {
-						//Copied from the player class
-						double d0 = -MathHelper.sin(player.rotationYaw * 0.017453292F);
-						double d1 = MathHelper.cos(player.rotationYaw * 0.017453292F);
-						((WorldServer) world).spawnParticle(EnumParticleTypes.SWEEP_ATTACK, player.posX + d0, player.posY + (double) player.height * 0.5D,
-								player.posZ + d1, 2, d0, 0.0D, d1, 0.05D);
+				}
+				world.addWeatherEffect(new EntityLightningBolt(world, player.posX, player.posY, player.posZ, true));
+				if (world instanceof WorldServer) {
+					//Copied from the player class. It converts the angle to radians
+					double d0 = -MathHelper.sin((player.rotationYaw) * 0.017453292F);
+					double d1 = MathHelper.cos((player.rotationYaw) * 0.017453292F);
+					//((WorldServer) world).spawnParticle(EnumParticleTypes.ENCHANTMENT_TABLE, player.posX + d0, player.posY + (double) player.height * 0.5D,
+					//		player.posZ + d1, 0, d0, 0.0D, d1, 0);
+					for (int angle = 0; angle < 360; angle += 20) {
+						d0 = -MathHelper.sin((player.rotationYaw + angle) * 0.017453292F);
+						d1 = MathHelper.cos((player.rotationYaw + angle) * 0.017453292F);
+						((WorldServer) world).spawnParticle(EnumParticleTypes.CRIT_MAGIC, player.posX + d0, player.posY + (double) player.height * 0.5D,
+								player.posZ + d1, level + 5, d0, 0.0D, d1, 1 + 0.8 * level * readChargeTime(player.getHeldItemMainhand()));
+						((WorldServer) world).spawnParticle(EnumParticleTypes.ENCHANTMENT_TABLE, player.posX + d0, player.posY + (double) player.height * 0.5D,
+								player.posZ + d1, level + 10, d0, 0.0D, d1, 0.2 + 0.1 * level * readChargeTime(player.getHeldItemMainhand()));
+
 					}
 				}
-				player.swingArm(EnumHand.MAIN_HAND);
+				player.getFoodStats().setFoodLevel(player.getFoodStats().getFoodLevel() - (readChargeTime(player.getHeldItemMainhand()) / Math.max(maxChargeTime, 50) * level + 2));
 			});
 		}
 		writeNbt(player.getHeldItemMainhand(), ((ItemSword) player.getHeldItemMainhand().getItem()).getAttackDamage(), 0);
@@ -185,5 +236,20 @@ public class Gigaslash extends Enchantment {
 	@Override
 	public int getMaxLevel() {
 		return 5;
+	}
+
+	@Override
+	public int getMinEnchantability(int enchantmentLevel) {
+		return super.getMinEnchantability(enchantmentLevel) + 50;
+	}
+
+	@Override
+	public int getMaxEnchantability(int enchantmentLevel) {
+		return super.getMaxEnchantability(enchantmentLevel) + 400;
+	}
+
+	@Override
+	public boolean isTreasureEnchantment() {
+		return true;
 	}
 }

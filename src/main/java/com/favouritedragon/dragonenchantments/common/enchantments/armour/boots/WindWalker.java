@@ -178,6 +178,7 @@ public class WindWalker extends Enchantment {
 		}
 	}
 
+	//TODO: Fix wind walking; use arcane essentials' teleportation code
 	public static void windWalk(EntityPlayer entity, double x, double y, double z, int level) {
 		setDoubleTapTicks(entity.getUniqueID().toString(), 0);
 		int foodlevel = entity.getFoodStats().getFoodLevel();

@@ -48,7 +48,7 @@ public class SoulDevour extends Enchantment {
 				writeNbt(stack, numberKilled, getAttackDamage(stack), readTotalHealthConsumed(stack));
 				trueEntity.heal(((EntityLivingBase) target).getMaxHealth() / 4);
 				if (numberKilled < 76) {
-					writeModifier(stack, readInitalDamage(stack) * ((100F + numberKilled) / 100F));
+					writeModifier(stack, readInitialDamage(stack) * ((100F + numberKilled) / 75F));
 				}
 			}
 		}
@@ -145,7 +145,7 @@ public class SoulDevour extends Enchantment {
 		}
 	}
 
-	private static double readInitalDamage(ItemStack stack) {
+	private static double readInitialDamage(ItemStack stack) {
 		NBTTagCompound nbt;
 		if (stack.hasTagCompound()) {
 			nbt = stack.getTagCompound();
