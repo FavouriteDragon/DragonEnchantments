@@ -95,8 +95,10 @@ public class Gigaslash extends Enchantment {
 					float damageMod = readChargeTime(stack) / (float) maxChargeTime * level;
 					if (mc.gameSettings.keyBindUseItem.isKeyDown()) {
 						player.getEntityWorld().sendPacketToServer(DragonEnchants.NETWORK.getPacketFrom(new PacketSGigaSlash(player.getUniqueID().toString(), damageMod, level, true)));
+						player.motionX *= 0.675;
+						player.motionZ *= 0.675;
 					} else {
-						if (readChargeTime(stack) > 0) {
+						if (readChargeTime(stack) > 20) {
 							//Send packets for attacking
 							player.getEntityWorld().sendPacketToServer(DragonEnchants.NETWORK.getPacketFrom(new PacketSGigaSlash(player.getUniqueID().toString(), damageMod,
 									level, false)));
@@ -119,7 +121,8 @@ public class Gigaslash extends Enchantment {
 		if (level > 0) {
 			((EntityPlayerMP) player).getServerWorld().addScheduledTask(() -> {
 				int maxChargeTime = (int) ((readChargeTime(player.getHeldItemMainhand()) * level) / damageMod);
-				AxisAlignedBB box = player.getEntityBoundingBox().grow(player.getEntityAttribute(EntityPlayer.REACH_DISTANCE).getAttributeValue() + Math.min(damageMod, 3) + 1);
+				float radius = (float) (player.getEntityAttribute(EntityPlayer.REACH_DISTANCE).getAttributeValue() / 2 + Math.min(damageMod, 3) + 1);
+				AxisAlignedBB box = player.getEntityBoundingBox().grow(radius);
 				List<EntityLivingBase> targets = player.world.getEntitiesWithinAABB(EntityLivingBase.class, box);
 				World world = player.world;
 				if (!targets.isEmpty()) {
@@ -128,10 +131,9 @@ public class Gigaslash extends Enchantment {
 							if (living.getTeam() != null && living.getTeam() != player.getTeam() || living.getTeam() == null) {
 								Vec3d vel = living.getPositionVector().subtract(player.getPositionVector()).scale(0.25);
 								vel = vel.scale(1 / DragonUtils.getMagnitude(vel));
-								vel = vel.scale(0.25F);
 								vel = vel.scale(1 + 0.5F * level);
 								living.attackEntityFrom(DamageSource.LIGHTNING_BOLT, (float) getAttackDamage(player.getHeldItemMainhand()));
-								living.addVelocity(vel.x, vel.y, vel.z);
+								living.addVelocity(vel.x, vel.y + 0.15, vel.z);
 								living.setFire(level + 1);
 								//living.attackEntityFrom(DamageSource.causePlayerDamage(player), (float) (getAttackDamage(player.getHeldItemMainhand()) - damageMod));
 							}
@@ -145,17 +147,17 @@ public class Gigaslash extends Enchantment {
 					double d1 = MathHelper.cos((player.rotationYaw) * 0.017453292F);
 					//((WorldServer) world).spawnParticle(EnumParticleTypes.ENCHANTMENT_TABLE, player.posX + d0, player.posY + (double) player.height * 0.5D,
 					//		player.posZ + d1, 0, d0, 0.0D, d1, 0);
-					for (int angle = 0; angle < 360; angle += 20) {
-						d0 = -MathHelper.sin((player.rotationYaw + angle) * 0.017453292F);
-						d1 = MathHelper.cos((player.rotationYaw + angle) * 0.017453292F);
+					for (int angle = 0; angle < 360; angle += 10) {
+						d0 = -MathHelper.sin((player.rotationYaw + angle) * 0.017453292F) * radius / 2;
+						d1 = MathHelper.cos((player.rotationYaw + angle) * 0.017453292F) * radius / 2;
 						((WorldServer) world).spawnParticle(EnumParticleTypes.CRIT_MAGIC, player.posX + d0, player.posY + (double) player.height * 0.5D,
-								player.posZ + d1, level + 5, d0, 0.0D, d1, 1 + 0.8 * level * readChargeTime(player.getHeldItemMainhand()));
+								player.posZ + d1, level * 2 + 5, d0, 0.0D, d1, 0.2 + 0.1 * level * readChargeTime(player.getHeldItemMainhand()) / 50);
 						((WorldServer) world).spawnParticle(EnumParticleTypes.ENCHANTMENT_TABLE, player.posX + d0, player.posY + (double) player.height * 0.5D,
-								player.posZ + d1, level + 10, d0, 0.0D, d1, 0.2 + 0.1 * level * readChargeTime(player.getHeldItemMainhand()));
+								player.posZ + d1, level * 2 + 10, d0, 0.0D, d1, 0.2 + 0.1 * level * readChargeTime(player.getHeldItemMainhand()) / 50);
 
 					}
 				}
-				player.getFoodStats().setFoodLevel(player.getFoodStats().getFoodLevel() - (readChargeTime(player.getHeldItemMainhand()) / Math.max(maxChargeTime, 50) * level + 2));
+				player.getFoodStats().setFoodLevel((int) (player.getFoodStats().getFoodLevel() - (4 + 0.5 * level)));
 			});
 		}
 		writeNbt(player.getHeldItemMainhand(), ((ItemSword) player.getHeldItemMainhand().getItem()).getAttackDamage(), 0);
