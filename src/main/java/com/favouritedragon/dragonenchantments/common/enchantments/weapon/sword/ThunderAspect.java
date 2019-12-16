@@ -68,10 +68,9 @@ public class ThunderAspect extends Enchantment {
 		EntityLivingBase hurt = event.getEntityLiving();
 		if (attacker instanceof EntityLivingBase) {
 			ItemStack stack = ((EntityLivingBase) attacker).getHeldItemMainhand();
-			if (stack.isItemEnchanted() && !(event.getSource() instanceof EntityDamageSourceIndirect)) {
+			if (hurt != null && hurt != attacker && stack.isItemEnchanted() && !(event.getSource() instanceof EntityDamageSourceIndirect)) {
 				if (getSweepAttack(attacker.getUniqueID().toString())) {
 					int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.thunderAspect, stack);
-					if (hurt != null) {
 						if (level > 0) {
 							float amount = level;
 							if (attacker.world.isRaining()) {
@@ -90,11 +89,10 @@ public class ThunderAspect extends Enchantment {
 							attacker.world.playSound(hurt.posX, hurt.posY, hurt.posZ, SoundEvents.ENTITY_LIGHTNING_IMPACT, SoundCategory.PLAYERS,
 									1.0F + attacker.world.rand.nextFloat(), 1.0F + attacker.world.rand.nextFloat(), true);
 						}
-					}
 					setIsSweepAttack(attacker.getUniqueID().toString(), false);
 				} else {
 					int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.thunderAspect, stack);
-					if (level > 0 && hurt != null) {
+					if (level > 0) {
 						float amount = level;
 						if (attacker.world.isRaining()) {
 							level *= 1.25F;
