@@ -30,11 +30,11 @@ public class StormProtection extends Enchantment {
 				EntityLivingBase entity = event.getEntityLiving();
 				int level = EnchantmentHelper.getMaxEnchantmentLevel(ModEnchantments.stormProtection, entity);
 				if (level > 0) {
-					float modifier = 1 - level / 10;
+					float modifier = 1 - level / 10F;
 					Iterable<ItemStack> armour = entity.getEquipmentAndArmor();
 					for (ItemStack stack : armour) {
 						int armourLevel = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.stormProtection, stack);
-						modifier -= armourLevel / 40;
+						modifier -= armourLevel / 40F;
 					}
 					event.setAmount(event.getAmount() * modifier);
 				}
