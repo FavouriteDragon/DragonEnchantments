@@ -2,7 +2,6 @@ package com.favouritedragon.dragon_enchants.common.enchantments.weapon.sword;
 
 import com.favouritedragon.dragon_enchants.DragonEnchants;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.inventory.EntityEquipmentSlot;
 

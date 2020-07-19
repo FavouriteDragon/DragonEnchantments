@@ -14,12 +14,13 @@ import net.minecraft.enchantment.EnchantmentType;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.BowItem;
 import net.minecraft.item.SwordItem;
+import net.minecraft.item.TridentItem;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = DragonEnchants.MODID)
 public class ModEnchantments {
     public static final EnchantmentType WEAPONS = EnchantmentType.create("weapons", (item) ->
-            (item instanceof SwordItem || item instanceof BowItem || item instanceof AxeItem));
+            (item instanceof SwordItem || item instanceof BowItem || item instanceof AxeItem || item instanceof TridentItem));
 
 
     public static final Enchantment berserk = new Berserk();
