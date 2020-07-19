@@ -1,4 +1,4 @@
-package com.favouritedragon.dragonenchantments.common.enchantments.armour.chest;
+package com.favouritedragon.dragon_enchants.common.enchantments.armour.chest;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;

@@ -1,6 +1,6 @@
-package com.favouritedragon.dragonenchantments.common.enchantments.weapon.sword;
+package com.favouritedragon.dragon_enchants.common.enchantments.weapon.sword;
 
-import com.favouritedragon.dragonenchantments.DragonEnchants;
+import com.favouritedragon.dragon_enchants.DragonEnchants;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnumEnchantmentType;

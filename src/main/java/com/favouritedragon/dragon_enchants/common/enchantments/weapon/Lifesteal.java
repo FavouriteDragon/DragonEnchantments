@@ -1,8 +1,8 @@
-package com.favouritedragon.dragonenchantments.common.enchantments.weapon;
+package com.favouritedragon.dragon_enchants.common.enchantments.weapon;
 
-import com.favouritedragon.dragonenchantments.DragonEnchants;
-import com.favouritedragon.dragonenchantments.common.enchantments.ModEnchantments;
-import com.favouritedragon.dragonenchantments.common.util.DragonUtils;
+import com.favouritedragon.dragon_enchants.DragonEnchants;
+import com.favouritedragon.dragon_enchants.common.enchantments.ModEnchantments;
+import com.favouritedragon.dragon_enchants.common.util.DragonUtils;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;

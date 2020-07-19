@@ -1,8 +1,8 @@
-package com.favouritedragon.dragonenchantments.common.enchantments.armour.chest;
+package com.favouritedragon.dragon_enchants.common.enchantments.armour.chest;
 
-import com.favouritedragon.dragonenchantments.DragonEnchants;
-import com.favouritedragon.dragonenchantments.common.enchantments.ModEnchantments;
-import com.favouritedragon.dragonenchantments.common.util.DragonUtils;
+import com.favouritedragon.dragon_enchants.DragonEnchants;
+import com.favouritedragon.dragon_enchants.common.enchantments.ModEnchantments;
+import com.favouritedragon.dragon_enchants.common.util.DragonUtils;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnumEnchantmentType;
@@ -21,8 +21,6 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
-import java.util.List;
 
 @Mod.EventBusSubscriber(modid = DragonEnchants.MODID)
 public class VoidHunger extends Enchantment {

@@ -1,8 +1,8 @@
-package com.favouritedragon.dragonenchantments.common.network;
+package com.favouritedragon.dragon_enchants.common.network;
 
 import java.util.UUID;
 
-import com.favouritedragon.dragonenchantments.common.enchantments.armour.boots.VoidWalker;
+import com.favouritedragon.dragon_enchants.common.enchantments.armour.boots.VoidWalker;
 import com.google.common.base.Charsets;
 
 import io.netty.buffer.ByteBuf;

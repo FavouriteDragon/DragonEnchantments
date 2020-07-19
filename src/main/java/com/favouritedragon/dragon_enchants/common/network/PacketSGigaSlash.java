@@ -1,7 +1,6 @@
-package com.favouritedragon.dragonenchantments.common.network;
+package com.favouritedragon.dragon_enchants.common.network;
 
-import com.favouritedragon.dragonenchantments.common.enchantments.armour.boots.StormStrider;
-import com.favouritedragon.dragonenchantments.common.enchantments.weapon.sword.Gigaslash;
+import com.favouritedragon.dragon_enchants.common.enchantments.weapon.sword.Gigaslash;
 import com.google.common.base.Charsets;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;

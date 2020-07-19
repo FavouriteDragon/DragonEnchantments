@@ -1,9 +1,8 @@
-package com.favouritedragon.dragonenchantments.common.enchantments.armour.boots;
+package com.favouritedragon.dragon_enchants.common.enchantments.armour.boots;
 
-import com.favouritedragon.dragonenchantments.DragonEnchants;
-import com.favouritedragon.dragonenchantments.common.enchantments.ModEnchantments;
-import com.favouritedragon.dragonenchantments.common.network.PacketSDoubleJump;
-import com.favouritedragon.dragonenchantments.common.util.DragonUtils;
+import com.favouritedragon.dragon_enchants.DragonEnchants;
+import com.favouritedragon.dragon_enchants.common.enchantments.ModEnchantments;
+import com.favouritedragon.dragon_enchants.common.network.PacketSDoubleJump;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.enchantment.Enchantment;

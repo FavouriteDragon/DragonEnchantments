@@ -1,8 +1,7 @@
-package com.favouritedragon.dragonenchantments.common.enchantments.armour.leggings;
+package com.favouritedragon.dragon_enchants.common.enchantments.armour.leggings;
 
-import com.favouritedragon.dragonenchantments.DragonEnchants;
-import com.favouritedragon.dragonenchantments.common.enchantments.ModEnchantments;
-import com.favouritedragon.dragonenchantments.common.util.DragonUtils;
+import com.favouritedragon.dragon_enchants.DragonEnchants;
+import com.favouritedragon.dragon_enchants.common.enchantments.ModEnchantments;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnumEnchantmentType;
@@ -15,7 +14,6 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import sun.awt.ModalExclude;
 
 import java.util.UUID;
 
