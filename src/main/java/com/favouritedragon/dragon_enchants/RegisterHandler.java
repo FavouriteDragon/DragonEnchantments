@@ -1,23 +1,29 @@
-package com.favouritedragon.dragonenchantments;
+package com.favouritedragon.dragon_enchants;
 
-import com.favouritedragon.dragonenchantments.common.enchantments.ModEnchantments;
-import com.favouritedragon.dragonenchantments.common.network.*;
+import com.favouritedragon.dragon_enchants.common.enchantments.ModEnchantments;
+import com.favouritedragon.dragon_enchants.common.network.*;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.network.NetworkRegistry;
+import net.minecraftforge.fml.network.simple.SimpleChannel;
 import net.minecraftforge.fml.relauncher.Side;
-
-import java.rmi.MarshalledObject;
 
 @Mod.EventBusSubscriber(modid = DragonEnchants.MODID)
 public class RegisterHandler {
 	private static final int LIVING_UPDATE_INTERVAL = 3;
 	private static final int PROJECTILE_UPDATE_INTERVAL = 10;
+	private static final String REV = "1";
+	public static SimpleChannel NETWORK = NetworkRegistry.newSimpleChannel(new ResourceLocation(DragonEnchants.MODID, "DragonEnchantsPackets"), () -> REV, REV::equals, REV::equals);
+
 
 	/**
 	 * Private helper method for registering entities; keeps things neater. For some reason, Forge 1.11.2 wants a
@@ -25,7 +31,7 @@ public class RegisterHandler {
 	 */
 	private static void registerEntity(Class<? extends Entity> entityClass, String name, int id, int trackingRange, int updateFrequency, boolean sendsVelocityUpdates) {
 		ResourceLocation registryName = new ResourceLocation(DragonEnchants.MODID, name);
-		EntityRegistry.registerModEntity(registryName, entityClass, registryName.toString(), id, DragonEnchants.instance, trackingRange, updateFrequency, sendsVelocityUpdates);
+		Entity.registerModEntity(registryName, entityClass, registryName.toString(), id, DragonEnchants.instance, trackingRange, updateFrequency, sendsVelocityUpdates);
 	}
 
 	/**
@@ -34,7 +40,7 @@ public class RegisterHandler {
 	 */
 	private static void registerEntityAndEgg(Class<? extends Entity> entityClass, String name, int id, int trackingRange, int updateFrequency, boolean sendsVelocityUpdates, int eggColour, int spotColour) {
 		ResourceLocation registryName = new ResourceLocation(DragonEnchants.MODID, name);
-		EntityRegistry.registerModEntity(registryName, entityClass, registryName.toString(), id, DragonEnchants.instance, trackingRange, updateFrequency, sendsVelocityUpdates);
+		GameRegistry.registerModEntity(registryName, entityClass, registryName.toString(), id, DragonEnchants.instance, trackingRange, updateFrequency, sendsVelocityUpdates);
 		EntityRegistry.registerEgg(registryName, eggColour, spotColour);
 	}
 
@@ -58,11 +64,11 @@ public class RegisterHandler {
 	}
 
 	public static void registerPackets() {
-		DragonEnchants.NETWORK.registerMessage(PacketSDoubleJump.Handler.class, PacketSDoubleJump.class, 1, Side.SERVER);
-		DragonEnchants.NETWORK.registerMessage(PacketSVoidWalk.Handler.class, PacketSVoidWalk.class, 2, Side.SERVER);
-		DragonEnchants.NETWORK.registerMessage(PacketSStormStride.Handler.class, PacketSStormStride.class, 3, Side.SERVER);
-		DragonEnchants.NETWORK.registerMessage(PacketSWindWalk.Handler.class, PacketSWindWalk.class, 4, Side.SERVER);
-		DragonEnchants.NETWORK.registerMessage(PacketSGigaSlash.Handler.class, PacketSGigaSlash.class, 5, Side.SERVER);
+	//	NETWORK.registerMessage(PacketSDoubleJump.Handler.class, PacketSDoubleJump.class, 1, Side.SERVER);
+	//	NETWORK.registerMessage(PacketSVoidWalk.Handler.class, PacketSVoidWalk.class, 2, Side.SERVER);
+	//	NETWORK.registerMessage(PacketSStormStride.Handler.class, PacketSStormStride.class, 3, Side.SERVER);
+	//	NETWORK.registerMessage(PacketSWindWalk.Handler.class, PacketSWindWalk.class, 4, Side.SERVER);
+	//	NETWORK.registerMessage(PacketSGigaSlash.Handler.class, PacketSGigaSlash.class, 5, Side.SERVER);
 	}
 
 	@SubscribeEvent
