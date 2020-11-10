@@ -8,7 +8,10 @@ import org.apache.logging.log4j.Logger;
 @Mod(DragonEnchants.MODID)
 public class DragonEnchants {
 
+	public static DragonEnchants INSTANCE;
+
 	public DragonEnchants() {
+		INSTANCE = this;
 		RegisterHandler.registerAll();
 		//logger = new org.apache.logging.log4j.core.Logger();
 	}
