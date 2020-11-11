@@ -4,9 +4,7 @@ import com.favouritedragon.dragonenchantments.DragonEnchants;
 import com.favouritedragon.dragonenchantments.common.enchantments.ModEnchantments;
 import com.favouritedragon.dragonenchantments.common.util.DragonUtils;
 import com.google.common.collect.Multimap;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.EnumEnchantmentType;
+import net.minecraft.enchantment.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
@@ -23,6 +21,7 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import java.util.Map;
 import java.util.UUID;
 
 
@@ -53,8 +52,9 @@ public class SoulDevour extends Enchantment {
                         .getHeldLevelForEnchantmentAndHeldItem(trueEntity, ModEnchantments.soulDevour).second();
                 int level = DragonUtils.getHeldLevelForEnchantment(trueEntity, ModEnchantments.soulDevour);
                 short numberKilled = readSoulsKilled(stack);
+                //Basically increases the amount of souls gotten per 20 health of the enemy. Ender dragon is worth 10 souls.
                 if (((EntityLivingBase) target).getMaxHealth() >= 20)
-                    numberKilled++;
+                    numberKilled += (int) (((EntityLivingBase) target).getMaxHealth() / 20F);
                 writeNbt(stack, numberKilled, readInitialDamage(stack, trueEntity), readTotalHealthConsumed(stack));
                 trueEntity.heal(((EntityLivingBase) target).getMaxHealth() / 4);
                 if (numberKilled < level * 25 + 1) {
@@ -81,12 +81,20 @@ public class SoulDevour extends Enchantment {
 
                 totalHealthConsumed += healthConsumed;
                 if (readSoulsKilled(stack) > 0) {
-                    writeNbt(stack, (short) (readSoulsKilled(stack)),
+                    writeNbt(stack, (readSoulsKilled(stack)),
                               totalHealthConsumed);
                 } else {
-                    writeNbt(stack, (short) (readSoulsKilled(stack)),
+                    writeNbt(stack, (readSoulsKilled(stack)),
                             getAttackDamage(stack, trueEntity), totalHealthConsumed);
                 }
+                boolean updateInitialDamage = false;
+                for (Enchantment enchantment : EnchantmentHelper.getEnchantments(stack).keySet()) {
+                    if (enchantment instanceof EnchantmentDamage)
+                        updateInitialDamage = true;
+                }
+                if (updateInitialDamage)
+                    writeNbt(stack, readSoulsKilled(stack),
+                            readInitialDamage(stack, trueEntity) + EnchantmentHelper.getModifierForCreature(stack, EnumCreatureAttribute.UNDEFINED), totalHealthConsumed);
             }
         }
     }
