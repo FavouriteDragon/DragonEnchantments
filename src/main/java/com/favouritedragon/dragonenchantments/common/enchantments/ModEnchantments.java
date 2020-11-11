@@ -21,6 +21,8 @@ import net.minecraftforge.fml.common.Mod;
 public class ModEnchantments {
 	public static final EnumEnchantmentType WEAPONS = EnumHelper.addEnchantmentType("weapons", (item) ->
 			(item instanceof ItemSword || item instanceof ItemBow || item instanceof ItemAxe));
+	public static final EnumEnchantmentType AXES = EnumHelper.addEnchantmentType("axes", (item) ->
+			item instanceof ItemAxe);
 
 
 	public static final Enchantment berserk = new Berserk();
