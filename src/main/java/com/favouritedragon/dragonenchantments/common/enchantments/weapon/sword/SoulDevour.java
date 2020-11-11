@@ -5,16 +5,19 @@ import com.favouritedragon.dragonenchantments.common.enchantments.ModEnchantment
 import com.favouritedragon.dragonenchantments.common.util.DragonUtils;
 import com.google.common.collect.Multimap;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AbstractAttributeMap;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -23,10 +26,12 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.util.Map;
 import java.util.UUID;
 
+
 @Mod.EventBusSubscriber(modid = DragonEnchants.MODID)
 public class SoulDevour extends Enchantment {
 
-    public final static UUID MODIFIER_UUID = UUID.fromString("294093da-54f0-4c1b-9dbb-13b77534a84c");
+    //Same as vanilla. We got dem hacks boys
+    public final static UUID ATTACK_DAMAGE_MODIFIER = UUID.fromString("CB3F55D3-645C-4F38-A497-9C13A33DB5CF");
 
     //TODO: Add souls as a nbt value, based on enemies killed (every 10 health of enemies killed is a soul). Use it for cool stuff.
     public SoulDevour() {
@@ -52,9 +57,8 @@ public class SoulDevour extends Enchantment {
                 writeNbt(stack, numberKilled, readInitialDamage(stack, trueEntity), readTotalHealthConsumed(stack));
                 trueEntity.heal(((EntityLivingBase) target).getMaxHealth() / 4);
                 if (numberKilled < level * 25 + 1) {
-                    float newMod = (float) (readInitialDamage(stack, trueEntity) * ((100 + numberKilled) / 100F));
-                    float oldMod = (float) (readInitialDamage(stack, trueEntity) * ((100 + numberKilled - 1) / 100F));
-                    writeModifier(stack, trueEntity, newMod, oldMod);
+                    float mod = (((100 + numberKilled) / 100F));
+                    writeModifier(stack, trueEntity, mod);
                 }
             }
         }
@@ -79,6 +83,11 @@ public class SoulDevour extends Enchantment {
         }
     }
 
+    @Override
+    public float calcDamageByCreature(int level, EnumCreatureAttribute creatureType) {
+        return super.calcDamageByCreature(level, creatureType);
+    }
+
     private static void writeNbt(ItemStack stack, short numberKilled, double initialDamage, double healthConsumed) {
         NBTTagCompound nbt;
         if (stack.hasTagCompound()) {
@@ -93,35 +102,27 @@ public class SoulDevour extends Enchantment {
             nbt.setDouble("InitialDamage", initialDamage);
     }
 
-    private static void writeModifier(ItemStack stack, EntityLivingBase entity, double value, double oldValue) {
-        AttributeModifier modifier;
-        IAttributeInstance attack = entity.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
+    private static void writeModifier(ItemStack stack, EntityLivingBase entity, double value) {
+        AttributeModifier modifier = new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon Modifier", readInitialDamage(stack, entity) * value, 0);
         Multimap<String, AttributeModifier> attributeMap = stack.getAttributeModifiers(EntityEquipmentSlot.MAINHAND);
-        boolean shouldRemove = false;
+        AbstractAttributeMap abstractMap = entity.getAttributeMap();
 
-        attack.removeModifier(MODIFIER_UUID);
+        //Removes modifiers so they can update
+        abstractMap.removeAttributeModifiers(attributeMap);
 
-        for (AttributeModifier mod : stack.getAttributeModifiers(EntityEquipmentSlot.MAINHAND).get(SharedMonsterAttributes.ATTACK_DAMAGE.getName()))
-            if (mod.getID().equals(MODIFIER_UUID))
-                shouldRemove = true;
-
-        if (shouldRemove) {
-            NBTTagList compound = stack.getTagCompound().getTagList("AttributeModifiers", 10);
-            int i = 0;
-            compound.removeTag(i);
-        }
-        modifier = new AttributeModifier(MODIFIER_UUID, "Soul Devour Damage Boost", value, 0);
-        for (Map.Entry<String, AttributeModifier> originalMod : attributeMap.entries())
-            stack.addAttributeModifier(originalMod.getKey(), originalMod.getValue(), EntityEquipmentSlot.MAINHAND);
-
-        stack.addAttributeModifier(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), modifier, EntityEquipmentSlot.MAINHAND);
+        //Removes the default attack damage; soul devour is the captain now
+        attributeMap.removeAll(SharedMonsterAttributes.ATTACK_DAMAGE.getName());
+        attributeMap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), modifier);
+        System.out.println(attributeMap);
+        //Reapplies them
+        abstractMap.applyAttributeModifiers(attributeMap);
     }
 
     private static double getAttackDamage(ItemStack stack, EntityLivingBase entity) {
-        double value = entity.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
-        if (entity.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getModifier(MODIFIER_UUID) != null) {
-            AttributeModifier modifier = entity.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getModifier(MODIFIER_UUID);
-            value -= modifier.getAmount();
+        double value = 0;
+        for (AttributeModifier modifier : stack.getAttributeModifiers(EntityEquipmentSlot.MAINHAND).get(SharedMonsterAttributes.ATTACK_DAMAGE.getName())) {
+            value += entity.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getBaseValue();
+            value += EnchantmentHelper.getModifierForCreature(stack, EnumCreatureAttribute.UNDEFINED);
         }
         return value;
     }

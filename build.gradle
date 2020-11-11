@@ -9,16 +9,21 @@ buildscript {
             name = "forge"
             url = "http://files.minecraftforge.net/maven/"
         }
+        maven {
+            url = 'http://repo.spongepowered.org/maven'
+        }
 
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+     //   classpath 'org.spongepowered:mixingradle:0.8.1-SNAPSHOT'
     }
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: "java"
 apply plugin: "idea"
+//apply plugin: 'org.spongepowered.mixin'
 
 
 version = "0.0.5"
@@ -45,6 +50,9 @@ repositories {
         name = "forge"
         url = "https://files.minecraftforge.net/maven"
     }
+    maven {
+        url = 'http://repo.spongepowered.org/maven'
+    }
 
 }
 minecraft {
@@ -58,6 +66,13 @@ minecraft {
     // simply re-run your setup task after changing the mappings to update your workspace.
     mappings = "stable_39"
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+//    def args = [
+//            '-Dfml.coreMods.load=com.MODID.asm.MODCoremod',
+//            '-Dmixin.hotSwap=true',
+//            '-Dmixin.checks.interfaces=true'
+//    ]
+//    clientJvmArgs.addAll(args)
+//    serverJvmArgs.addAll(args)
 }
 
 dependencies {
