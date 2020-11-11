@@ -111,7 +111,6 @@ public class StormStrider extends Enchantment {
 					if (!targets.isEmpty()) {
 						for (Entity hit : targets) {
 							if (hit != entity) {
-								System.out.println(hit);
 								Vec3d velocity = new Vec3d(hit.posX - entity.posX, hit.posY - entity.posY, hit.posZ - entity.posZ);
 								velocity.scale(level);
 								float amount = level * 3;
@@ -133,7 +132,7 @@ public class StormStrider extends Enchantment {
 									0, 0, 0, 2);
 						}
 					}
-					entity.getFoodStats().setFoodLevel(entity.isCreative() ? foodlevel : foodlevel - (int) (distance / (level)));
+					entity.addExhaustion((float) (distance / level + 2F));
 				}
 			});
 

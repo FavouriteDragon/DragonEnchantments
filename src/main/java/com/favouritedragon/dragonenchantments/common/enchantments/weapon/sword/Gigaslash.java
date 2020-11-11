@@ -157,7 +157,7 @@ public class Gigaslash extends Enchantment {
 
 					}
 				}
-				player.getFoodStats().setFoodLevel((int) (player.getFoodStats().getFoodLevel() - (4 + 0.5 * level)));
+				player.addExhaustion(10 + 2.5F * level);
 			});
 		}
 		writeNbt(player.getHeldItemMainhand(), ((ItemSword) player.getHeldItemMainhand().getItem()).getAttackDamage(), 0);

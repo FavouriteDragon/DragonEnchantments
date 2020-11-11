@@ -16,18 +16,18 @@ public class Oblivion extends Enchantment {
 	//Low chance for instantaneous death
 	public Oblivion() {
 		super(Rarity.VERY_RARE, ModEnchantments.WEAPONS, new EntityEquipmentSlot[] {EntityEquipmentSlot.OFFHAND, EntityEquipmentSlot.MAINHAND});
-		setRegistryName(DragonEnchants.MODID + ":" + "oblivion");
-		setName("oblivion");
+		setName(DragonEnchants.MODID + ":" + "oblivion");
+		setRegistryName("oblivion");
 	}
 
 	@Override
 	public int getMinEnchantability(int enchantmentLevel) {
-		return 75;
+		return 250;
 	}
 
 	@Override
 	public int getMaxEnchantability(int enchantmentLevel) {
-		return super.getMaxEnchantability(enchantmentLevel) + 200;
+		return super.getMaxEnchantability(enchantmentLevel) + 100;
 	}
 
 	@Override
@@ -46,6 +46,7 @@ public class Oblivion extends Enchantment {
 		if (DragonUtils.getRandomNumberInRange(1, 100) <= 5 && target instanceof EntityLivingBase) {
 			target.playSound(SoundEvents.ENTITY_GHAST_DEATH, 1.5F, 0.8F + user.world.rand.nextFloat() / 5);
 			((EntityLivingBase) target).setHealth(0);
+			target.attackEntityFrom(DamageSource.OUT_OF_WORLD, ((EntityLivingBase) target).getMaxHealth());
 			((EntityLivingBase) target).onDeath(DamageSource.OUT_OF_WORLD);
 		}
 	}
