@@ -20,6 +20,7 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import scala.collection.mutable.MultiMap;
 
 import java.util.Map;
 import java.util.UUID;
@@ -127,14 +128,20 @@ public class SoulDevour extends Enchantment {
 
     private static void writeModifier(ItemStack stack, EntityLivingBase entity, double value) {
         AttributeModifier modifier = new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon Modifier", readInitialDamage(stack, entity) * value, 0);
+        Multimap<String, AttributeModifier> attributeMods = stack.getAttributeModifiers(EntityEquipmentSlot.MAINHAND);
 
         stack.getTagCompound().setTag("AttributeModifiers", new NBTTagList());
-        //Clear it??
+        //Clears it. Get the modifiers before clearing!
 
 
-        AttributeModifier attackSpeed = new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier",
-                -2.4000000953674316D, 0);
-        stack.addAttributeModifier(SharedMonsterAttributes.ATTACK_SPEED.getName(), attackSpeed, EntityEquipmentSlot.MAINHAND);
+        //Provides compatibility with other mods and enchantments
+        for (Map.Entry<String, AttributeModifier> modifierEntry : attributeMods.entries()) {
+            if (!modifierEntry.getKey().equals(SharedMonsterAttributes.ATTACK_DAMAGE.getName())) {
+                AttributeModifier mod = new AttributeModifier(modifierEntry.getValue().getID(), modifierEntry.getValue().getName(),
+                        modifierEntry.getValue().getAmount(), modifierEntry.getValue().getOperation());
+                stack.addAttributeModifier(modifierEntry.getKey(), mod, EntityEquipmentSlot.MAINHAND);
+            }
+        }
         stack.addAttributeModifier(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), modifier, EntityEquipmentSlot.MAINHAND);
     }
 
