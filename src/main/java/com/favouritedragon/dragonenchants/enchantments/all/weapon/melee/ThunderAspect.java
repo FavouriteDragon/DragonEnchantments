@@ -1,4 +1,4 @@
-package com.favouritedragon.dragonenchants.enchantments.all.weapon.melee.sword;
+package com.favouritedragon.dragonenchants.enchantments.all.weapon.melee;
 
 import com.favouritedragon.dragonenchants.DragonEnchants;
 import com.favouritedragon.dragonenchants.enchantments.ModEnchantments;
