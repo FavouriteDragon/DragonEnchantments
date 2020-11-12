@@ -26,7 +26,7 @@ apply plugin: "idea"
 //apply plugin: 'org.spongepowered.mixin'
 
 
-version = "0.0.5"
+version = "1.0.0"
 group = "com.favouritedragon.dragonenchantments" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "dragonenchantments"
 

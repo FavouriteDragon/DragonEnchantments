@@ -3,7 +3,7 @@
   "modid": "dragon_enchants",
   "name": "Dragon Enchantments",
   "description": "Adds a bunch of awesome enchantments!",
-  "version": "0.0.5",
+  "version": "1.0.0",
   "mcversion": "${mcversion}",
   "url": "",
   "updateUrl": "",
