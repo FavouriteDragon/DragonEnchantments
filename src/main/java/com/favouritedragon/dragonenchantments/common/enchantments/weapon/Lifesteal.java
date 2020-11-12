@@ -28,7 +28,7 @@ public class Lifesteal extends Enchantment {
 		if (attacker instanceof EntityLivingBase && !attacker.world.isRemote) {
 			int level = DragonUtils.getHeldLevelForEnchantment((EntityLivingBase) attacker, ModEnchantments.lifeSteal, event);
 			if (level > 0) {
-				float amount = event.getAmount() > event.getEntityLiving().getHealth() ? event.getAmount() : event.getEntityLiving().getHealth();
+				float amount = Math.max(event.getAmount(), event.getEntityLiving().getHealth());
 				((EntityLivingBase) attacker).heal(amount / 10 * level);
 			}
 		}

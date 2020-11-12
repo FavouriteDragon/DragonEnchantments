@@ -6,6 +6,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.inventory.EntityEquipmentSlot;
 
+//Thunder aspect but big boom
 public class Mjolnir extends Enchantment {
 
     public Mjolnir(Rarity rarityIn, EnumEnchantmentType typeIn, EntityEquipmentSlot[] slots) {

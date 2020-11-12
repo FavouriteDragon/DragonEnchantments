@@ -77,7 +77,7 @@ public class DoubleEdged extends Enchantment {
 	}
 
 	private static boolean isCrit(String UUID) {
-		return isCrit.get(UUID) == null ? false : isCrit.get(UUID);
+		return isCrit.get(UUID) != null && isCrit.get(UUID);
 	}
 
 	@Override
