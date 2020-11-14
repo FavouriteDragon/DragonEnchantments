@@ -1,6 +1,6 @@
 package com.favouritedragon.dragonenchants.enchantments;
 
-import com.favouritedragon.dragonenchants.DragonEnchants;
+import com.favouritedragon.dragonenchants.enchantments.all.armour.StormProtection;
 import com.favouritedragon.dragonenchants.enchantments.all.weapon.melee.ThunderAspect;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentType;
@@ -10,6 +10,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.IForgeRegistry;
 
+//Used for registry events. TODO: Move to a deferred registry so other mods can have compatibility.
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModEnchantments {
 
@@ -23,7 +24,8 @@ public class ModEnchantments {
 
 
     public static final Enchantment
-        THUNDER_ASPECT = new ThunderAspect();
+        THUNDER_ASPECT = new ThunderAspect(),
+        STORM_PROTECTION = new StormProtection();
 
 
     @SubscribeEvent
