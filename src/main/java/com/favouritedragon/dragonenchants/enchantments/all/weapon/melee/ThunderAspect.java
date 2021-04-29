@@ -23,7 +23,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 @Mod.EventBusSubscriber(modid = DragonEnchants.MODID)
